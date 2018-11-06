@@ -3,8 +3,8 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    app: './src/app/app.js',
-    zense: './src/app/lib/zense.js'
+    app: './src/app.js',
+    zense: './src/zense.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
