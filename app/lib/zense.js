@@ -89,10 +89,11 @@
   };
 
   const Renderer = {
-    callee: '',
+    type: '',
     regions: [],
-    selector: '',
-    template: '',
+    selector: null,
+    template: null,
+    renderType: 'append',
     warningText: 'There is no data being passed in.',
 
     beforeRender: function () {
@@ -103,16 +104,31 @@
       this.beforeRender();
       this.setDOMSelector();
 
-      if (this.selector) {
+      try {
+        this.errorCheck();
+
         if (!this.selector.length) {
-          this.selector.innerHTML += this.template(this.serializeData());
+          let data = this.serializeData();
+          
+          if (this.type === 'append') {
+            this.selector.innerHTML += this.template(data);
+          } else {
+            this.selector.innerHTML = this.template(data);
+          }
         } else {
           for (let i = 0; i < this.selector.length; i++) {
             let el = this.selector[i];
 
-            el.innerHTML += this.template;
+            if (this.type === 'append') {
+              el.innerHTML += this.template(data);
+            } else {
+              el.innerHTML = this.template(data)
+            }
           }
         }
+      } catch (e) {
+        // this.createRendererContainer();
+        Config.errors.push(e);
       }
 
       this.afterRender();
@@ -175,6 +191,31 @@
 
       this.regions.push(this.selector);
     },
+
+    createRendererContainer: function () {
+      let id = this.selector.id;
+      let container = `<div id="${id}></div>`;
+
+      this.regions[0].innerHTML += container;
+    },
+
+    errorCheck: function () {
+      let errorObj = {
+        type: this.type,
+        name: this.name
+      }
+      if (this.type === 'component' && this.template === null) {
+        errorObj.message = 'no template currently exists.';
+      }
+
+      if (this.selector === null) {
+        errorObj.message = 'The necessary elements to render your components do not exist in the DOM.'
+      }
+
+      if (errorObj.message) {
+        throw errorObj;
+      }
+    }
   };
 
   // ERROR HANDLER
@@ -221,7 +262,7 @@
   // COMPONENT
   const Component = Object.create(Renderer);
 
-  Component.callee = 'component';
+  Component.type = 'component';
   
   Component.create = function (options) {
     Object.assign(this, options);
@@ -234,13 +275,13 @@
   };
 
   Component.setName = function (selector) {
-    this.name = selector.slice(1) + '-component';
+    this.name = selector.slice(1) + '-' + this.type;
   };
 
   // MODULE
   const Module = Object.create(Renderer);
 
-  Module.callee = 'module';
+  Module.type = 'module';
   Module.components = [];
   Module.componentNameArray = [];
   Module.shouldRenderChildren = true;
