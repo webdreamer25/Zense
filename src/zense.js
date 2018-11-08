@@ -1,6 +1,34 @@
-import _ from "underscore";
-
 (function (root) {
+  // Object.assign Polyfill!
+  if (typeof Object.assign != 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, "assign", {
+      value: function assign(target, varArgs) { // .length of function is 2
+        'use strict';
+        if (target == null) { // TypeError if undefined or null
+          throw new TypeError('Cannot convert undefined or null to object');
+        }
+  
+        var to = Object(target);
+  
+        for (var index = 1; index < arguments.length; index++) {
+          var nextSource = arguments[index];
+  
+          if (nextSource != null) { // Skip over if undefined or null
+            for (var nextKey in nextSource) {
+              // Avoid bugs when hasOwnProperty is shadowed
+              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+        }
+        return to;
+      },
+      writable: true,
+      configurable: true
+    });
+  }
 
   const Config = {
     env: 'dev',
@@ -60,46 +88,23 @@ import _ from "underscore";
     }
   };
 
-  // const Events = {
-  //   config: {
-  //     bubbles: true,
-  //     cancelable: true
-  //   },
-
-  //   separator: /(^|:)(\w)/gi,
-
-  //   triggerMethod: function (options) {
-  //     let methodName = 'on' + event.replace(separator, options.eventName);
-  //     let method = this[methodName];
-  //     let result = '';
-
-  //     if (typeof method === 'function') {
-  //       result = method.apply
-  //     }
-  //   },
-
-  //   listenTo: function (options) {
-  //     options.el.addEventListener(options.event, (e) => options.callback);
-  //   }
-  // };
-
   const Renderer = {
     callee: '',
     regions: [],
     selector: '',
     template: '',
-    multiSelector: false,
+    warningText: 'There is no data being passed in.',
 
     beforeRender: function () {
-      this.setDOMSelector();
-      this.addTemplate();
+      return null;
     },
 
     render: function () {
       this.beforeRender();
+      this.setDOMSelector();
 
-      if (!this.multiSelector) {
-        this.selector.innerHTML += this.template;
+      if (!this.selector.length) {
+        this.selector.innerHTML += this.template(this.serializeData());
       } else {
         for (let i = 0; i < this.selector.length; i++) {
           let el = this.selector[i];
@@ -119,42 +124,45 @@ import _ from "underscore";
       this.selector.remove();
     },
 
-    setTemplateData: function () {
+    serializeData: function (data) {
       if (this.api.model || this.api.collection.length > 0) {
         return {
           model: this.api.model,
           collection: this.api.collection
         }
+      } else if (data) {
+        return data;
       } else {
-        return {};
-      }
-    },
+        let newErrorArray = [];
 
-    addTemplate: function () {
-      // We need to ensure that if the template turns out to be a function we pass in the data.
-      if (typeof this.template === 'function') {
-        let templateData = this.setTemplateData();
+        // Adds a warning to config errors
+        for (let i = 0; i < Config.errors.length; i++) {
+          let error = Config.errors[i];
 
-        this.template = this.template(templateData);
+          if (error.selector === this.selector) {
+            error.warning = this.warningText;
+            
+            newErrorArray.push(error);
+          } else {
+            newErrorArray.push({
+              selector: error.selector,
+              component: error.component,
+              warning: this.warningText
+            });
+          }
+        }
+
+        Config.errors = newErrorArray;
       }
     },
 
     setDOMSelector: function () {
       switch (this.selector.charAt(0)) {
-        case '.':
-          this.selector = document.getElementsByClassName(this.selector.slice(1));
-          this.multiSelector = true;
-          break;
-        case '[':
-          this.selector = document.querySelectorAll(this.selector);
-          this.multiSelector = true;
-          break;
         case '#':
           this.selector = document.getElementById(this.selector.slice(1));
           break;
         default:
-          this.selector = document.getElementsByTagName(this.selector);
-          this.multiSelector = true;
+          this.selector = document.querySelectorAll(this.selector);
       }
 
       // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
@@ -164,85 +172,83 @@ import _ from "underscore";
       }
 
       this.regions.push(this.selector);
-    }
+    },
   };
 
   // ERROR HANDLER
   const ErrorHandler = Object.create(Renderer);
 
+  ErrorHandler.index = 0;
+
   ErrorHandler.initialize = function (options) {
     let defaults = {
       selector: 'body',
+      trigger: '.js-errors-toggle',
       ui: {
-        container: '.dev-errors-container',
-        target: '.js-dev-errors'
+        container: '.errors',
+        target: '.errors-list',
+        tab: '.errors-tab'
       }
     };
 
-    _.extend(this, defaults, options);
+    Object.assign(this, defaults, options);
 
-    _.each(Config.errors, function (err, idx) {
-      console.log(err);
-      let div = document.querySelector(err.selector);
+    for (let i = 0; i < Config.errors.length; i++) {
+      let error = Config.errors[i];
 
-      div.style.borderWidth = '1px';
-      div.style.borderColor = 'red';
-      div.style.borderStyle = 'solid';
+      document.querySelector(error.selector).style.border = '1px solid red';
 
-      this.selector = div;
-    });
+      this.index = i;
+      this.selector = error.selector;
+
+      this.render();
+
+    };
   };
 
-  ErrorHandler.setTemplateData = function () {
-    return Config.errors;
+  ErrorHandler.serializeData = function () {
+    return Config.errors[this.index];
   };
 
   ErrorHandler.start = function () {
     if ((Config.errors === 0 || Config.env !== 'dev')) { return null; }
 
-    console.log(Config);
-
     this.initialize();
-    this.render();
   }
 
   // COMPONENT
   const Component = Object.create(Renderer);
 
-  Component.name = '';
   Component.callee = 'component';
   Component.api = Object.create(Api);
   
   Component.create = function (options) {
-    _.extend(this, options);
+    Object.assign(this, options);
 
     this.initialize();
-    this.setName();
   };
 
   Component.initialize = function () {
     return null;
   };
 
-  Component.setName = function () {
-    // We need to have a name for the component if none exist for error handling
-    if (typeof this.name === '') {
-      this.name = this.selector.slice(1) + '-component';
-    } else {
-      return null;
-    }
-  }
+  Component.setName = function (selector) {
+    this.name = selector.slice(1) + '-component';
+  };
 
   // MODULE
   const Module = Object.create(Renderer);
 
   Module.callee = 'module';
   Module.components = [];
+  Module.componentNameArray = [];
   Module.shouldRenderChildren = true;
   Module.api = Object.create(Api);
 
   Module.create = function (options) {
-    _.extend(this, options);
+    Object.assign(this, options);
+
+    this.components = options.components;
 
     this.initialize();
   };
@@ -263,31 +269,34 @@ import _ from "underscore";
 
     for (let i = 0; i < componentList.length; i++) {
       let component = componentList[i];
-      let componentName = component.name;
+
+      this.checkUniqueName(component);
 
       // Needed to ensure we merge component under Module/this context.
-      _.extend(this, component);
+      Object.assign(this, component);
 
       // shouldRenderChildren property exists so you can decide where and/or when a component should render.
-      if (this.shouldRenderChildren && this.component[componentName].template !== '') {
-        this.component[componentName].render();
+      if (this.shouldRenderChildren && component.template !== '') {
+        component.render();
       } else {
         // console.log('Component: ' + componentName + ' Error: Nees a template!');
         Config.errors.push({
           selector: component.selector,
-          component: componentName,
+          component: component.name,
           description: 'This component needs a template!'
-        })
+        });
       }
     }
   };
 
-  Module.checkUniqueName = function (name) {
-    this.componentNameArray = [];
+  Module.checkUniqueName = function (component) {
+    this.componentNameArray.push(component.name);
 
     for (let i = 0; i < this.componentNameArray.length; i++) {
-      if (this.componentNameArray[i] !== name) {
-        this.componentNameArray.push(name);
+      if (this.componentNameArray[i] !== component.name) {
+        return null;
+      } else {
+        component.setName(component.selector);
       }
     }
   };
@@ -298,7 +307,7 @@ import _ from "underscore";
   Composite.modules = [];
 
   Composite.create = function (options) {
-    _.extend(this, options);
+    Object.assign(this, options);
 
     this.api = Object.create(Api);
 
