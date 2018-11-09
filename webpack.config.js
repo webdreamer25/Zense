@@ -4,16 +4,15 @@ module.exports = {
   target: 'web',
   mode: 'development',
   entry: {
-    app: ['./src/app.js'],
-    zense: ['./src/zense.js']
+    app: ['./src/app/app.entry.js']
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './dist/app'),
     filename: '[name].js'
   },
   devServer: {
     publicPath: '/dist',
-    contentBase: path.resolve(__dirname, './dist'),
+    contentBase: path.resolve(__dirname, './dist/app'),
     watchContentBase: true,
     compress: true,
     port: 8000
