@@ -10,14 +10,14 @@ define(function (require) {
     components: [
       LogoComponent,
       NavigationComponent
-    ]
+    ],
 
-    // template: function () {
-    //   return `
-    //     <div id="header-logo"></div>
-    //     <nav id="navigation"></nav>
-    //   `;
-    // }
+    template: function () {
+      return `
+        <div id="header-logo"></div>
+        <nav id="navigation"></nav>
+      `;
+    }
   });
 
   return HeaderModule;

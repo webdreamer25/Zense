@@ -110,24 +110,15 @@
         if (!this.selector.length) {
           let data = this.serializeData();
           
-          if (this.type === 'append') {
-            this.selector.innerHTML += this.template(data);
-          } else {
-            this.selector.innerHTML = this.template(data);
-          }
+          this.determineRenderType({ element: this.selector, data: data });
         } else {
           for (let i = 0; i < this.selector.length; i++) {
             let el = this.selector[i];
 
-            if (this.type === 'append') {
-              el.innerHTML += this.template(data);
-            } else {
-              el.innerHTML = this.template(data)
-            }
+            this.determineRenderType({ element: el, data: data })
           }
         }
       } catch (e) {
-        // this.createRendererContainer();
         Config.errors.push(e);
       }
 
@@ -142,8 +133,16 @@
       this.selector.remove();
     },
 
+    determineRenderType: function (options) {
+      if (this.renderType === 'append') {
+        options.element.innerHTML += this.template(options.data);
+      } else {
+        options.element.innerHTML = this.template(options.data)
+      }
+    },
+
     serializeData: function (data) {
-      if (this.api.model || this.api.collection.length > 0) {
+      if (this.api && (this.api.model || this.api.collection.length > 0)) {
         return {
           model: this.api.model,
           collection: this.api.collection
@@ -151,26 +150,26 @@
       } else if (data) {
         return data;
       } else {
-        let newErrorArray = [];
+        // let newErrorArray = [];
 
-        // Adds a warning to config errors
-        for (let i = 0; i < Config.errors.length; i++) {
-          let error = Config.errors[i];
+        // // Adds a warning to config errors
+        // for (let i = 0; i < Config.errors.length; i++) {
+        //   let error = Config.errors[i];
 
-          if (error.selector === this.selector) {
-            error.warning = this.warningText;
+        //   if (error.selector === this.selector) {
+        //     error.warning = this.warningText;
             
-            newErrorArray.push(error);
-          } else {
-            newErrorArray.push({
-              selector: error.selector,
-              component: error.component,
-              warning: this.warningText
-            });
-          }
-        }
+        //     newErrorArray.push(error);
+        //   } else {
+        //     newErrorArray.push({
+        //       selector: error.selector,
+        //       component: error.component,
+        //       warning: this.warningText
+        //     });
+        //   }
+        // }
 
-        Config.errors = newErrorArray;
+        // Config.errors = newErrorArray;
       }
     },
 
@@ -190,13 +189,6 @@
       }
 
       this.regions.push(this.selector);
-    },
-
-    createRendererContainer: function () {
-      let id = this.selector.id;
-      let container = `<div id="${id}></div>`;
-
-      this.regions[0].innerHTML += container;
     },
 
     errorCheck: function () {

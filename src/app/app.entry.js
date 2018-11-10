@@ -1,6 +1,7 @@
 require(
   [
-    'modules/header.module'
+    'modules/header.module',
+    'underscore'
   ],
   function (HeaderModule) {
     HeaderModule.render();
