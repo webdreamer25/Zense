@@ -1,6 +1,7 @@
 #Ignore file
 node_modules/
 dist/
+src/mocks/
 src/app.js
 notes.txt
 npm-debug.log

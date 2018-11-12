@@ -35,7 +35,8 @@
   };
 
   const Internal = {
-    errors: []
+    errors: [],
+    warnings: []
   };
 
   const Model = {
@@ -83,32 +84,45 @@
   }
 
   const Api = {
+    store: {},
+    state: 'not-ready',
     response: null,
-    methodType: 'GET',
-    percentComplete: '',
+    percentComplete: 0,
+    storage: null,
 
     fetch: function (options) {
-      let xhr = new XMLHttpRequest();
+      this.xhr = new XMLHttpRequest();
 
-      xhr.addEventListener('error', this.error.bind(this));
-      xhr.addEventListener('abort', this.abort.bind(this));
-      xhr.addEventListener('load', this.success.bind(this));
-      xhr.addEventListener('progress', this.updateProgress.bind(this));
+      if (options.method.toLowerCase() === 'post') {
+        for (let i = 0; i < options.headers.length; i++) {
+          let header = options.headers[i];
 
-      xhr.open(options.method, options.url);
-      xhr.send(options.data);
+          xhr.setRequestHeader(header.name, header.value);
+        }
+      }
+
+      this.xhr.addEventListener('error', this.error.bind(this));
+      this.xhr.addEventListener('abort', this.abort.bind(this));
+      this.xhr.addEventListener('load', this.success.bind(this));
+      this.xhr.addEventListener('loadend', this.complete.bind(this));
+      this.xhr.addEventListener('progress', this.updateProgress.bind(this));
+
+      this.xhr.open(options.method, options.url);
+
+      if (options.withCredentials) {
+        this.xhr.widthCredentials = true;
+      }
+
+      this.xhr.send(options.data);
     },
 
-    success: function (res) {
+    success: function (progress) {
       if (this.response !== null) {
         this.response = null;
       } 
 
-      console.log(res);
-
-      this.response = res;
-
-      this.complete(res);
+      this.progressEvent = progress;
+      this.response = JSON.parse(this.xhr.responseText);
     },
 
     error: function () {
@@ -123,139 +137,294 @@
       if (eventObj.lengthComputable) {
         this.percentComplete = eventObj.loaded / eventObj.total * 100;
       } else {
-        Internal.errors.push({
-          type: 'XHR.'.concat(this.methodType),
+        Internal.warnings.push({
+          type: 'XHR.' + this.methodType,
           description: 'Unable to update "' + this.methodType + '" xhr request progress.'
         });
       }
     },
 
     complete: function (res) {
+      this.state = 'ready';
       return null;
     }
   };
 
-  const Renderer = {
-    type: '',
-    regions: [],
-    selector: null,
-    template: null,
-    renderType: 'append',
-    warningText: 'There is no data being passed in.',
+  const Renderer = Object.create(Api);
 
-    beforeRender: function () {
-      return null;
-    },
+  Renderer.type = '';
+  Renderer.regions = [];
+  Renderer.selector = null;
+  Renderer.template = null;
+  Renderer.renderType = 'append';
+  Renderer.warningText = 'There is no data being passed in.';
 
-    render: function () {
-      this.beforeRender();
-      this.setDOMSelector();
+  Renderer.beforeRender = function () {
+    return null;
+  };
 
-      try {
-        this.errorCheck();
+  Renderer.render = function () {
+    this.beforeRender();
+    this.setDOMSelector();
 
-        if (!this.selector.length) {
-          let data = this.serializeData();
+    try {
+      this.errorCheck();
+
+      if (!this.selector.length) {
+        let data = this.serializeData();
+        
+        this.determineRenderType({ element: this.selector, data: data });
+      } else {
+        for (let i = 0; i < this.selector.length; i++) {
+          let el = this.selector[i];
+
+          this.determineRenderType({ element: el, data: data })
+        }
+      }
+    } catch (e) {
+      Internal.errors.push(e);
+    }
+
+    this.afterRender();
+  };
+
+  Renderer.afterRender = function () {
+    return null;
+  };
+
+  Renderer.destroy = function () {
+    this.selector.remove();
+  };
+
+  Renderer.determineRenderType = function (options) {
+    if (this.renderType === 'append') {
+      options.element.innerHTML += this.template(options.data);
+    } else {
+      options.element.innerHTML = this.template(options.data)
+    }
+  };
+
+  // Renderer.determineDataState = function () {
+  //   let limit = 0;
+
+  //   if (this.state === 'not-ready') {
+  //     do {
+  //       this.state = 'loading';
+  //       limit++;
+  //     } while (this.xhr.readyState === 2);
+
+  //     this.api.state = 'ready';
+  //   }
+  // };
+
+  Renderer.serializeData = function (data) {
+    if (this.api) {
+      // check is necessary so data is there before rendering components, modules or composites.
+      this.determineDataState();
+
+      console.log(this.api);
+      console.log(this.api.response);
+
+      return this.api.response;
+    } else if (data) {
+      return data;
+    } else {
+      // let newErrorArray = [];
+
+      // // Adds a warning to config errors
+      // for (let i = 0; i < Internal.errors.length; i++) {
+      //   let error = Internal.errors[i];
+
+      //   if (error.selector === this.selector) {
+      //     error.warning = this.warningText;
           
-          this.determineRenderType({ element: this.selector, data: data });
-        } else {
-          for (let i = 0; i < this.selector.length; i++) {
-            let el = this.selector[i];
+      //     newErrorArray.push(error);
+      //   } else {
+      //     newErrorArray.push({
+      //       selector: error.selector,
+      //       component: error.component,
+      //       warning: this.warningText
+      //     });
+      //   }
+      // }
 
-            this.determineRenderType({ element: el, data: data })
-          }
-        }
-      } catch (e) {
-        Internal.errors.push(e);
-      }
-
-      this.afterRender();
-    },
-
-    afterRender: function () {
-      return null;
-    },
-
-    destroy: function () {
-      this.selector.remove();
-    },
-
-    determineRenderType: function (options) {
-      if (this.renderType === 'append') {
-        options.element.innerHTML += this.template(options.data);
-      } else {
-        options.element.innerHTML = this.template(options.data)
-      }
-    },
-
-    serializeData: function (data) {
-      if (this.api && (this.api.model || this.api.collection.length > 0)) {
-        return {
-          model: this.api.model,
-          collection: this.api.collection
-        }
-      } else if (data) {
-        return data;
-      } else {
-        // let newErrorArray = [];
-
-        // // Adds a warning to config errors
-        // for (let i = 0; i < Internal.errors.length; i++) {
-        //   let error = Internal.errors[i];
-
-        //   if (error.selector === this.selector) {
-        //     error.warning = this.warningText;
-            
-        //     newErrorArray.push(error);
-        //   } else {
-        //     newErrorArray.push({
-        //       selector: error.selector,
-        //       component: error.component,
-        //       warning: this.warningText
-        //     });
-        //   }
-        // }
-
-        // Internal.errors = newErrorArray;
-      }
-    },
-
-    setDOMSelector: function () {
-      switch (this.selector.charAt(0)) {
-        case '#':
-          this.selector = document.getElementById(this.selector.slice(1));
-          break;
-        default:
-          this.selector = document.querySelectorAll(this.selector);
-      }
-
-      // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
-      // this is incase we have an instance of appending purely on the parent element vs a specific container.
-      if (typeof this.selector === 'undefined' && this.selector === null) {
-        this.selector = this.regions[0];
-      }
-
-      this.regions.push(this.selector);
-    },
-
-    errorCheck: function () {
-      let errorObj = {
-        type: this.type,
-        name: this.name
-      }
-      if (this.type === 'component' && this.template === null) {
-        errorObj.message = 'no template currently exists.';
-      }
-
-      if (this.selector === null) {
-        errorObj.message = 'The necessary elements to render your components do not exist in the DOM.'
-      }
-
-      if (errorObj.message) {
-        throw errorObj;
-      }
+      // Internal.errors = newErrorArray;
     }
   };
+
+  Renderer.setDOMSelector = function () {
+    switch (this.selector.charAt(0)) {
+      case '#':
+        this.selector = document.getElementById(this.selector.slice(1));
+        break;
+      default:
+        this.selector = document.querySelectorAll(this.selector);
+    }
+
+    // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
+    // this is incase we have an instance of appending purely on the parent element vs a specific container.
+    if (typeof this.selector === 'undefined' && this.selector === null) {
+      this.selector = this.regions[0];
+    }
+
+    this.regions.push(this.selector);
+  };
+
+  Renderer.errorCheck = function () {
+    let errorObj = {
+      type: this.type,
+      name: this.name
+    }
+    if (this.type === 'component' && this.template === null) {
+      errorObj.message = 'no template currently exists.';
+    }
+
+    if (this.selector === null) {
+      errorObj.message = 'The necessary elements to render your components do not exist in the DOM.'
+    }
+
+    if (errorObj.message) {
+      throw errorObj;
+    }
+  };
+
+  // const Renderer = {
+  //   type: '',
+  //   regions: [],
+  //   selector: null,
+  //   template: null,
+  //   renderType: 'append',
+  //   warningText: 'There is no data being passed in.',
+
+  //   beforeRender: function () {
+  //     return null;
+  //   },
+
+  //   render: function () {
+  //     this.beforeRender();
+  //     this.setDOMSelector();
+
+  //     try {
+  //       this.errorCheck();
+
+  //       if (!this.selector.length) {
+  //         let data = this.serializeData();
+          
+  //         this.determineRenderType({ element: this.selector, data: data });
+  //       } else {
+  //         for (let i = 0; i < this.selector.length; i++) {
+  //           let el = this.selector[i];
+
+  //           this.determineRenderType({ element: el, data: data })
+  //         }
+  //       }
+  //     } catch (e) {
+  //       Internal.errors.push(e);
+  //     }
+
+  //     this.afterRender();
+  //   },
+
+  //   afterRender: function () {
+  //     return null;
+  //   },
+
+  //   destroy: function () {
+  //     this.selector.remove();
+  //   },
+
+  //   determineRenderType: function (options) {
+  //     if (this.renderType === 'append') {
+  //       options.element.innerHTML += this.template(options.data);
+  //     } else {
+  //       options.element.innerHTML = this.template(options.data)
+  //     }
+  //   },
+
+  //   determineDataState: function () {
+  //     let limit = 0;
+
+  //     if (this.api.state === 'not-ready') {
+  //       do {
+  //         this.api.state = 'loading';
+  //         limit++;
+  //       } while (limit < 100);
+
+  //       this.api.state = 'ready';
+  //     }
+  //   },
+
+  //   serializeData: function (data) {
+  //     if (this.api) {
+  //       // check is necessary so data is there before rendering components, modules or composites.
+  //       this.determineDataState();
+
+  //       console.log(this.api);
+  //       console.log(this.api.response);
+
+  //       return this.api.response;
+  //     } else if (data) {
+  //       return data;
+  //     } else {
+  //       // let newErrorArray = [];
+
+  //       // // Adds a warning to config errors
+  //       // for (let i = 0; i < Internal.errors.length; i++) {
+  //       //   let error = Internal.errors[i];
+
+  //       //   if (error.selector === this.selector) {
+  //       //     error.warning = this.warningText;
+            
+  //       //     newErrorArray.push(error);
+  //       //   } else {
+  //       //     newErrorArray.push({
+  //       //       selector: error.selector,
+  //       //       component: error.component,
+  //       //       warning: this.warningText
+  //       //     });
+  //       //   }
+  //       // }
+
+  //       // Internal.errors = newErrorArray;
+  //     }
+  //   },
+
+  //   setDOMSelector: function () {
+  //     switch (this.selector.charAt(0)) {
+  //       case '#':
+  //         this.selector = document.getElementById(this.selector.slice(1));
+  //         break;
+  //       default:
+  //         this.selector = document.querySelectorAll(this.selector);
+  //     }
+
+  //     // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
+  //     // this is incase we have an instance of appending purely on the parent element vs a specific container.
+  //     if (typeof this.selector === 'undefined' && this.selector === null) {
+  //       this.selector = this.regions[0];
+  //     }
+
+  //     this.regions.push(this.selector);
+  //   },
+
+  //   errorCheck: function () {
+  //     let errorObj = {
+  //       type: this.type,
+  //       name: this.name
+  //     }
+  //     if (this.type === 'component' && this.template === null) {
+  //       errorObj.message = 'no template currently exists.';
+  //     }
+
+  //     if (this.selector === null) {
+  //       errorObj.message = 'The necessary elements to render your components do not exist in the DOM.'
+  //     }
+
+  //     if (errorObj.message) {
+  //       throw errorObj;
+  //     }
+  //   }
+  // };
 
   // ERROR HANDLER
   const ErrorHandler = Object.create(Renderer);
@@ -408,6 +577,7 @@
   };
 
   root.Zense = {
+    Api,
     Module,
     Composite,
     Component,
