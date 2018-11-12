@@ -31,7 +31,10 @@
   }
 
   const Config = {
-    env: 'dev',
+    env: 'dev'
+  };
+
+  const Internal = {
     errors: []
   };
 
@@ -80,11 +83,55 @@
   }
 
   const Api = {
-    model: {},
-    collection: {},
+    response: null,
+    methodType: 'GET',
+    percentComplete: '',
 
-    fetch: function () {
+    fetch: function (options) {
+      let xhr = new XMLHttpRequest();
 
+      xhr.addEventListener('error', this.error.bind(this));
+      xhr.addEventListener('abort', this.abort.bind(this));
+      xhr.addEventListener('load', this.success.bind(this));
+      xhr.addEventListener('progress', this.updateProgress.bind(this));
+
+      xhr.open(options.method, options.url);
+      xhr.send(options.data);
+    },
+
+    success: function (res) {
+      if (this.response !== null) {
+        this.response = null;
+      } 
+
+      console.log(res);
+
+      this.response = res;
+
+      this.complete(res);
+    },
+
+    error: function () {
+
+    },
+
+    abort: function () {
+
+    },
+
+    updateProgress: function (eventObj) {
+      if (eventObj.lengthComputable) {
+        this.percentComplete = eventObj.loaded / eventObj.total * 100;
+      } else {
+        Internal.errors.push({
+          type: 'XHR.'.concat(this.methodType),
+          description: 'Unable to update "' + this.methodType + '" xhr request progress.'
+        });
+      }
+    },
+
+    complete: function (res) {
+      return null;
     }
   };
 
@@ -119,7 +166,7 @@
           }
         }
       } catch (e) {
-        Config.errors.push(e);
+        Internal.errors.push(e);
       }
 
       this.afterRender();
@@ -153,8 +200,8 @@
         // let newErrorArray = [];
 
         // // Adds a warning to config errors
-        // for (let i = 0; i < Config.errors.length; i++) {
-        //   let error = Config.errors[i];
+        // for (let i = 0; i < Internal.errors.length; i++) {
+        //   let error = Internal.errors[i];
 
         //   if (error.selector === this.selector) {
         //     error.warning = this.warningText;
@@ -169,7 +216,7 @@
         //   }
         // }
 
-        // Config.errors = newErrorArray;
+        // Internal.errors = newErrorArray;
       }
     },
 
@@ -228,8 +275,8 @@
 
     Object.assign(this, defaults, options);
 
-    for (let i = 0; i < Config.errors.length; i++) {
-      let error = Config.errors[i];
+    for (let i = 0; i < Internal.errors.length; i++) {
+      let error = Internal.errors[i];
 
       document.querySelector(error.selector).style.border = '1px solid red';
 
@@ -242,11 +289,11 @@
   };
 
   ErrorHandler.serializeData = function () {
-    return Config.errors[this.index];
+    return Internal.errors[this.index];
   };
 
   ErrorHandler.start = function () {
-    if ((Config.errors === 0 || Config.env !== 'dev')) { return null; }
+    if ((Internal.errors === 0 || Config.env !== 'dev')) { return null; }
 
     this.initialize();
   }
@@ -313,7 +360,7 @@
         component.render();
       } else {
         // console.log('Component: ' + componentName + ' Error: Nees a template!');
-        Config.errors.push({
+        Internal.errors.push({
           selector: component.selector,
           component: component.name,
           description: 'This component needs a template!'
