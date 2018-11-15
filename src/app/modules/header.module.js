@@ -7,11 +7,11 @@ define(function (require) {
 
   HeaderApi.fetch({
     method: 'GET',
+    responseType: 'JSON',
     url: '../../mocks/test.json'
   });
 
   HeaderModule.create({
-    api: HeaderApi,
     name: 'header-module',
     selector: '#header-region',
     components: [

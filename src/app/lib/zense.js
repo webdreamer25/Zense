@@ -81,7 +81,7 @@
         }
       }
     }
-  }
+  };
 
   const Api = {
     store: {},
@@ -89,6 +89,7 @@
     response: null,
     percentComplete: 0,
     storage: null,
+    connect: null,
 
     fetch: function (options) {
       this.xhr = new XMLHttpRequest();
@@ -108,6 +109,7 @@
       this.xhr.addEventListener('progress', this.updateProgress.bind(this));
 
       this.xhr.open(options.method, options.url);
+      this.xhr.responseType = options.responseType;
 
       if (options.withCredentials) {
         this.xhr.widthCredentials = true;
@@ -123,6 +125,10 @@
 
       this.progressEvent = progress;
       this.response = JSON.parse(this.xhr.responseText);
+
+      if (this.connect !== null) {
+        this.connect(res);
+      }
     },
 
     error: function () {
@@ -204,27 +210,8 @@
     }
   };
 
-  // Renderer.determineDataState = function () {
-  //   let limit = 0;
-
-  //   if (this.state === 'not-ready') {
-  //     do {
-  //       this.state = 'loading';
-  //       limit++;
-  //     } while (this.xhr.readyState === 2);
-
-  //     this.api.state = 'ready';
-  //   }
-  // };
-
   Renderer.serializeData = function (data) {
     if (this.api) {
-      // check is necessary so data is there before rendering components, modules or composites.
-      this.determineDataState();
-
-      console.log(this.api);
-      console.log(this.api.response);
-
       return this.api.response;
     } else if (data) {
       return data;
