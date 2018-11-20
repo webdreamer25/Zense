@@ -1,15 +1,8 @@
-define(function (require) {
-  const HeaderApi = Object.create(Zense.Api);
+define(function (require) { 
   const HeaderModule = Object.create(Zense.Module);
 
   const LogoComponent = require('components/logo.component');
   const NavigationComponent = require('components/navigation.component');
-
-  HeaderApi.fetch({
-    method: 'GET',
-    responseType: 'JSON',
-    url: '../../mocks/test.json'
-  });
 
   HeaderModule.create({
     name: 'header-module',

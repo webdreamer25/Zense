@@ -4,6 +4,10 @@ define(function (require) {
   NavigationComponent.create({
     name: 'navigationComponent',
     selector: '#navigation',
+    api: {
+      method: 'GET',
+      url: '../../mocks/nav.json'
+    },
 
     template: function (data) {
       return `
@@ -13,16 +17,8 @@ define(function (require) {
           <li> ${data.link3} </li>
         </ul>
       `;
-    },
-
-    serializeData: function () {
-      return {
-        link1: 'home',
-        link2: 'about',
-        link3: 'contact'
-      }
     }
   });
-
+  
   return NavigationComponent;
 });
