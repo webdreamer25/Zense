@@ -1,19 +1,26 @@
-import { Renderer } from './cores';
+(function (root) {
+  const Component = function (options) {
+    Zense.Renderer.call(this, options);
+    this.initialize();
+  };
 
-class Component extends Renderer {
-  name = '';
+  Component.prototype = new Zense.Renderer();
 
-  constructor(options) {
-    this.opt = Object.assign({}, options);
-  }
+  Component.prototype.initialize = function () {
+    return null;
+  };
 
-  initialize() {
-    return null; 
-  }
+  Component.prototype.setName = function (selector) {
+    this.opt.name = selector.slice(1).concat('-component');
+  };
 
-  setName(selector) {
-    this.name = selector.slice(1).concat('-component');
-  }
-}
+  root.Zense.Component = {
+    create: function (options) {
+      Object.assign(Component.prototype, options);
 
-export default Component;
+      let component = new Component(options);
+
+      return component;
+    }
+  };
+})(window);
