@@ -84,54 +84,38 @@
   };
 
   const Api = {
-    store: {},
     percentComplete: 0,
     storage: null,
-    events: {
-      success: 'success'
-    },
 
-    fetch: function (options) {
-      let xhr = new XMLHttpRequest();
+    fetch: function (options, callback) {
+      this.xhr = new XMLHttpRequest();
+      
 
       if (options.method.toLowerCase() === 'post') {
         for (let i = 0; i < options.headers.length; i++) {
           let header = options.headers[i];
 
-          xhr.setRequestHeader(header.name, header.value);
+          this.xhr.setRequestHeader(header.name, header.value);
         }
       }
 
-      xhr.addEventListener('error', this.error.bind(this));
-      xhr.addEventListener('abort', this.abort.bind(this));
-      xhr.addEventListener('load', this.success.bind(this));
-      xhr.addEventListener('loadend', this.complete.bind(this));
-      xhr.addEventListener('progress', this.updateProgress.bind(this));
+      this.xhr.addEventListener('error', this.error.bind(this));
+      this.xhr.addEventListener('abort', this.abort.bind(this));
+      // this.xhr.addEventListener('load', this.success.bind(this));
+      // this.xhr.addEventListener('loadend', this.complete.bind(this));
+      this.xhr.addEventListener('progress', this.updateProgress.bind(this));
 
-      xhr.open(options.method, options.url);
+      this.xhr.open(options.method, options.url);
 
       if (options.responseType) {
-        xhr.responseType = options.responseType.toLowerCase();
+        this.xhr.responseType = options.responseType.toLowerCase();
       }
 
       if (options.withCredentials) {
-        xhr.widthCredentials = true;
+        this.xhr.widthCredentials = true;
       }
 
-      xhr.send(options.data);
-    },
-
-    success: function (progress) {
-      let event = new Event(this.events.success);
-
-      if (this.store !== null) {
-        this.store = null;
-      } 
-
-      this.progressEvent = progress;
-      this.store = JSON.parse(progress.currentTarget.responseText);
-      
-      document.dispatchEvent(event);
+      this.xhr.send(options.data);
     },
 
     error: function () {
@@ -151,69 +135,56 @@
           description: 'Unable to update "' + this.methodType + '" xhr request progress.'
         });
       }
-    },
-
-    complete: function (res) {
-      
-      return null;
     }
   };
 
-  const Renderer = {};
+  const Renderer = Object.create(Api);
 
   Renderer.type = '';
   Renderer.regions = [];
   Renderer.selector = null;
   Renderer.template = null;
   Renderer.renderType = 'append';
-  Renderer.warningText = 'There is no data being passed in.';
-
-  Renderer.initRenderer = function () {
-    if (this.api && this.api.method.toLowerCase() === 'get') {
-      this.api.events.success = 'success-' + this.name;
-      this.api.fetch(this.api);
-      console.log('setting dom selector');
-    }
-  };
-
-  Renderer.setupRenderer = function () {
-    this.beforeRender();
-    this.setDOMSelector();
-    
-    try {
-      this.errorCheck();
-      let data = this.serializeData();
-
-      if (!this.selector.length) {
-        this.determineRenderType({ element: this.selector, data: data });
-      } else {
-        for (let i = 0; i < this.selector.length; i++) {
-          let el = this.selector[i];
-
-          this.determineRenderType({ element: el, data: data })
-        }
-      }
-    } catch (e) {
-      Internal.errors.push(e);
-    }
-
-    this.afterRender();
-  };
 
   Renderer.beforeRender = function () {
     return null;
   };
 
   Renderer.render = function () {
-    if (!this.api) {
-      this.setupRenderer();
+    this.beforeRender();
+    this.setDOMSelector();
+    
+    try {
+      this.errorCheck();
+
+      if (!this.api) {
+        let data = this.serializeData();
+
+        this.addTemplateToDOM(data);
+      } else {
+        this.xhr.addEventListener('load', function (req) {
+          this.addTemplateToDOM(JSON.parse(req.currentTarget.responseText));
+        }.bind(this));
+      }
+    } catch (e) {
+      Internal.errors.push(e);
+    }
+
+    
+
+    this.afterRender();
+  };
+
+  Renderer.addTemplateToDOM = function (data) {
+    if (!this.selector.length) {
+      this.determineRenderType({ element: this.selector, data: data });
     } else {
-      document.addEventListener(
-        this.api.events.success, 
-        this.setupRenderer.bind(this), 
-        false
-      );
-    } 
+      for (let i = 0; i < this.selector.length; i++) {
+        let el = this.selector[i];
+
+        this.determineRenderType({ element: el, data: data })
+      }
+    }
   };
 
   Renderer.afterRender = function () {
@@ -233,10 +204,7 @@
   };
 
   Renderer.serializeData = function (data) {
-    if (this.api && this.api.store) {
-      console.log(this.api.store);
-      return this.api.store;
-    } else if (data) { 
+    if (data) { 
       return data;
     } else {
       return null;
@@ -329,13 +297,11 @@
   
   Component.create = function (options) {
     Object.assign(this, options);
-    
+
     if (this.api) {
-      this.api = Object.create(Api);
-      this.api = Object.assign(this.api, options.api);
+      this.fetch(this.api);
     }
 
-    this.initRenderer();
     this.initialize();
   };
 
@@ -360,7 +326,6 @@
 
     this.components = options.components;
 
-    this.initRenderer();
     this.initialize();
   };
 
