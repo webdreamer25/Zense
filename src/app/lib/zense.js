@@ -83,11 +83,11 @@
     }
   };
 
-  const Api = {
+  const Xhr = {
     percentComplete: 0,
     storage: null,
 
-    fetch: function (options, callback) {
+    ajax: function (options, callback) {
       this.xhr = new XMLHttpRequest();
       
 
@@ -138,7 +138,7 @@
     }
   };
 
-  const Renderer = Object.create(Api);
+  const Renderer = Object.create(Xhr);
 
   Renderer.type = '';
   Renderer.regions = [];
@@ -299,7 +299,7 @@
     Object.assign(this, options);
 
     if (this.api) {
-      this.fetch(this.api);
+      this.ajax(this.api);
     }
 
     this.initialize();
@@ -346,10 +346,8 @@
     for (let i = 0; i < componentList.length; i++) {
       let component = componentList[i];
 
+      // We need to ensure every component has a unique name set for debugging and error handling purposes.
       this.checkUniqueName(component);
-
-      // Needed to ensure we merge component under Module/this context.
-      Object.assign(this, component);
 
       // shouldRenderChildren property exists so you can decide where and/or when a component should render.
       if (this.shouldRenderChildren && component.template !== '') {
@@ -404,7 +402,6 @@
   };
 
   root.Zense = {
-    Api,
     Module,
     Composite,
     Component,
