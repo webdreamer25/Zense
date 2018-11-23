@@ -1,10 +1,12 @@
 require(
   [
     'modules/header.module',
+    'modules/footer.module',
     'underscore'
   ],
-  function (HeaderModule) {
+  function (HeaderModule, FooterModule) {
     HeaderModule.render();
+    FooterModule.render();
 
     // const AppErrorHandler = Object.create(Zense.ErrorHandler);
 

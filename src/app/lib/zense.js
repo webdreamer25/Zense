@@ -170,8 +170,6 @@
       Internal.errors.push(e);
     }
 
-    
-
     this.afterRender();
   };
 
@@ -196,10 +194,12 @@
   };
 
   Renderer.determineRenderType = function (options) {
+    let el = options.element;
+
     if (this.renderType === 'append') {
-      options.element.innerHTML += this.template(options.data);
+      el.insertAdjacentHTML('beforeend', this.template(options.data));
     } else {
-      options.element.innerHTML = this.template(options.data)
+      el.innerHTML = this.template(options.data)
     }
   };
 
@@ -324,8 +324,6 @@
   Module.create = function (options) {
     Object.assign(this, options);
 
-    this.components = options.components;
-
     this.initialize();
   };
 
@@ -334,7 +332,9 @@
   };
 
   Module.afterRender = function () {
-    this.addComponents(this.components);
+    if (this.components.length > 0) {
+      this.addComponents(this.components);
+    }
   };
 
   Module.addComponents = function (componentList) {
