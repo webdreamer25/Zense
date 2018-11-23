@@ -83,6 +83,7 @@
     }
   };
 
+  // CORE
   const Xhr = {
     percentComplete: 0,
     storage: null,
@@ -146,7 +147,6 @@
 
   const Renderer = Object.create(Xhr);
 
-  Renderer.type = '';
   Renderer.regions = [];
   Renderer.selector = null;
   Renderer.template = null;
@@ -176,6 +176,11 @@
       Internal.errors.push(e);
     }
 
+    // Needed for modules only
+    if (this.addComponents) {
+      this.addComponents();
+    }
+
     this.afterRender();
   };
 
@@ -201,11 +206,12 @@
 
   Renderer.determineRenderType = function (options) {
     let el = options.element;
+    let tpl = this.template(options.data);
 
     if (this.renderType === 'append') {
-      el.insertAdjacentHTML('beforeend', this.template(options.data));
+      el.insertAdjacentHTML('beforeend', tpl);
     } else {
-      el.innerHTML = this.template(options.data)
+      el.innerHTML = tpl;
     }
   };
 
@@ -218,14 +224,14 @@
   };
 
   Renderer.setDOMSelector = function () {
-    if (typeof this.selector !== 'string') { return null; };
-
-    switch (this.selector.charAt(0)) {
-      case '#':
-        this.selector = document.getElementById(this.selector.slice(1));
-        break;
-      default:
-        this.selector = document.querySelectorAll(this.selector);
+    if (typeof this.selector === 'string') {
+      switch (this.selector.charAt(0)) {
+        case '#':
+          this.selector = document.getElementById(this.selector.slice(1));
+          break;
+        default:
+          this.selector = document.querySelectorAll(this.selector);
+      }
     }
 
     // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
@@ -295,13 +301,12 @@
 
     this.initialize();
   };
-
-  // COMPONENT
-  const Component = Object.create(Renderer);
-
-  Component.type = 'component';
   
-  Component.create = function (options) {
+  // CONTROLLER
+  // Helps code dry with by keeping similar functionilty in one place
+  const Controller = Object.create(Renderer);
+
+  Controller.create = function (options) {
     Object.assign(this, options);
 
     if (this.api) {
@@ -311,46 +316,41 @@
     this.initialize();
   };
 
-  Component.initialize = function () {
+  Controller.initialize = function () {
     return null;
-  };      
+  }; 
+
+  // COMPONENT
+  const Component = Object.create(Controller);
+
+  Component.id = 0;
+  Component.type = 'component';
 
   Component.setName = function (selector) {
-    this.name = selector.slice(1) + '-' + this.type;
+    selector = selector.toLowerCase();
+
+    this.name = selector.slice(1) + '-' + this.type + '-' + this.id;
+
+    // Increment id after name is set so no duplication occurs
+    this.id++
   };
 
   // MODULE
-  const Module = Object.create(Renderer);
+  const Module = Object.create(Controller);
 
   Module.type = 'module';
   Module.components = [];
   Module.componentNameArray = [];
   Module.shouldRenderChildren = true;
 
-  Module.create = function (options) {
-    Object.assign(this, options);
-
-    this.initialize();
-  };
-
-  Module.initialize = function () {
-    return null;
-  };
-
-  Module.afterRender = function () {
-    if (this.components.length > 0) {
-      this.addComponents(this.components);
-    }
-  };
-
-  Module.addComponents = function (componentList) {
+  Module.addComponents = function () {
     // Do nothing if no child components exist
-    if (!Array.isArray(componentList) && componentList.length === 0) {
+    if (!Array.isArray(this.components) && this.components.length === 0) {
       return null;
     }
 
-    for (let i = 0; i < componentList.length; i++) {
-      let component = componentList[i];
+    for (let i = 0; i < this.components.length; i++) {
+      let component = this.components[i];
 
       // We need to ensure every component has a unique name set for debugging and error handling purposes.
       this.checkUniqueName(component);
@@ -373,7 +373,7 @@
     this.componentNameArray.push(component.name);
 
     for (let i = 0; i < this.componentNameArray.length; i++) {
-      if (this.componentNameArray[i] !== component.name) {
+      if (this.componentNameArray[i] !== component.name && typeof component.name !== 'undefined') {
         return null;
       } else {
         component.setName(component.selector);
@@ -382,21 +382,14 @@
   };
 
   // COMPOSITE
-  const Composite = Object.create(Renderer);
+  const Composite = Object.create(Controller);
   
   Composite.modules = [];
 
-  Composite.create = function (options) {
-    Object.assign(this, options);
-
-    this.initialize();
+  Composite.initialize = function () {
     this.render();
 
     this.bootstrapModules();
-  };
-
-  Composite.initialize = function () {
-    return null;
   };
 
   Composite.bootstrapModules = function () {
