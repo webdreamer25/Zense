@@ -168,7 +168,7 @@
 
         this.addTemplateToDOM(data);
       } else {
-        this.xhr.addEventListener('load', function (req) {
+        this.xhr.addEventListener('loadend', function (req) {
           this.addTemplateToDOM(JSON.parse(req.currentTarget.responseText));
         }.bind(this));
       }
