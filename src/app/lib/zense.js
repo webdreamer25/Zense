@@ -87,9 +87,15 @@
     percentComplete: 0,
     storage: null,
 
-    ajax: function (options, callback) {
+    ajax: function (options) {
+      let defaults = {
+        method: 'GET',
+        data: null
+      };
+
+      options = Object.assign({}, defaults, options);
+
       this.xhr = new XMLHttpRequest();
-      
 
       if (options.method.toLowerCase() === 'post') {
         for (let i = 0; i < options.headers.length; i++) {
