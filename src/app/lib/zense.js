@@ -52,65 +52,127 @@
     }
   };
 
+  const Util = {};
+
+  Util.dom = function (selector) {
+    if (typeof selector === 'string') {
+      switch (selector.charAt(0)) {
+        case '#':
+          selector = document.getElementById(selector.slice(1));
+
+          selector.on = function (event, callback, bubble) {
+            if (typeof bubble === 'undefined') {
+              bubble = true;
+            }
+      
+            selector.addEventListener(event, callback, bubble);
+          };
+
+          break;
+        default:
+          selector = document.querySelectorAll(selector);
+
+          selector.on = function (event, callback, bubble) {
+            if (typeof bubble === 'undefined') {
+              bubble = true;
+            }
+      
+            for (let i = 0; i < selector.length; i++) {
+              selector[i].addEventListener(event, callback, bubble);
+            }
+          };
+      }
+    }
+
+    return selector;
+  };
+
+  const Behavior = Object.create(Util);
+
+  Behavior.trigger = '';
+
+  Behavior.config = function (options) {
+    Object.assign(this, options);
+  };
+
+  Behavior.bindHandlers = function () {
+    this.trigger = this.dom(this.trigger);
+
+    if (!this.trigger.length) {
+      console.log(this.trigger);
+    } else {
+      this.trigger.on('click', function (e) {
+        e.preventDefault;
+        console.log('clicked');
+      });
+    }
+
+    return null;
+  };
+
+  Behavior.start = function () {
+    this.bindHandlers();
+  };
+
   // CORE
-  const Xhr = {
-    percentComplete: 0,
-    storage: null,
+  const Xhr = Object.create(Util);
+  
+  Xhr.percentComplete = 0;
+  Xhr.storage = null;
 
-    ajax: function (options) {
-      let defaults = {
-        method: 'GET',
-        data: null
-      };
+  Xhr.ajax = function (options) {
+    let defaults = {
+      method: 'GET',
+      data: null
+    };
 
-      options = Object.assign({}, defaults, options);
+    options = Object.assign({}, defaults, options);
 
-      this.xhr = new XMLHttpRequest();
+    this.xhr = new XMLHttpRequest();
 
-      if (options.method.toLowerCase() === 'post') {
-        for (let i = 0; i < options.headers.length; i++) {
-          let header = options.headers[i];
+    if (options.method.toLowerCase() === 'post') {
+      for (let i = 0; i < options.headers.length; i++) {
+        let header = options.headers[i];
 
-          this.xhr.setRequestHeader(header.name, header.value);
-        }
+        this.xhr.setRequestHeader(header.name, header.value);
       }
+    }
 
-      this.xhr.addEventListener('error', this.error.bind(this));
-      this.xhr.addEventListener('abort', this.abort.bind(this));
-      // this.xhr.addEventListener('load', this.success.bind(this));
-      // this.xhr.addEventListener('loadend', this.complete.bind(this));
-      this.xhr.addEventListener('progress', this.updateProgress.bind(this));
+    this.xhr.addEventListener('error', this.error.bind(this));
+    this.xhr.addEventListener('abort', this.abort.bind(this));
+    // this.xhr.addEventListener('load', this.success.bind(this));
+    // this.xhr.addEventListener('loadend', this.complete.bind(this));
+    this.xhr.addEventListener('progress', this.updateProgress.bind(this));
 
-      this.xhr.open(options.method, options.url);
+    this.xhr.open(options.method, options.url);
 
-      if (options.responseType) {
-        this.xhr.responseType = options.responseType.toLowerCase();
-      }
+    if (options.responseType) {
+      this.xhr.responseType = options.responseType.toLowerCase();
+    }
 
-      if (options.withCredentials) {
-        this.xhr.widthCredentials = true;
-      }
+    if (options.withCredentials) {
+      this.xhr.widthCredentials = true;
+    }
 
-      this.xhr.send(options.data);
-    },
+    this.xhr.send(options.data);
+  };
 
-    error: function () {
-      console.log('There was an error with your XHR request');
-    },
+  Xhr.error = function () {
+    console.log('There was an error with your XHR request');
+  };
 
-    abort: function () {
-      console.log('Aborted your XHR request.');
-    },
+  Xhr.abort = function () {
+    console.log('Aborted your XHR request.');
+  };
 
-    updateProgress: function (eventObj) {
-      if (eventObj.lengthComputable) {
-        this.percentComplete = eventObj.loaded / eventObj.total * 100;
-      } else {
-        Internal.warnings.push({
-          type: 'XHR.' + this.methodType,
-          description: 'Unable to update "' + this.methodType + '" xhr request progress.'
-        });
-      }
+  Xhr.updateProgress = function (eventObj) {
+    if (eventObj.lengthComputable) {
+      this.percentComplete = eventObj.loaded / eventObj.total * 100;
+    } else {
+      Internal.warnings.push({
+        type: 'XHR.' + this.methodType,
+        description: 'Unable to update "' + this.methodType + '" xhr request progress.'
+      });
     }
   };
 
@@ -150,7 +212,32 @@
       this.addComponents();
     }
 
+    this.setBehaviors();
     this.afterRender();
+  };
+
+  Renderer.afterRender = function () {
+    return null;
+  };
+
+  Renderer.setBehaviors = function () {
+    return null;
+  };
+
+  Renderer.destroy = function () {
+    this.selector.remove();
+  };
+
+  Renderer.setDOMSelector = function () {
+    this.selector = this.dom(this.selector);
+
+    // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
+    // this is incase we have an instance of appending purely on the parent element vs a specific container.
+    if (typeof this.selector === 'undefined' && this.selector === null) {
+      this.selector = this.regions[0];
+    }
+
+    this.regions.push(this.selector);
   };
 
   Renderer.addTemplateToDOM = function (data) {
@@ -163,14 +250,6 @@
         this.determineRenderType({ element: el, data: data })
       }
     }
-  };
-
-  Renderer.afterRender = function () {
-    return null;
-  };
-
-  Renderer.destroy = function () {
-    this.selector.remove();
   };
 
   Renderer.determineRenderType = function (options) {
@@ -190,26 +269,6 @@
     } else {
       return null;
     }
-  };
-
-  Renderer.setDOMSelector = function () {
-    if (typeof this.selector === 'string') {
-      switch (this.selector.charAt(0)) {
-        case '#':
-          this.selector = document.getElementById(this.selector.slice(1));
-          break;
-        default:
-          this.selector = document.querySelectorAll(this.selector);
-      }
-    }
-
-    // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
-    // this is incase we have an instance of appending purely on the parent element vs a specific container.
-    if (typeof this.selector === 'undefined' && this.selector === null) {
-      this.selector = this.regions[0];
-    }
-
-    this.regions.push(this.selector);
   };
 
   Renderer.errorCheck = function () {
@@ -275,6 +334,8 @@
   // Helps code dry with by keeping similar functionilty in one place
   const Controller = Object.create(Renderer);
 
+  Controller.behaviors = [];
+
   Controller.create = function (options) {
     Object.assign(this, options);
 
@@ -288,6 +349,16 @@
   Controller.initialize = function () {
     return null;
   }; 
+
+  Controller.setBehaviors = function () {
+    if (this.behaviors.length > 0) {
+      for (let i = 0; i < this.behaviors.length; i++) {
+        let behavior = this.behaviors[i];
+
+        behavior.start();
+      }
+    }
+  };
 
   // COMPONENT
   const Component = Object.create(Controller);
@@ -373,6 +444,7 @@
     Module,
     Composite,
     Component,
+    Behavior,
     ErrorHandler,
 
     Version:  '1.0.0',
