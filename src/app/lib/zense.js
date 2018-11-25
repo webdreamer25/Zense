@@ -55,7 +55,12 @@
   const Util = {};
 
   Util.dom = function (selector) {
+    // We need to preserve a string version of selector for error handling later on.
+    let selectorStr = '';
+
     if (typeof selector === 'string') {
+      selectorStr = selector;
+
       switch (selector.charAt(0)) {
         case '#':
           selector = document.getElementById(selector.slice(1));
@@ -64,6 +69,10 @@
         default:
           selector = document.querySelectorAll(selector);         
       }
+    } 
+
+    if (selector === null || selector.length === 0) {
+      throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };
     }
 
     selector.on = function (event, callback, bubble) {
@@ -101,6 +110,18 @@
         for (let i = 0; i < this.length; i++) {
           this[i].insertAdjacentHTML('beforeend', html);
         }
+      }
+    };
+
+    selector.each = function (callback, context) {
+      try {
+        for (let i = 0; i < this.length; i++) {
+          let el = this[i];
+
+          callback(el, i, this);
+        }
+      } catch (e) {
+        console.error(e);
       }
     };
 
@@ -308,7 +329,7 @@
   // BEHAVIOR
   const Behavior = Object.create(Util);
 
-  Behavior.trigger = '';
+  Behavior.ui = {};
 
   Behavior.config = function (options) {
     Object.assign(this, options);
