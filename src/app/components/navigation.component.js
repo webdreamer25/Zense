@@ -3,10 +3,6 @@ define(function (require) {
 
   NavigationComponent.create({
     selector: '#navigation',
-    api: {
-      method: 'GET',
-      url: '../../mocks/nav.json'
-    },
 
     template: function (data) {
       return `

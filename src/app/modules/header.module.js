@@ -5,6 +5,7 @@ define(function (require) {
   const NavigationComponent = require('components/navigation.component');
 
   HeaderModule.create({
+    api: '../../mocks/test.json',
     name: 'header-module',
     selector: '#header-region',
     components: [

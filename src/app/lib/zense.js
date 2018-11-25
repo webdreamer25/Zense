@@ -128,7 +128,8 @@
   Xhr.ajax = function (options) {
     let defaults = {
       method: 'GET',
-      data: null
+      data: null,
+      success: null
     };
 
     options = Object.assign({}, defaults, options);
@@ -158,6 +159,14 @@
     if (options.withCredentials) {
       this.xhr.widthCredentials = true;
     }
+
+    this.xhr.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        if (options.success !== null) {
+          options.success(JSON.parse(this.responseText));
+        }
+      }
+    };
 
     this.xhr.send(options.data);
   };
@@ -199,23 +208,13 @@
     try {
       this.errorCheck();
 
-      if (!this.api) {
-        let data = this.serializeData();
+      let data = this.serializeData(this.store);
 
-        this.addTemplateToDOM(data);
-      } else {
-        this.xhr.addEventListener('loadend', function (req) {
-          this.addTemplateToDOM(JSON.parse(req.currentTarget.responseText));
-        }.bind(this));
-      }
+      this.addTemplateToDOM(data);
     } catch (e) {
       Internal.errors.push(e);
     }
 
-    // Needed for modules only
-    if (this.addComponents) {
-      this.addComponents();
-    }
 
     this.setBehaviors();
     this.afterRender();
@@ -328,10 +327,6 @@
   Controller.create = function (options) {
     Object.assign(this, options);
 
-    if (this.api) {
-      this.ajax(this.api);
-    }
-
     this.initialize();
   };
 
@@ -373,7 +368,19 @@
   Module.componentNameArray = [];
   Module.shouldRenderChildren = true;
 
-  Module.addComponents = function () {
+  Module.afterRender = function () {
+    // Neccessary to ensure data is passed down to all child components if api exists
+    if (!this.api) {
+      this.addComponents();
+    } else {
+      this.ajax({
+        url: this.api,
+        success: this.addComponents.bind(this)
+      });
+    }
+  };
+
+  Module.addComponents = function (res) {
     // Do nothing if no child components exist
     if (!Array.isArray(this.components) && this.components.length === 0) {
       return null;
@@ -384,6 +391,10 @@
 
       // We need to ensure every component has a unique name set for debugging and error handling purposes.
       this.checkUniqueName(component);
+
+      // Let the component know whos their daddy.
+      component.parent = this;
+      component.store = res;
 
       // shouldRenderChildren property exists so you can decide where and/or when a component should render.
       if (this.shouldRenderChildren && component.template !== '') {
