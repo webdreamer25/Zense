@@ -5,8 +5,12 @@ define(function (require) {
     name: 'logo',
     selector: '#header-logo',
 
-    template: function (data) {
-      return `<div> ${data.companyName} </div>`;
+    serializeData: function (data) {
+      return data.companyName;
+    },
+
+    template: function (companyName) {
+      return `<div> ${companyName} </div>`;
     }
   });
 

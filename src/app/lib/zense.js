@@ -107,18 +107,6 @@
     return selector;
   };
 
-  const Behavior = Object.create(Util);
-
-  Behavior.trigger = '';
-
-  Behavior.config = function (options) {
-    Object.assign(this, options);
-  };
-
-  Behavior.start = function () {
-    return null;
-  };
-
   // CORE
   const Xhr = Object.create(Util);
   
@@ -315,6 +303,19 @@
     if ((Internal.errors === 0 || Config.env !== 'dev')) { return null; }
 
     this.initialize();
+  };
+
+  // BEHAVIOR
+  const Behavior = Object.create(Util);
+
+  Behavior.trigger = '';
+
+  Behavior.config = function (options) {
+    Object.assign(this, options);
+  };
+
+  Behavior.start = function () {
+    return null;
   };
   
   // CONTROLLER
