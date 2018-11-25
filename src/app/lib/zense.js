@@ -60,29 +60,49 @@
         case '#':
           selector = document.getElementById(selector.slice(1));
 
-          selector.on = function (event, callback, bubble) {
-            if (typeof bubble === 'undefined') {
-              bubble = true;
-            }
-      
-            selector.addEventListener(event, callback, bubble);
-          };
-
           break;
         default:
-          selector = document.querySelectorAll(selector);
-
-          selector.on = function (event, callback, bubble) {
-            if (typeof bubble === 'undefined') {
-              bubble = true;
-            }
-      
-            for (let i = 0; i < selector.length; i++) {
-              selector[i].addEventListener(event, callback, bubble);
-            }
-          };
+          selector = document.querySelectorAll(selector);         
       }
     }
+
+    selector.on = function (event, callback, bubble) {
+      if (typeof bubble === 'undefined') {
+        bubble = true;
+      }
+
+      if (!this.length) {
+        this.addEventListener(event, callback, bubble);
+      } else {
+        for (let i = 0; i < selector.length; i++) {
+          this[i].addEventListener(event, callback, bubble);
+        }
+      }
+    };
+
+    selector.html = function (tpl) {
+      if (!this.length) {
+        this.innerHTML = tpl;
+      } else {
+        for (let i = 0; i < this.length; i++) {
+          if (this[i].innerHTML !== '') {
+            this[i].innerHTML = '';
+          }
+
+          this[i].innerHTML = tpl;
+        }
+      }
+    };
+
+    selector.append = function (html) {
+      if (!this.length) {
+        this.insertAdjacentHTML('beforeend', html);
+      } else {
+        for (let i = 0; i < this.length; i++) {
+          this[i].insertAdjacentHTML('beforeend', html);
+        }
+      }
+    };
 
     return selector;
   };
@@ -98,14 +118,10 @@
   Behavior.bindHandlers = function () {
     this.trigger = this.dom(this.trigger);
 
-    if (!this.trigger.length) {
-      console.log(this.trigger);
-    } else {
-      this.trigger.on('click', function (e) {
-        e.preventDefault;
-        console.log('clicked');
-      });
-    }
+    this.trigger.on('click', function (e) {
+      e.preventDefault;
+      console.log('clicked');
+    });
 
     return null;
   };
@@ -241,25 +257,12 @@
   };
 
   Renderer.addTemplateToDOM = function (data) {
-    if (!this.selector.length) {
-      this.determineRenderType({ element: this.selector, data: data });
+    let tpl = this.template(data);
+
+    if (this.renderType !== 'append') {
+      this.dom(this.selector).html(tpl);
     } else {
-      for (let i = 0; i < this.selector.length; i++) {
-        let el = this.selector[i];
-
-        this.determineRenderType({ element: el, data: data })
-      }
-    }
-  };
-
-  Renderer.determineRenderType = function (options) {
-    let el = options.element;
-    let tpl = this.template(options.data);
-
-    if (this.renderType === 'append') {
-      el.insertAdjacentHTML('beforeend', tpl);
-    } else {
-      el.innerHTML = tpl;
+      this.dom(this.selector).append(tpl);
     }
   };
 
