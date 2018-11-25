@@ -2,7 +2,6 @@ define(function (require) {
   const NavigationComponent = Object.create(Zense.Component);
 
   NavigationComponent.create({
-    name: 'navigationComponent',
     selector: '#navigation',
     api: {
       method: 'GET',

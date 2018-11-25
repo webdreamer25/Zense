@@ -1,35 +1,4 @@
 (function (root) {
-  // Object.assign Polyfill!
-  if (typeof Object.assign != 'function') {
-    // Must be writable: true, enumerable: false, configurable: true
-    Object.defineProperty(Object, "assign", {
-      value: function assign(target, varArgs) { // .length of function is 2
-        'use strict';
-        if (target == null) { // TypeError if undefined or null
-          throw new TypeError('Cannot convert undefined or null to object');
-        }
-  
-        var to = Object(target);
-  
-        for (var index = 1; index < arguments.length; index++) {
-          var nextSource = arguments[index];
-  
-          if (nextSource != null) { // Skip over if undefined or null
-            for (var nextKey in nextSource) {
-              // Avoid bugs when hasOwnProperty is shadowed
-              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                to[nextKey] = nextSource[nextKey];
-              }
-            }
-          }
-        }
-        return to;
-      },
-      writable: true,
-      configurable: true
-    });
-  }
-
   const Config = {
     env: 'dev'
   };
@@ -83,70 +52,137 @@
     }
   };
 
-  const Xhr = {
-    percentComplete: 0,
-    storage: null,
+  const Util = {};
 
-    ajax: function (options) {
-      let defaults = {
-        method: 'GET',
-        data: null
-      };
+  Util.dom = function (selector) {
+    if (typeof selector === 'string') {
+      switch (selector.charAt(0)) {
+        case '#':
+          selector = document.getElementById(selector.slice(1));
 
-      options = Object.assign({}, defaults, options);
+          break;
+        default:
+          selector = document.querySelectorAll(selector);         
+      }
+    }
 
-      this.xhr = new XMLHttpRequest();
+    selector.on = function (event, callback, bubble) {
+      if (typeof bubble === 'undefined') {
+        bubble = true;
+      }
 
-      if (options.method.toLowerCase() === 'post') {
-        for (let i = 0; i < options.headers.length; i++) {
-          let header = options.headers[i];
-
-          this.xhr.setRequestHeader(header.name, header.value);
+      if (!this.length) {
+        this.addEventListener(event, callback, bubble);
+      } else {
+        for (let i = 0; i < selector.length; i++) {
+          this[i].addEventListener(event, callback, bubble);
         }
       }
+    };
 
-      this.xhr.addEventListener('error', this.error.bind(this));
-      this.xhr.addEventListener('abort', this.abort.bind(this));
-      // this.xhr.addEventListener('load', this.success.bind(this));
-      // this.xhr.addEventListener('loadend', this.complete.bind(this));
-      this.xhr.addEventListener('progress', this.updateProgress.bind(this));
-
-      this.xhr.open(options.method, options.url);
-
-      if (options.responseType) {
-        this.xhr.responseType = options.responseType.toLowerCase();
-      }
-
-      if (options.withCredentials) {
-        this.xhr.widthCredentials = true;
-      }
-
-      this.xhr.send(options.data);
-    },
-
-    error: function () {
-      console.log('There was an error with your XHR request');
-    },
-
-    abort: function () {
-      console.log('Aborted your XHR request.');
-    },
-
-    updateProgress: function (eventObj) {
-      if (eventObj.lengthComputable) {
-        this.percentComplete = eventObj.loaded / eventObj.total * 100;
+    selector.html = function (html) {
+      if (!this.length) {
+        this.innerHTML = html;
       } else {
-        Internal.warnings.push({
-          type: 'XHR.' + this.methodType,
-          description: 'Unable to update "' + this.methodType + '" xhr request progress.'
-        });
+        for (let i = 0; i < this.length; i++) {
+          if (this[i].innerHTML !== '') {
+            this[i].innerHTML = '';
+          }
+
+          this[i].innerHTML = html;
+        }
       }
+    };
+
+    selector.append = function (html) {
+      if (!this.length) {
+        this.insertAdjacentHTML('beforeend', html);
+      } else {
+        for (let i = 0; i < this.length; i++) {
+          this[i].insertAdjacentHTML('beforeend', html);
+        }
+      }
+    };
+
+    return selector;
+  };
+
+  const Behavior = Object.create(Util);
+
+  Behavior.trigger = '';
+
+  Behavior.config = function (options) {
+    Object.assign(this, options);
+  };
+
+  Behavior.start = function () {
+    return null;
+  };
+
+  // CORE
+  const Xhr = Object.create(Util);
+  
+  Xhr.percentComplete = 0;
+  Xhr.storage = null;
+
+  Xhr.ajax = function (options) {
+    let defaults = {
+      method: 'GET',
+      data: null
+    };
+
+    options = Object.assign({}, defaults, options);
+
+    this.xhr = new XMLHttpRequest();
+
+    if (options.method.toLowerCase() === 'post') {
+      for (let i = 0; i < options.headers.length; i++) {
+        let header = options.headers[i];
+
+        this.xhr.setRequestHeader(header.name, header.value);
+      }
+    }
+
+    this.xhr.addEventListener('error', this.error.bind(this));
+    this.xhr.addEventListener('abort', this.abort.bind(this));
+    // this.xhr.addEventListener('load', this.success.bind(this));
+    // this.xhr.addEventListener('loadend', this.complete.bind(this));
+    this.xhr.addEventListener('progress', this.updateProgress.bind(this));
+
+    this.xhr.open(options.method, options.url);
+
+    if (options.responseType) {
+      this.xhr.responseType = options.responseType.toLowerCase();
+    }
+
+    if (options.withCredentials) {
+      this.xhr.widthCredentials = true;
+    }
+
+    this.xhr.send(options.data);
+  };
+
+  Xhr.error = function () {
+    console.log('There was an error with your XHR request');
+  };
+
+  Xhr.abort = function () {
+    console.log('Aborted your XHR request.');
+  };
+
+  Xhr.updateProgress = function (eventObj) {
+    if (eventObj.lengthComputable) {
+      this.percentComplete = eventObj.loaded / eventObj.total * 100;
+    } else {
+      Internal.warnings.push({
+        type: 'XHR.' + this.methodType,
+        description: 'Unable to update "' + this.methodType + '" xhr request progress.'
+      });
     }
   };
 
   const Renderer = Object.create(Xhr);
 
-  Renderer.type = '';
   Renderer.regions = [];
   Renderer.selector = null;
   Renderer.template = null;
@@ -176,19 +212,13 @@
       Internal.errors.push(e);
     }
 
-    this.afterRender();
-  };
-
-  Renderer.addTemplateToDOM = function (data) {
-    if (!this.selector.length) {
-      this.determineRenderType({ element: this.selector, data: data });
-    } else {
-      for (let i = 0; i < this.selector.length; i++) {
-        let el = this.selector[i];
-
-        this.determineRenderType({ element: el, data: data })
-      }
+    // Needed for modules only
+    if (this.addComponents) {
+      this.addComponents();
     }
+
+    this.setBehaviors();
+    this.afterRender();
   };
 
   Renderer.afterRender = function () {
@@ -199,13 +229,25 @@
     this.selector.remove();
   };
 
-  Renderer.determineRenderType = function (options) {
-    let el = options.element;
+  Renderer.setDOMSelector = function () {
+    this.selector = this.dom(this.selector);
 
-    if (this.renderType === 'append') {
-      el.insertAdjacentHTML('beforeend', this.template(options.data));
+    // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
+    // this is incase we have an instance of appending purely on the parent element vs a specific container.
+    if (typeof this.selector === 'undefined' && this.selector === null) {
+      this.selector = this.regions[0];
+    }
+
+    this.regions.push(this.selector);
+  };
+
+  Renderer.addTemplateToDOM = function (data) {
+    let tpl = this.template(data);
+
+    if (this.renderType !== 'append') {
+      this.selector.html(tpl);
     } else {
-      el.innerHTML = this.template(options.data)
+      this.selector.append(tpl);
     }
   };
 
@@ -215,26 +257,6 @@
     } else {
       return null;
     }
-  };
-
-  Renderer.setDOMSelector = function () {
-    if (typeof this.selector !== 'string') { return null; };
-
-    switch (this.selector.charAt(0)) {
-      case '#':
-        this.selector = document.getElementById(this.selector.slice(1));
-        break;
-      default:
-        this.selector = document.querySelectorAll(this.selector);
-    }
-
-    // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
-    // this is incase we have an instance of appending purely on the parent element vs a specific container.
-    if (typeof this.selector === 'undefined' && this.selector === null) {
-      this.selector = this.regions[0];
-    }
-
-    this.regions.push(this.selector);
   };
 
   Renderer.errorCheck = function () {
@@ -295,13 +317,15 @@
 
     this.initialize();
   };
-
-  // COMPONENT
-  const Component = Object.create(Renderer);
-
-  Component.type = 'component';
   
-  Component.create = function (options) {
+  // CONTROLLER
+  // Helps code dry with by keeping similar functionilty in one place
+  const Controller = Object.create(Renderer);
+
+  Controller.name = '';
+  Controller.behaviors = [];
+
+  Controller.create = function (options) {
     Object.assign(this, options);
 
     if (this.api) {
@@ -311,46 +335,52 @@
     this.initialize();
   };
 
-  Component.initialize = function () {
+  Controller.initialize = function () {
     return null;
-  };      
+  }; 
+
+  Controller.setBehaviors = function () {
+    if (this.behaviors.length > 0) {
+      for (let i = 0; i < this.behaviors.length; i++) {
+        let behavior = this.behaviors[i];
+
+        behavior.context = this;
+        behavior.start();
+      }
+    }
+  };
+
+  // COMPONENT
+  const Component = Object.create(Controller);
+
+  Component.id = 0;
+  Component.type = 'component';
 
   Component.setName = function (selector) {
-    this.name = selector.slice(1) + '-' + this.type;
+    selector = selector.toLowerCase();
+
+    this.name = selector.slice(1) + '-' + this.type + '-' + this.id;
+
+    // Increment id after name is set so no duplication occurs
+    this.id++
   };
 
   // MODULE
-  const Module = Object.create(Renderer);
+  const Module = Object.create(Controller);
 
   Module.type = 'module';
   Module.components = [];
   Module.componentNameArray = [];
   Module.shouldRenderChildren = true;
 
-  Module.create = function (options) {
-    Object.assign(this, options);
-
-    this.initialize();
-  };
-
-  Module.initialize = function () {
-    return null;
-  };
-
-  Module.afterRender = function () {
-    if (this.components.length > 0) {
-      this.addComponents(this.components);
-    }
-  };
-
-  Module.addComponents = function (componentList) {
+  Module.addComponents = function () {
     // Do nothing if no child components exist
-    if (!Array.isArray(componentList) && componentList.length === 0) {
+    if (!Array.isArray(this.components) && this.components.length === 0) {
       return null;
     }
 
-    for (let i = 0; i < componentList.length; i++) {
-      let component = componentList[i];
+    for (let i = 0; i < this.components.length; i++) {
+      let component = this.components[i];
 
       // We need to ensure every component has a unique name set for debugging and error handling purposes.
       this.checkUniqueName(component);
@@ -373,7 +403,7 @@
     this.componentNameArray.push(component.name);
 
     for (let i = 0; i < this.componentNameArray.length; i++) {
-      if (this.componentNameArray[i] !== component.name) {
+      if (this.componentNameArray[i] !== component.name && component.name !== '') {
         return null;
       } else {
         component.setName(component.selector);
@@ -382,21 +412,14 @@
   };
 
   // COMPOSITE
-  const Composite = Object.create(Renderer);
+  const Composite = Object.create(Controller);
   
   Composite.modules = [];
 
-  Composite.create = function (options) {
-    Object.assign(this, options);
-
-    this.initialize();
+  Composite.initialize = function () {
     this.render();
 
     this.bootstrapModules();
-  };
-
-  Composite.initialize = function () {
-    return null;
   };
 
   Composite.bootstrapModules = function () {
@@ -411,6 +434,7 @@
     Module,
     Composite,
     Component,
+    Behavior,
     ErrorHandler,
 
     Version:  '1.0.0',
