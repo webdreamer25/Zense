@@ -11,7 +11,10 @@ define(function (require) {
     ],
 
     template: function () {
-      return `<button class="js-toggle" data-modal="#testmodal">open modal</button>`;
+      return `
+      <button class="js-toggle" data-modal="#testmodal1">open modal 1</button>
+      <button class="js-toggle" data-modal="#testmodal2">open modal 2</button>
+      `;
     }
   });
 
