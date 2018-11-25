@@ -80,16 +80,16 @@
       }
     };
 
-    selector.html = function (tpl) {
+    selector.html = function (html) {
       if (!this.length) {
-        this.innerHTML = tpl;
+        this.innerHTML = html;
       } else {
         for (let i = 0; i < this.length; i++) {
           if (this[i].innerHTML !== '') {
             this[i].innerHTML = '';
           }
 
-          this[i].innerHTML = tpl;
+          this[i].innerHTML = html;
         }
       }
     };
@@ -115,19 +115,8 @@
     Object.assign(this, options);
   };
 
-  Behavior.bindHandlers = function () {
-    this.trigger = this.dom(this.trigger);
-
-    this.trigger.on('click', function (e) {
-      e.preventDefault;
-      console.log('clicked');
-    });
-
-    return null;
-  };
-
   Behavior.start = function () {
-    this.bindHandlers();
+    return null;
   };
 
   // CORE
@@ -215,7 +204,7 @@
 
         this.addTemplateToDOM(data);
       } else {
-        this.xhr.addEventListener('load', function (req) {
+        this.xhr.addEventListener('loadend', function (req) {
           this.addTemplateToDOM(JSON.parse(req.currentTarget.responseText));
         }.bind(this));
       }
@@ -233,10 +222,6 @@
   };
 
   Renderer.afterRender = function () {
-    return null;
-  };
-
-  Renderer.setBehaviors = function () {
     return null;
   };
 
@@ -260,9 +245,9 @@
     let tpl = this.template(data);
 
     if (this.renderType !== 'append') {
-      this.dom(this.selector).html(tpl);
+      this.selector.html(tpl);
     } else {
-      this.dom(this.selector).append(tpl);
+      this.selector.append(tpl);
     }
   };
 
@@ -337,6 +322,7 @@
   // Helps code dry with by keeping similar functionilty in one place
   const Controller = Object.create(Renderer);
 
+  Controller.name = '';
   Controller.behaviors = [];
 
   Controller.create = function (options) {
@@ -358,6 +344,7 @@
       for (let i = 0; i < this.behaviors.length; i++) {
         let behavior = this.behaviors[i];
 
+        behavior.context = this;
         behavior.start();
       }
     }
@@ -416,7 +403,7 @@
     this.componentNameArray.push(component.name);
 
     for (let i = 0; i < this.componentNameArray.length; i++) {
-      if (this.componentNameArray[i] !== component.name && typeof component.name !== 'undefined') {
+      if (this.componentNameArray[i] !== component.name && component.name !== '') {
         return null;
       } else {
         component.setName(component.selector);

@@ -1,19 +1,17 @@
 define(function (require) {
   const MainModule = Object.create(Zense.Module);
-  const ModalBehavior = Object.create(Zense.Behavior);
-
-  ModalBehavior.config({
-    trigger: '.js-toggle'
-  });
+  
+  const ModalComponent = require('components/modal.component');
 
   MainModule.create({
+    name: 'main-module',
     selector: '#main-region',
-    behaviors: [
-      ModalBehavior
+    components: [
+      ModalComponent
     ],
 
     template: function () {
-      return `<button class="js-toggle">open modal</button>`;
+      return `<button class="js-toggle" data-modal="#testmodal">open modal</button>`;
     }
   });
 

@@ -2,7 +2,7 @@ define(function (require) {
   const LogoComponent = Object.create(Zense.Component);
 
   LogoComponent.create({
-    name: 'header-logo-component',
+    name: 'logo',
     selector: '#header-logo',
     api: {
       method: 'GET',
