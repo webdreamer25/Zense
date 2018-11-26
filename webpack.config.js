@@ -10,6 +10,9 @@ module.exports = {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js'
   },
+  watchOptions: {
+    poll: true
+  },
   devServer: {
     publicPath: '/dist',
     contentBase: path.resolve(__dirname, './dist'),

@@ -1,19 +1,18 @@
-define(function (require) {
-  const FooterModule = Object.create(Zense.Module);
+import Module from '../../zense/module';
+import FormComponent from '../components/form.component';
 
-  const FormComponent = require('components/form.component');
+const FooterModule = Object.create(Module);
 
-  FooterModule.create({
-    name: 'footer',
-    selector: '#app',
-    components: [
-      FormComponent
-    ],
-    
-    template: function () {
-      return '<footer id="footer-region">Test footer module</footer>'
-    }
-  });
-
-  return FooterModule;
+FooterModule.create({
+  name: 'footer',
+  selector: '#app',
+  components: [
+    FormComponent
+  ],
+  
+  template: function () {
+    return '<footer id="footer-region">Test footer module</footer>'
+  }
 });
+
+export default FooterModule;

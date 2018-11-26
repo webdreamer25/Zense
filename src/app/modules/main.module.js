@@ -1,22 +1,21 @@
-define(function (require) {
-  const MainModule = Object.create(Zense.Module);
-  
-  const ModalComponent = require('components/modal.component');
+import Module from '../../zense/module';
+import ModalComponent from '../components/modal.component';
 
-  MainModule.create({
-    name: 'main-module',
-    selector: '#main-region',
-    components: [
-      ModalComponent
-    ],
+const MainModule = Object.create(Module);
 
-    template: function () {
-      return `
-      <button class="js-toggle" data-modal="#testmodal1">open modal 1</button>
-      <button class="js-toggle" data-modal="#testmodal2">open modal 2</button>
-      `;
-    }
-  });
+MainModule.create({
+  name: 'main-module',
+  selector: '#main-region',
+  components: [
+    ModalComponent
+  ],
 
-  return MainModule;
+  template: function () {
+    return `
+    <button class="js-toggle" data-modal="#testmodal1">open modal 1</button>
+    <button class="js-toggle" data-modal="#testmodal2">open modal 2</button>
+    `;
+  }
 });
+
+export default MainModule;

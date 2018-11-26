@@ -1,46 +1,46 @@
-define(function(require) {
-  const ModalBehavior = Object.create(Zense.Behavior);
+import Behavior from '../../zense/behavior';
 
-  ModalBehavior.config({
-    modal: null,
-    isOpen: false,
-    ui: {
-      trigger: '.js-toggle',
-      closeBtn: '.js-modal-close-btn'
-    },
+const ModalBehavior = Object.create(Behavior);
 
-    setHandlers: function () {
-      this.ui.trigger.on('click', this.open.bind(this));
-      this.ui.closeBtn.on('click', this.close.bind(this));
-    },
+ModalBehavior.config({
+  modal: null,
+  isOpen: false,
+  ui: {
+    trigger: '.js-toggle',
+    closeBtn: '.js-modal-close-btn'
+  },
 
-    open: function (e) {
-      e.preventDefault();
-      let btn = e.currentTarget;
-      this.modal = this.dom(btn.dataset.modal);
+  setHandlers: function () {
+    this.ui.trigger.on('click', this.open.bind(this));
+    this.ui.closeBtn.on('click', this.close.bind(this));
+  },
 
-      if (!this.isOpen) {
-        this.modal.classList.remove('modal--hidden');
+  open: function (e) {
+    e.preventDefault();
+    let btn = e.currentTarget;
+    this.modal = this.dom(btn.dataset.modal);
 
-        this.isOpen = true;
-      }
-    },
+    if (!this.isOpen) {
+      this.modal.classList.remove('modal--hidden');
 
-    close: function (e) {
-      e.preventDefault();
-      
-      if (this.isOpen) {
-        this.modal.classList.add('modal--hidden');
-
-        this.isOpen = false;
-        this.modal = null;
-      }
-    },
-
-    start: function () {
-      this.setHandlers();
+      this.isOpen = true;
     }
-  });
+  },
 
-  return ModalBehavior;
+  close: function (e) {
+    e.preventDefault();
+    
+    if (this.isOpen) {
+      this.modal.classList.add('modal--hidden');
+
+      this.isOpen = false;
+      this.modal = null;
+    }
+  },
+
+  start: function () {
+    this.setHandlers();
+  }
 });
+
+export default ModalBehavior;

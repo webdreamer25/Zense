@@ -1,55 +1,55 @@
-define(function (require) {
-  const FormBehavior = Object.create(Zense.Behavior);
+import Behavior from '../../zense/behavior';
 
-  FormBehavior.config({
-    ui: {
-      submitBtn: '.js-submit-form-btn',
-      fields: '.js-field'
-    },
+const FormBehavior = Object.create(Behavior);
 
-    serializeFormFields: function () {
-      let fieldData = {};
+FormBehavior.config({
+  ui: {
+    submitBtn: '.js-submit-form-btn',
+    fields: '.js-field'
+  },
 
-      this.ui.fields.each(function (el) {
-        fieldData[el.name] = el.value;
-      });
+  serializeFormFields: function () {
+    let fieldData = {};
 
-      return fieldData;
-    },
+    this.ui.fields.each(function (el) {
+      fieldData[el.name] = el.value;
+    });
 
-    submitForm: function (e) {
-      e.preventDefault();
-      let payload = this.serializeFormFields();
+    return fieldData;
+  },
 
-      this.handleFormSubmit(payload);
-    },
+  submitForm: function (e) {
+    e.preventDefault();
+    let payload = this.serializeFormFields();
 
-    handleFormSubmit: function (payload) {
-      console.log(payload);
-      this.ajax({
-        url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
-        method: 'POST',
-        headers: [
-          { 
-            name: 'Content-Type',
-            value: 'application/json'
-          }
-        ],
-        data: JSON.stringify(payload),
-        success: function(e, xhr)  {
-          console.log(e, xhr);
+    this.handleFormSubmit(payload);
+  },
+
+  handleFormSubmit: function (payload) {
+    console.log(payload);
+    this.ajax({
+      url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
+      method: 'POST',
+      headers: [
+        { 
+          name: 'Content-Type',
+          value: 'application/json'
         }
-      })
-    },
+      ],
+      data: JSON.stringify(payload),
+      success: function(e, xhr)  {
+        console.log(e, xhr);
+      }
+    })
+  },
 
-    setHandlers: function () {
-      this.ui.submitBtn.on('click', this.submitForm.bind(this));
-    },
+  setHandlers: function () {
+    this.ui.submitBtn.on('click', this.submitForm.bind(this));
+  },
 
-    start: function () {
-      this.setHandlers();
-    }
-  });
+  start: function () {
+    this.setHandlers();
+  }
+});
 
-  return FormBehavior;
-})
+export default FormBehavior;
