@@ -1,13 +1,3 @@
-require(
-  [
-    'modules/header.module',
-    'modules/main.module',
-    'modules/footer.module',
-    'underscore'
-  ],
-  function (HeaderModule, MainModule, FooterModule) {
-    HeaderModule.render();
-    MainModule.render();
-    FooterModule.render();
-  });
-  
+import HeaderModule from './modules/header.module';
+
+HeaderModule.render();

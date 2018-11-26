@@ -1,18 +1,18 @@
-define(function (require) {
-  const LogoComponent = Object.create(Zense.Component);
+import Component from '../../zense/component';
 
-  LogoComponent.create({
-    name: 'logo',
-    selector: '#header-logo',
+const LogoComponent = Object.create(Component);
 
-    serializeData: function (data) {
-      return data.companyName;
-    },
+LogoComponent.create({
+  name: 'logo',
+  selector: '#header-logo',
 
-    template: function (companyName) {
-      return `<div> ${companyName} </div>`;
-    }
-  });
+  serializeData: function (data) {
+    return data.companyName;
+  },
 
-  return LogoComponent;
+  template: function (companyName) {
+    return `<div> ${companyName} </div>`;
+  }
 });
+
+export default LogoComponent;
