@@ -7,7 +7,7 @@ define(function (require) {
     name: 'footer-form',
     selector: '#footer-region',
     behaviors: [
-      FormBehavior
+      { name: FormBehavior, overwrites: null }
     ],
 
     template: function (data) {

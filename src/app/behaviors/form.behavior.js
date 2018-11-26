@@ -2,13 +2,15 @@ define(function (require) {
   const FormBehavior = Object.create(Zense.Behavior);
 
   FormBehavior.config({
-    trigger: '.js-submit-form-btn',
-    fields: '.js-field',
+    ui: {
+      submitBtn: '.js-submit-form-btn',
+      fields: '.js-field'
+    },
 
     serializeFormFields: function () {
       let fieldData = {};
 
-      this.dom(this.fields).each(function (el) {
+      this.ui.fields.each(function (el) {
         fieldData.name = el.name;
         fieldData.value = el.value;
       });
@@ -24,7 +26,7 @@ define(function (require) {
     },
 
     setHandlers: function () {
-      this.dom(this.trigger).on('click', this.submitForm.bind(this));
+      this.ui.submitBtn.on('click', this.submitForm.bind(this));
     },
 
     start: function () {

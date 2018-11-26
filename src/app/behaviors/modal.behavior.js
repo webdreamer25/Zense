@@ -3,13 +3,15 @@ define(function(require) {
 
   ModalBehavior.config({
     modal: null,
-    trigger: '.js-toggle',
-    closeBtn: '.js-modal-close-btn',
     isOpen: false,
+    ui: {
+      trigger: '.js-toggle',
+      closeBtn: '.js-modal-close-btn'
+    },
 
     setHandlers: function () {
-      this.dom(this.trigger).on('click', this.open.bind(this));
-      this.dom(this.closeBtn).on('click', this.close.bind(this));
+      this.ui.trigger.on('click', this.open.bind(this));
+      this.ui.closeBtn.on('click', this.close.bind(this));
     },
 
     open: function (e) {

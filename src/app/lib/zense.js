@@ -69,7 +69,7 @@
         default:
           selector = document.querySelectorAll(selector);         
       }
-    } 
+    }
 
     if (selector === null || selector.length === 0) {
       throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };
@@ -126,6 +126,40 @@
     };
 
     return selector;
+  };
+
+  // I did it for the children :-)
+  Util.each = function (arr, callback) {
+    if (Array.isArray(arr)) {
+      for (let i = 0; i < arr.length; i++) {
+        callback(arr[i], i, arr);
+      }
+    } else {
+      let obj = arr;
+      
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          callback(obj[key], key, obj);
+        }
+      }
+    }
+  };
+
+  Util.isObject = function (val) {
+    if (val === null) { return false; }
+    return ((typeof val === 'function') || (typeof val === 'object'));
+  };
+
+  Util.extend = function () {
+    for (var i = 1; i < arguments.length; i++) {
+      for (var key in arguments[i]) {
+        if (arguments[i].hasOwnProperty(key)) {
+          arguments[0][key] = arguments[i][key];
+        }
+      }
+    }
+
+    return arguments[0];
   };
 
   // CORE
@@ -335,12 +369,20 @@
     Object.assign(this, options);
   };
 
+  Behavior.bindUIElements = function () {
+    for (let key in this.ui) {
+      if (this.ui.hasOwnProperty(key)) {
+        this.ui[key] = this.dom(this.ui[key]);
+      }
+    }
+  };
+
   Behavior.start = function () {
     return null;
   };
   
   // CONTROLLER
-  // Helps code dry with by keeping similar functionilty in one place
+  // Helps to keep code dry by keeping similar functionilty in one place
   const Controller = Object.create(Renderer);
 
   Controller.name = '';
@@ -360,8 +402,25 @@
     if (this.behaviors.length > 0) {
       for (let i = 0; i < this.behaviors.length; i++) {
         let behavior = this.behaviors[i];
+        
+        // This is a check to ensure we are also handling overwrites to the behavior.
+        if (behavior.name) {
+          behavior = this.behaviors[i].name;
 
-        behavior.context = this;
+          // Necessary if we want to have specific behavior on any given component/module
+          if (this.behaviors[i].overwrites) {
+            if (typeof behavior.overwrites !== 'function') {
+              behavior = this.extend({}, behavior, this.behaviors[i].overwrites);
+            } else {
+              // Allow developers to figure out how they with overwite behaviors
+              behavior = this.behaviors[i].overwrites();
+            }
+          }
+        }
+
+        // The parent will be the component/module that references the behavior
+        behavior.parent = this;
+        behavior.bindUIElements();
         behavior.start();
       }
     }
