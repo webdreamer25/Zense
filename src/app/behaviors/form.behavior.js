@@ -11,8 +11,7 @@ define(function (require) {
       let fieldData = {};
 
       this.ui.fields.each(function (el) {
-        fieldData.name = el.name;
-        fieldData.value = el.value;
+        fieldData[el.name] = el.value;
       });
 
       return fieldData;
@@ -22,7 +21,25 @@ define(function (require) {
       e.preventDefault();
       let payload = this.serializeFormFields();
 
+      this.handleFormSubmit(payload);
+    },
+
+    handleFormSubmit: function (payload) {
       console.log(payload);
+      this.ajax({
+        url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
+        method: 'POST',
+        headers: [
+          { 
+            name: 'Content-Type',
+            value: 'application/json'
+          }
+        ],
+        data: JSON.stringify(payload),
+        success: function(e, xhr)  {
+          console.log(e, xhr);
+        }
+      })
     },
 
     setHandlers: function () {
