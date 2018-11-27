@@ -3,7 +3,8 @@ A new application development library that will differ from others in that it wi
 
 Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects and ridding the need to fix implicit/explicit 'this' and leveraging JavaScripts natural delegation pattern;
 
-# Creating a Zense Component
+### Creating a Zense Component
+```
 import { Component } from '../../zense/index';
 
 const LogoComponent = Object.create(Component);
@@ -27,3 +28,4 @@ LogoComponent.create({
     return `<div>${data.title}</div>`;
   }
 });
+```
