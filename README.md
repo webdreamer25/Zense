@@ -1,9 +1,9 @@
 # Zense
-A new application development library that will differ from others in that it will give you peace of mind, joy and it will make so much sense! - Zense
-
-Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects and ridding the need to fix implicit/explicit 'this' and leveraging JavaScripts natural delegation pattern;
+The library that not only give you peace of mind, but just makes more sense than the competition. Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects at its core. 
 
 ### Creating a Component
+Components are small pieces of the application that can be used to create larger pieces known in zense as modules.
+
 ```
 import { Component } from '../../zense/index';
 
@@ -29,6 +29,7 @@ LogoComponent.create({
   }
 });
 ```
+
 ### Creating a Module
 ```
 import { Module } from '../../zense/index';
@@ -44,6 +45,9 @@ HeaderModule.create({
   // Similar usage as components
   name: 'header-module',
   selector: '#header-region',
+  
+  // Passed in an array of values or objects.
+  behaviors: [], 
   
   // Set this property to false if you don't want child components to be rendered (default is true).
   shouldRenderChildren: true,
