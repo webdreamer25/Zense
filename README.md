@@ -182,8 +182,8 @@ const ResultsModalComponent.create({
   name: 'results-modal',
   selector: 'body',
   behaviors: [
-    // We pass in the object we want to use to extend into the 'overwrites' property
-    { name: ModalBehavior, extend: extendBehavior }
+    // We pass in the object we want to use to extend into the 'options' property
+    { name: ModalBehavior, options: extendBehavior }
   ],
   template(data) {
     // SOME MODAL TEMPLATE
