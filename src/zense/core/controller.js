@@ -20,17 +20,17 @@ Controller.setBehaviors = function () {
     for (let i = 0; i < this.behaviors.length; i++) {
       let behavior = this.behaviors[i];
       
-      // This check is to ensure we are also handling overwrites to the behavior.
+      // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
         behavior = this.behaviors[i].name;
 
         // Necessary if we want to have specific behavior on any given component/module
-        if (this.behaviors[i].overwrites) {
-          if (typeof behavior.overwrites !== 'function') {
-            behavior = this.extend({}, behavior, this.behaviors[i].overwrites);
+        if (this.behaviors[i].options) {
+          if (typeof behavior.options !== 'function') {
+            behavior = this.extend({}, behavior, this.behaviors[i].options);
           } else {
             // Allow developers to figure out how they with overwite behaviors
-            behavior = this.behaviors[i].overwrites();
+            behavior = this.behaviors[i].options();
           }
         }
       }

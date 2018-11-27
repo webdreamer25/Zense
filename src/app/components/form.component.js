@@ -7,7 +7,7 @@ FormComponent.create({
   name: 'footer-form',
   selector: '#footer-region',
   behaviors: [
-    { name: FormBehavior, overwrites: null }
+    { name: FormBehavior, options: null }
   ],
 
   template() {
