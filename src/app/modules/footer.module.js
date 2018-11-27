@@ -10,7 +10,7 @@ FooterModule.create({
     FormComponent
   ],
   
-  template: function () {
+  template() {
     return '<footer id="footer-region">Test footer module</footer>'
   }
 });

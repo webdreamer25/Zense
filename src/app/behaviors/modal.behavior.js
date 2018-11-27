@@ -10,12 +10,12 @@ ModalBehavior.config({
     closeBtn: '.js-modal-close-btn'
   },
 
-  setHandlers: function () {
+  setHandlers() {
     this.ui.trigger.on('click', this.open.bind(this));
     this.ui.closeBtn.on('click', this.close.bind(this));
   },
 
-  open: function (e) {
+  open(e) {
     e.preventDefault();
     let btn = e.currentTarget;
     this.modal = this.dom(btn.dataset.modal);
@@ -27,7 +27,7 @@ ModalBehavior.config({
     }
   },
 
-  close: function (e) {
+  close(e) {
     e.preventDefault();
     
     if (this.isOpen) {
@@ -38,7 +38,7 @@ ModalBehavior.config({
     }
   },
 
-  start: function () {
+  start() {
     this.setHandlers();
   }
 });

@@ -10,7 +10,7 @@ ModalComponent.create({
     ModalBehavior
   ],
 
-  template: function () {
+  template() {
     return `
       <div id="testmodal1" class="modal modal--hidden">
         <div class="modal-content">

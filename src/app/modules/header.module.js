@@ -13,7 +13,7 @@ HeaderModule.create({
     NavigationComponent
   ],
 
-  template: function () {
+  template() {
     return `
       <div id="header-logo"></div>
       <nav id="navigation"></nav>

@@ -8,7 +8,7 @@ FormBehavior.config({
     fields: '.js-field'
   },
 
-  serializeFormFields: function () {
+  serializeFormFields() {
     let fieldData = {};
 
     this.ui.fields.each(function (el) {
@@ -18,14 +18,14 @@ FormBehavior.config({
     return fieldData;
   },
 
-  submitForm: function (e) {
+  submitForm(e) {
     e.preventDefault();
     let payload = this.serializeFormFields();
 
     this.handleFormSubmit(payload);
   },
 
-  handleFormSubmit: function (payload) {
+  handleFormSubmit(payload) {
     console.log(payload);
     this.ajax({
       url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
@@ -43,11 +43,11 @@ FormBehavior.config({
     })
   },
 
-  setHandlers: function () {
+  setHandlers() {
     this.ui.submitBtn.on('click', this.submitForm.bind(this));
   },
 
-  start: function () {
+  start() {
     this.setHandlers();
   }
 });

@@ -6,11 +6,11 @@ LogoComponent.create({
   name: 'logo',
   selector: '#header-logo',
 
-  serializeData: function (data) {
+  serializeData(data) {
     return data.companyName;
   },
 
-  template: function (companyName) {
+  template(companyName) {
     return `<div> ${companyName} </div>`;
   }
 });

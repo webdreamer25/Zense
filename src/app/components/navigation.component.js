@@ -5,7 +5,7 @@ const NavigationComponent = Object.create(Component);
 NavigationComponent.create({
   selector: '#navigation',
 
-  template: function (data) {
+  template(data) {
     return `
       <ul>
         <li> ${data.link1} </li>
