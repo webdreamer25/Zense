@@ -36,6 +36,7 @@ LogoComponent.create({
 ```
 
 ## Creating a Module
+
 ```
 import { Module } from '../../zense/index';
 import LogoComponent from '../components/logo.component';
@@ -78,7 +79,7 @@ HeaderModule.create({
 });
 ```
 
-##Behaviors
+## Behaviors
 Behaviors allow for developers to maintain DRY code in their JavaScript. Need accordions, filters, forms, submit or reset functionality? Write a Behavior and pass it into your component or module and the behavior(s) will automagically accept its parent and do its thing!
 
 ### Creating a behavior
@@ -133,7 +134,8 @@ ModalBehavior.config({
   }
 });
 ```
-###Ways to behave
+
+### Ways to behave
 In the example above we create a modal behavior that can be passed into a generic Modal component like so:
 
 ```
