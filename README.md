@@ -81,7 +81,7 @@ HeaderModule.create({
 ##Behaviors
 Behaviors allow for developers to maintain DRY code in their JavaScript. Need accordions, filters, forms, submit or reset functionality? Write a Behavior and pass it into your component or module and the behavior(s) will automagically accept its parent and do its thing!
 
-###Creating a behavior
+### Creating a behavior
 
 ```
 import { Behavior } from '../../zense/index';
