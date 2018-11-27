@@ -1,4 +1,4 @@
-import Module from '../../zense/module';
+import { Module } from '../../zense/index';
 import FormComponent from '../components/form.component';
 
 const FooterModule = Object.create(Module);

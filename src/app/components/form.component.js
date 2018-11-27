@@ -1,4 +1,4 @@
-import Component from '../../zense/component';
+import { Component } from '../../zense/index';
 import FormBehavior from '../behaviors/form.behavior';
 
 const FormComponent = Object.create(Component);
@@ -10,7 +10,7 @@ FormComponent.create({
     { name: FormBehavior, overwrites: null }
   ],
 
-  template: function (data) {
+  template() {
     return `
       <div>
         <label for="commentName">Name</label>

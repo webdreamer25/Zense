@@ -1,4 +1,4 @@
-import Component from '../../zense/component';
+import { Component } from '../../zense/index';
 
 const NavigationComponent = Object.create(Component);
 

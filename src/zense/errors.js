@@ -1,46 +1,43 @@
-const InternalErrorHandler = (function () {
-  // ERROR HANDLER
-  const ErrorHandler = Object.create(Renderer);
+import Renderer from './core/renderer';
 
-  ErrorHandler.index = 0;
+const ErrorHandler = Object.create(Renderer);
 
-  ErrorHandler.initialize = function (options) {
-    let defaults = {
-      selector: 'body',
-      trigger: '.js-errors-toggle',
-      ui: {
-        container: '.errors',
-        target: '.errors-list',
-        tab: '.errors-tab'
-      }
-    };
+ErrorHandler.index = 0;
 
-    Object.assign(this, defaults, options);
-
-    for (let i = 0; i < Internal.errors.length; i++) {
-      let error = Internal.errors[i];
-
-      document.querySelector(error.selector).style.border = '1px solid red';
-
-      this.index = i;
-      this.selector = error.selector;
-
-      this.render();
-
-    };
+ErrorHandler.initialize = function (options) {
+  let defaults = {
+    selector: 'body',
+    trigger: '.js-errors-toggle',
+    ui: {
+      container: '.errors',
+      target: '.errors-list',
+      tab: '.errors-tab'
+    }
   };
 
-  ErrorHandler.serializeData = function () {
-    return Internal.errors[this.index];
+  Object.assign(this, defaults, options);
+
+  for (let i = 0; i < Internal.errors.length; i++) {
+    let error = Internal.errors[i];
+
+    document.querySelector(error.selector).style.border = '1px solid red';
+
+    this.index = i;
+    this.selector = error.selector;
+
+    this.render();
+
   };
+};
 
-  ErrorHandler.start = function () {
-    if ((Internal.errors === 0 || Config.env !== 'dev')) { return null; }
+ErrorHandler.serializeData = function () {
+  return Internal.errors[this.index];
+};
 
-    this.initialize();
-  };
+ErrorHandler.start = function () {
+  if ((Internal.errors === 0 || Config.env !== 'dev')) { return null; }
 
-  return ErrorHandler;
-})();
+  this.initialize();
+};
 
-export default InternalErrorHandler;
+export default ErrorHandler;

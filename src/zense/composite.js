@@ -1,23 +1,21 @@
 import Controller from './core/controller';
 
-const Composite = (function () {
-  const composite = Object.create(Controller);
-  
-  composite.modules = [];
+const Composite = Object.create(Controller);
 
-  composite.initialize = function () {
-    this.render();
+Composite.modules = [];
 
-    this.bootstrapModules();
-  };
+Composite.initialize = function () {
+  this.render();
 
-  composite.bootstrapModules = function () {
-    for (let i = 0; i < this.modules.length; i++) {
-      let mod = this.modules[i];
+  this.bootstrapModules();
+};
 
-      mod.render();
-    }
-  };
+Composite.bootstrapModules = function () {
+  for (let i = 0; i < this.modules.length; i++) {
+    let mod = this.modules[i];
 
-  return composite;
-})();
+    mod.render();
+  }
+};
+
+export default Composite;

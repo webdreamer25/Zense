@@ -1,4 +1,4 @@
-import Module from '../../zense/module';
+import { Module } from '../../zense/index';
 import ModalComponent from '../components/modal.component';
 
 const MainModule = Object.create(Module);

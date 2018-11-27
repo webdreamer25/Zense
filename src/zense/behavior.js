@@ -1,27 +1,23 @@
 import Util from './core/util';
 
-const Behavior = (function () {
-  const behavior = Object.create(Util);
+const Behavior = Object.create(Util);
 
-  behavior.ui = {};
+Behavior.ui = {};
 
-  behavior.config = function (options) {
-    Object.assign(this, options);
-  };
+Behavior.config = function (options) {
+  Object.assign(this, options);
+};
 
-  behavior.bindUIElements = function () {
-    for (let key in this.ui) {
-      if (this.ui.hasOwnProperty(key)) {
-        this.ui[key] = this.dom(this.ui[key]);
-      }
+Behavior.bindUIElements = function () {
+  for (let key in this.ui) {
+    if (this.ui.hasOwnProperty(key)) {
+      this.ui[key] = this.dom(this.ui[key]);
     }
-  };
+  }
+};
 
-  behavior.start = function () {
-    return null;
-  };
-
-  return behavior;
-})();
+Behavior.start = function () {
+  return null;
+};
 
 export default Behavior;

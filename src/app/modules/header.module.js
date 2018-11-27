@@ -1,4 +1,4 @@
-import Module from '../../zense/module';
+import { Module } from '../../zense/index';
 import LogoComponent from '../components/logo.component';
 import NavigationComponent from '../components/navigation.component';
 

@@ -1,4 +1,4 @@
-import Behavior from '../../zense/behavior';
+import { Behavior } from '../../zense/index';
 
 const ModalBehavior = Object.create(Behavior);
 
