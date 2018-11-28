@@ -8,7 +8,11 @@ Module.componentNameArray = [];
 Module.shouldRenderChildren = true;
 
 Module.afterRender = function () {
-  this.addComponents();
+  if (this.api) {
+    this.ajax({ url: this.api }).then(this.addComponents.bind(this));
+  } else {
+    this.addComponents();
+  }
 };
 
 Module.addComponents = function (res) {
@@ -25,11 +29,11 @@ Module.addComponents = function (res) {
 
     // Let the component know whos their daddy.
     component.parent = this;
-    component.store = this.async(this.promise);
+    component.store = this.api ? res : null;
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
     if (this.shouldRenderChildren && component.template !== '') {
-      component.render();
+        component.render();
     } else {
       // console.log('Component: ' + componentName + ' Error: Nees a template!');
       Internal.errors.push({

@@ -7,7 +7,7 @@ module.exports = {
   watch: true,
   // mode: 'development',
   entry: {
-    app: ['./src/app/app.entry.js']
+    app: ['@babel/polyfill', './src/app/app.entry.js']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

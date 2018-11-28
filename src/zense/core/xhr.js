@@ -1,59 +1,68 @@
-import Assure from "./assure";
-import { rejects } from "assert";
+import Assure from './assure';
 
-const XHR = Object.create(Assure);
+const XHR = {};
 
 XHR.percentComplete = 0;
 XHR.storage = null;
 
-XHR.ajax = function (options) {
-  let defaults = {
-    method: 'GET',
-    data: null,
-    success: null
-  };
+XHR.ajax = function ({...options}) {
+  let { 
+    url, 
+    method = 'GET', 
+    headers = false, 
+    responseType = 'json', 
+    widthCredentials = false, 
+    data = null 
+  } = options;
 
-  options = Object.assign({}, defaults, options);
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
 
-  this.xhr = new XMLHttpRequest();
+    xhr.open(method, url);
 
-  this.xhr.open(options.method, options.url);
-
-  if (options.method.toLowerCase() === 'post') {
-    for (let i = 0; i < options.headers.length; i++) {
-      let header = options.headers[i];
-
-      this.xhr.setRequestHeader(header.name, header.value);
+    if (headers) {
+      Object.keys(headers).forEach(key => {
+        xhr.setRequestHeader(key, headers[key]);
+      });
     }
-  }
 
-  this.xhr.addEventListener('error', this.error.bind(this));
-  this.xhr.addEventListener('abort', this.abort.bind(this));
-  // this.xhr.addEventListener('load', this.success.bind(this));
-  // this.xhr.addEventListener('loadend', this.complete.bind(this));
-  this.xhr.addEventListener('progress', this.updateProgress.bind(this));
+    xhr.responseType = responseType.toLowerCase();
+    xhr.widthCredentials = widthCredentials;
 
-  if (options.responseType) {
-    this.xhr.responseType = options.responseType.toLowerCase();
-  }
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(xhr.response);
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
+    };
 
-  if (options.withCredentials) {
-    this.xhr.widthCredentials = true;
-  }
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
 
-  this.xhr.onreadystatechange = this.createPromise(function (resolve, reject) {
-    if (this.readyState === 4 && this.status === 200) {
-      // if (options.success !== null) {
-        // options.success(JSON.parse(this.responseText));
-        resolve(JSON.parse(this.responseText));
-      // }
-    } else {
-      let error = new Error('failed');
-      reject(error);
+    // xhr.onreadystatechange = function () {
+    //   if (this.readyState === 4 && this.status === 200) {
+    //     if (options.success !== null) {
+    //       options.success(JSON.parse(this.responseText));
+    //     }
+    //   }
+    // };
+
+    if (data && typeof data === 'object') {
+      data = Object.keys(data).map(function (key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+      }).join('&');
     }
-  }.bind(this));
 
-  this.xhr.send(options.data);
+    xhr.send(data);
+  });
 };
 
 XHR.error = function () {
