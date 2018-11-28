@@ -8,6 +8,13 @@ Controller.behaviors = [];
 Controller.create = function (options) {
   Object.assign(this, options);
 
+  if (this.api) {
+    this.ajax({
+      url: this.api
+      // success: this.addComponents.bind(this)
+    });
+  }
+
   this.initialize();
 };
 

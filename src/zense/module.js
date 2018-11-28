@@ -8,15 +8,7 @@ Module.componentNameArray = [];
 Module.shouldRenderChildren = true;
 
 Module.afterRender = function () {
-  // Neccessary to ensure data is passed down to all child components if api exists
-  if (!this.api) {
-    this.addComponents();
-  } else {
-    this.ajax({
-      url: this.api,
-      success: this.addComponents.bind(this)
-    });
-  }
+  this.addComponents();
 };
 
 Module.addComponents = function (res) {
@@ -33,7 +25,7 @@ Module.addComponents = function (res) {
 
     // Let the component know whos their daddy.
     component.parent = this;
-    component.store = res;
+    component.store = this.async(this.promise);
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
     if (this.shouldRenderChildren && component.template !== '') {

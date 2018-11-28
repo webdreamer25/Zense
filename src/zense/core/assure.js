@@ -1,27 +1,25 @@
 const Assure = {};
 
-Assure.promise = function (...options) {
-  let { bool, data, errorMessage } = options;
+Assure.promise = null;
 
-  return new Promise(
-    (resolve, reject) => {
-      if (bool) {
-        resolve(data);
-      } else {
-        let reason = new Error(errorMessage);
-
-        reject(reason);
-      }
-    }
-  );
+Assure.createPromise = function (callback) {
+  this.promise = new Promise(callback);
 };
 
-Assure.request = function (promise) {
+Assure.requestPromise = function (promise) {
   promise
     .then(fulfilled => {
-      console.log(fullfilled)
+      console.log(fulfilled)
+      return fulfilled;
     })
     .catch(error => {
-      console.log(error.message)
+      console.log(error.message);
     });
 };
+
+Assure.async = async function (promise) {
+  let result = await this.requestPromise(promise);
+  return result;
+};
+
+export default Assure;

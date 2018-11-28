@@ -1,4 +1,7 @@
-const XHR = {};
+import Assure from "./assure";
+import { rejects } from "assert";
+
+const XHR = Object.create(Assure);
 
 XHR.percentComplete = 0;
 XHR.storage = null;
@@ -38,13 +41,17 @@ XHR.ajax = function (options) {
     this.xhr.widthCredentials = true;
   }
 
-  this.xhr.onreadystatechange = function () {
+  this.xhr.onreadystatechange = this.createPromise(function (resolve, reject) {
     if (this.readyState === 4 && this.status === 200) {
-      if (options.success !== null) {
-        options.success(JSON.parse(this.responseText));
-      }
+      // if (options.success !== null) {
+        // options.success(JSON.parse(this.responseText));
+        resolve(JSON.parse(this.responseText));
+      // }
+    } else {
+      let error = new Error('failed');
+      reject(error);
     }
-  };
+  }.bind(this));
 
   this.xhr.send(options.data);
 };
