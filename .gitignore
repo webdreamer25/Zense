@@ -1,6 +1,7 @@
 #Ignore file
 node_modules/
-dist/
+dist/app.js
+dist/index.html
 src/app/
 src/app.js
 notes.txt
