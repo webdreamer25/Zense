@@ -23,11 +23,7 @@ Util.dom = function (selector) {
     throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };
   }
 
-  selector.on = function (event, callback, bubble) {
-    if (typeof bubble === 'undefined') {
-      bubble = true;
-    }
-
+  selector.on = function (event, callback, bubble = true) {
     if (!this.length) {
       this.addEventListener(event, callback, bubble);
     } else {
@@ -61,7 +57,7 @@ Util.dom = function (selector) {
     }
   };
 
-  selector.each = function (callback, context) {
+  selector.each = function (callback) {
     try {
       for (let i = 0; i < this.length; i++) {
         let el = this[i];
@@ -99,8 +95,8 @@ Util.isObject = function (val) {
 };
 
 Util.extend = function () {
-  for (var i = 1; i < arguments.length; i++) {
-    for (var key in arguments[i]) {
+  for (let i = 1; i < arguments.length; i++) {
+    for (let key in arguments[i]) {
       if (arguments[i].hasOwnProperty(key)) {
         arguments[0][key] = arguments[i][key];
       }

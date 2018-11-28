@@ -60,19 +60,18 @@ Renderer.addTemplateToDOM = function (data) {
   }
 };
 
-Renderer.serializeData = function (data) {
+Renderer.serializeData = function (data = false) {
   if (data) { 
     return data;
-  } else {
-    return null;
-  }
+  } 
 };
 
 Renderer.errorCheck = function () {
   let errorObj = {
     type: this.type,
     name: this.name
-  }
+  };
+  
   if (this.type === 'component' && this.template === null) {
     errorObj.message = 'no template currently exists.';
   }
