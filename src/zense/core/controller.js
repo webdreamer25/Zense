@@ -32,16 +32,26 @@ Controller.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
+        let customizedBehaviorOptions = this.behaviors[i].options;
+
         behavior = this.behaviors[i].name;
 
         // Necessary if we want to have specific behavior on any given component/module
-        if (this.behaviors[i].options) {
-          if (typeof behavior.options !== 'function') {
-            behavior = this.extend({}, behavior, this.behaviors[i].options);
+        if (customizedBehaviorOptions) {
+          if (typeof customizedBehaviorOptions !== 'function') {
+            for (let key in customizedBehaviorOptions) {
+              behavior[key] = this.extend({}, behavior[key], customizedBehaviorOptions[key]);
+            }
           } else {
             // Allow developers to figure out how they with overwite behaviors
             behavior = this.behaviors[i].options();
           }
+
+          // We need to let the current behavior there has been a change
+          behavior.customized = true;
+        } else {
+          // This ensures the next invocation of a behavior has a reset customized state.
+          behavior.customized = false;
         }
       }
 
