@@ -1,5 +1,3 @@
-import Assure from './assure';
-
 const XHR = {};
 
 XHR.percentComplete = 0;
