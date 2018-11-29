@@ -19,9 +19,9 @@ ModalBehavior.config({
     e.preventDefault();
     let btn = e.currentTarget;
     this.modal = this.dom(btn.dataset.modal);
-
+    
     if (!this.isOpen) {
-      this.modal.classList.remove('modal--hidden');
+      this.modal.classList.add('show');
 
       this.isOpen = true;
     }
@@ -31,7 +31,7 @@ ModalBehavior.config({
     e.preventDefault();
     
     if (this.isOpen) {
-      this.modal.classList.add('modal--hidden');
+      this.modal.classList.remove('show');
 
       this.isOpen = false;
       this.modal = null;

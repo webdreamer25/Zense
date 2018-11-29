@@ -12,8 +12,11 @@ MainModule.create({
 
   template() {
     return `
-      <button class="js-toggle" data-modal="#testmodal1">open modal 1</button>
-      <button class="js-toggle" data-modal="#testmodal2">open modal 2</button>
+      <div class="container">
+        <button class="btn btn-primary js-toggle" data-modal="#testmodal1">
+          open modal 1
+        </button>
+      </div>
     `;
   }
 });

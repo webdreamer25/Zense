@@ -11,7 +11,7 @@ LogoComponent.create({
   },
 
   template(companyName) {
-    return `<div> ${companyName} </div>`;
+    return `<div class="navbar-brand"> ${companyName} </div>`;
   }
 });
 

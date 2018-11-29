@@ -24,7 +24,7 @@ module.exports = {
     rules: [
       { 
         test: /\.css$/,
-        use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.html$/,
@@ -57,10 +57,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: './index.html'
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.css'],
+    modules: [
+      'node_modules'
+    ]
+  }
 };

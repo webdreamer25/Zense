@@ -7,10 +7,22 @@ NavigationComponent.create({
 
   template(data) {
     return `
-      <ul>
-        <li> ${data.link1} </li>
-        <li> ${data.link2} </li>
-        <li> ${data.link3} </li>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a href="#" class="nav-link active">
+            ${data.link1}
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link">
+            ${data.link2}
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link">
+            ${data.link2}
+          </a>
+        </li>
       </ul>
     `;
   }
