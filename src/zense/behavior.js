@@ -9,6 +9,8 @@ Behavior.config = function (options) {
 };
 
 Behavior.bindUIElements = function () {
+  if (!this.ui) { return null; }
+  
   for (let key in this.ui) {
     if (this.ui.hasOwnProperty(key)) {
       this.ui[key] = this.dom(this.ui[key]);

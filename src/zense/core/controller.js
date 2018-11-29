@@ -15,6 +15,16 @@ Controller.initialize = function () {
   return null;
 }; 
 
+Controller.bindUIElements = function () {
+  if (!this.ui) { return null; }
+  
+  for (let key in this.ui) {
+    if (this.ui.hasOwnProperty(key)) {
+      this.ui[key] = this.dom(this.ui[key]);
+    }
+  }
+};
+
 Controller.setBehaviors = function () {
   if (this.behaviors.length > 0) {
     for (let i = 0; i < this.behaviors.length; i++) {

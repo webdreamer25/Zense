@@ -25,7 +25,7 @@ Renderer.render = function () {
     Internal.errors.push(e);
   }
 
-
+  this.bindUIElements();
   this.setBehaviors();
   this.afterRender();
 };

@@ -1,3 +1,7 @@
+.header {
+  min-height: 40px;
+}
+
 .modal {
   position: fixed;
   top: 0;

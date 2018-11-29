@@ -5,9 +5,9 @@ import NavigationComponent from '../components/navigation.component';
 const HeaderModule = Object.create(Module);
 
 HeaderModule.create({
-  api: 'http://localhost:8000/mocks/test.json',
   name: 'header-module',
   selector: '#header-region',
+  api: 'mocks/test.json',
   components: [
     LogoComponent,
     NavigationComponent

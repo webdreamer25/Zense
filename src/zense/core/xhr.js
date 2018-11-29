@@ -45,14 +45,6 @@ XHR.ajax = function ({...options}) {
       });
     };
 
-    // xhr.onreadystatechange = function () {
-    //   if (this.readyState === 4 && this.status === 200) {
-    //     if (options.success !== null) {
-    //       options.success(JSON.parse(this.responseText));
-    //     }
-    //   }
-    // };
-
     if (data && typeof data === 'object') {
       data = Object.keys(data).map(function (key) {
         return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
