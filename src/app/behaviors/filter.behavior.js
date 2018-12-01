@@ -17,7 +17,8 @@ FilterBehavior.config({
 
   applyFilters(e) {
     let btn = e.currentTarget;
-    let filters = this.serializeFilterFields();
+
+    this.serializeFilterFields();
 
     console.log(this.selectedFilters);
     if (this.selectedFilters.length > 0) {
@@ -40,6 +41,10 @@ FilterBehavior.config({
           }
       }
     });
+
+    if (this.selectedFilters.length > 0) {
+      this.selectedFilters = this.uniqueArray(this.selectedFilters);
+    }
   },
 
   start() {

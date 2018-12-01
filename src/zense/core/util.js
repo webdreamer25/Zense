@@ -106,4 +106,8 @@ Util.extend = function () {
   return arguments[0];
 };
 
+Util.uniqueArray = function (arr) {
+  return Array.from(new Set(arr));
+};
+
 export default Util;

@@ -74,7 +74,7 @@ Controller.setBehaviors = function () {
 };
 
 Controller.getBehavior = function (behaviorName) {
-  if (this.behaviors.length === 0) { return null; }
+  if (this.behaviors.length === 0) { return false; }
   
   let result = this.behaviors.filter(item => item.behaviorName === behaviorName);
 
