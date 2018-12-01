@@ -27,6 +27,11 @@ Renderer.render = function () {
 
   this.bindUIElements();
   this.setBehaviors();
+
+  if (this.handleAPIUse) {
+    this.handleAPIUse();
+  }
+  
   this.afterRender();
 };
 

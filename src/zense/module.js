@@ -7,7 +7,7 @@ Module.components = [];
 Module.componentNameArray = [];
 Module.shouldRenderChildren = true;
 
-Module.afterRender = function () {
+Module.handleAPIUse = function () {
   if (this.api) {
     this.ajax({ url: this.api }).then(this.addComponents.bind(this));
   } else {

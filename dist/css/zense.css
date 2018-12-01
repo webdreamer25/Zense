@@ -35,6 +35,7 @@
   cursor: pointer;
   display: block;
   border: none;
+  border-bottom: 1px solid #ccc;
   text-align: left;
   background: transparent;
   padding: 0 5px 5px;

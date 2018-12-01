@@ -18,11 +18,21 @@ Controller.initialize = function () {
 Controller.bindUIElements = function () {
   if (!this.ui) { return null; }
   
-  for (let key in this.ui) {
-    if (this.ui.hasOwnProperty(key)) {
-      this.ui[key] = this.dom(this.ui[key]);
+  Object.keys(this.ui).forEach(key => {
+    let uiElement = this.ui[key];
+
+    // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
+    if (typeof this.ui[key] === 'string' || (this.strUI !== null && this.ui[key] === this.strUI[key])) {
+      this.strUI[key] = this.ui[key];
     }
-  }
+
+    // Needed to ensure ui dom elements are rebound
+    if (this.customized || typeof uiElement !== 'string') {
+      uiElement = this.strUI[key];
+    }
+
+    this.ui[key] = this.dom(uiElement);
+  });
 };
 
 Controller.setBehaviors = function () {
@@ -32,16 +42,16 @@ Controller.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
-        let customizedBehaviorOptions = this.behaviors[i].options;
+        let customizedOptions = this.behaviors[i].options;
 
         behavior = this.behaviors[i].name;
 
         // Necessary if we want to have specific behavior changes on any given component/module
-        if (customizedBehaviorOptions) {
-          if (typeof customizedBehaviorOptions !== 'function') {
-            for (let key in customizedBehaviorOptions) {
-              behavior[key] = this.extend({}, behavior[key], customizedBehaviorOptions[key]);
-            }
+        if (customizedOptions) {
+          if (typeof customizedOptions !== 'function') {
+            Object.keys(customizedOptions).forEach(key => {
+              behavior[key] = this.extend({}, behavior[key], customizedOptions[key]);
+            });
           } else {
             // Allow developers to figure out how they with overwite behaviors
             behavior = this.behaviors[i].options();
@@ -61,6 +71,14 @@ Controller.setBehaviors = function () {
       behavior.start();
     }
   }
+};
+
+Controller.getBehavior = function (behaviorName) {
+  if (this.behaviors.length === 0) { return null; }
+  
+  let result = this.behaviors.filter(item => item.behaviorName === behaviorName);
+
+  return result[0];
 };
 
 export default Controller;

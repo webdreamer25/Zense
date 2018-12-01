@@ -22,7 +22,7 @@ ModalComponent.create({
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-              <button type="button" class="js-modal-close-btn" data-dismiss="modal" aria-label="Close">
+              <button type="button" class="close js-modal-close-btn" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>

@@ -3,6 +3,7 @@ import { Behavior } from '../../zense/index';
 const ModalBehavior = Object.create(Behavior);
 
 ModalBehavior.config({
+  behaviorName: 'modal',
   modal: null,
   isOpen: false,
   ui: {

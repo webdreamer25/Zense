@@ -4,10 +4,26 @@ const Behavior = Object.create(Util);
 
 Behavior.ui = {};
 Behavior.strUI = {};
+Behavior.behaviorName = '';
 Behavior.customized = false;
 
 Behavior.config = function (options) {
   Object.assign(this, options);
+
+  try {
+    if (this.behaviorName === '') {
+      throw {
+        type: 'Behavior',
+        message: 'Behavior name has not been declared'
+      }
+    } else {
+      if (this.behaviorName.indexOf('-behavior') === -1) {
+        this.behaviorName += '-behavior';
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 Behavior.bindUIElements = function () {

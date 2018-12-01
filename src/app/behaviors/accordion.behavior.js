@@ -3,16 +3,17 @@ import { Behavior } from '../../zense/index';
 const AccordionBehavior = Object.create(Behavior);
 
 AccordionBehavior.config({
+  behaviorName: 'accordion',
   ui: {
     trigger: '.js-accordion-toggle',
     drawer: '.accordion-drawer'
   },
 
-  setHandlers: function () {
+  setHandlers() {
     this.ui.trigger.on('click', this.toggleAccordion.bind(this));
   },
 
-  toggleAccordion: function (e) {
+  toggleAccordion(e) {
     e.preventDefault();
     let btn = e.currentTarget;
     let drawer = e.currentTarget.nextElementSibling;
@@ -27,7 +28,7 @@ AccordionBehavior.config({
     }
   },
 
-  start: function () {
+  start() {
     this.setHandlers();
   }
 });

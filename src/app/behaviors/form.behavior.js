@@ -3,6 +3,7 @@ import { Behavior } from '../../zense/index';
 const FormBehavior = Object.create(Behavior);
 
 FormBehavior.config({
+  behaviorName: 'form',
   ui: {
     submitBtn: '.js-submit-form-btn',
     fields: '.js-field'
