@@ -3,6 +3,18 @@
   margin-bottom: 20px;
 }
 
+.visibility-hidden {
+  clip-path: inset(100%);
+  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; /* added line */
+  visibility: hidden;
+  width: 1px;
+}
+
 .fade.show {
   opacity: 1;
   display: block;
@@ -12,3 +24,29 @@
   background: rgba(0,0,0, 0.45);
 }
 
+.accordion {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.accordion-header {
+  width: 100%;
+  cursor: pointer;
+  display: block;
+  border: none;
+  text-align: left;
+  background: transparent;
+  padding: 0 5px 5px;
+  margin-bottom: 10px;
+}
+
+.accordion-drawer.collapse {
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.accordion-drawer-content {
+  padding: 0 5px 10px;
+}

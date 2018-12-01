@@ -17,12 +17,8 @@ Behavior.bindUIElements = function () {
       let uiElement = this.ui[key];
 
       // Needed to ensure ui dom elements are rebound
-      if (this.customized && typeof uiElement !== 'string') {
-        if (uiElement[0].className !== '') {
-          uiElement = '.' + uiElement[0].className;
-        } else {
-          uiElement = '#' + uiElement[0].id;
-        }
+      if (this.customized || typeof uiElement !== 'string') {
+        uiElement = this.strUI[key];
       }
 
       this.ui[key] = this.dom(uiElement);

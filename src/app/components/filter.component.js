@@ -1,5 +1,6 @@
 import { Component } from '../../zense/index';
 import ModalBehavior from '../behaviors/modal.behavior';
+import AccordionBehavior from '../behaviors/accordion.behavior';
 // import FilterBehavior from '../behaviors/filter.behavior';
 
 const FilterComponent = Object.create(Component);
@@ -14,14 +15,15 @@ FilterComponent.create({
   name: 'filter',
   selector: '#filter-region',
   behaviors: [
-    { name: ModalBehavior, options: customizeUI }
+    ModalBehavior,
+    AccordionBehavior
     // FilterBehavior
   ],
 
   template() {
     return `
       <div class="consultant-hub-filter align-self-center">
-        <button class="btn btn-primary btn-sm js-filter-modal-toggle" data-modal="#filter-modal">
+        <button class="btn btn-primary btn-sm js-toggle" data-modal="#filter-modal">
           Filter Consultant List
         </button>
 
@@ -41,13 +43,15 @@ FilterComponent.create({
               </div>
 
               <div class="modal-body">
-                <ul>
+                <ul class="accordion">
                   <li>
-                    <button class="js-accordion-toggle"></button>
-                    <div class="accordion-drawer"
-                      <div class="from-group">
-                        <label for="filter-search">Search</label>
-                        <input id="filter-search" type="search" name="filterSearch" class="search form-control" />
+                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">Search</button>
+                    <div class="accordion-drawer collapse">
+                      <div class="accordion-drawer-content">
+                        <div class="from-group">
+                          <label for="filter-search" class="visibility-hidden">Search</label>
+                          <input id="filter-search" type="search" name="filterSearch" class="search form-control" />
+                        </div>
                       </div>
                     </div>
                   </li>
@@ -56,7 +60,7 @@ FilterComponent.create({
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary js-modal-close-btn" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary js-apply-filteers-btn">Save changes</button>
               </div>
             </div>
           </div>
