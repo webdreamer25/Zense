@@ -69,6 +69,14 @@ Util.dom = function (selector) {
     }
   };
 
+  selector.setAttribute = function (name, value) {
+    if (this.length > 0) {
+      for (let i = 0; i < this.length; i++) {
+        this[i].setAttribute(name, value);
+      }
+    }
+  };
+
   return selector;
 };
 
