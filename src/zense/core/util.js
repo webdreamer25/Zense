@@ -71,13 +71,25 @@ Util.dom = function (selector) {
       }
     };
 
-    selector.attr = function (name, value) {
+    selector.attr = function (attribute, property) {
       for (let i = 0; i < this.length; i++) {
-        if (typeof value !== 'undefined') {
-          this[i].setAttribute(name, value);    
+        if (typeof property !== 'undefined') {
+          this[i].setAttribute(attribute, property);    
         } else {
-          this[i].getAttribute(name);
+          return this[i].getAttribute(attribute);
         }
+      }
+    };
+
+    selector.hasAttribute = function (attribute) {
+      for (let i = 0; i < this.length; i++) {
+        return this[i].hasAttribute(attribute);
+      }
+    };
+
+    selector.removeAttribute = function (attribute) {
+      for (let i = 0; i < this.length; i++) {
+        this[i].removeAttribute(attribute);
       }
     };
   }

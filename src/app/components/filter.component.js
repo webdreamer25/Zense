@@ -46,7 +46,7 @@ FilterComponent.create({
                       <div class="accordion-drawer-content">
                         <div class="from-group">
                           <label for="filter-search" class="visibility-hidden">Search</label>
-                          <input id="filter-search" type="search" name="filterSearch" class="search form-control js-filter-field" />
+                          <input id="filter-search" type="search" name="filterSearch" class="search form-control js-filter-search" />
                         </div>
                       </div>
                     </div>
@@ -75,7 +75,7 @@ FilterComponent.create({
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary js-modal-close-btn" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary js-apply-filters-btn">Apply Filters</button>
+                <button type="button" class="btn btn-primary js-apply-filters-btn" disabled="true">Apply Filters</button>
               </div>
             </div>
           </div>

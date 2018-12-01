@@ -4,61 +4,77 @@ const FilterBehavior = Object.create(Behavior);
 
 FilterBehavior.config({
   behaviorName: 'filter',
+  searchTerm: '',
   selectedFilters: [],
-  appliedFilters: [],
+  appliedFilters: {},
+  hasChanged: false,
   ui: {
+    search: '.js-filter-search',
     fields: '.js-filter-field',
     applyBtn: '.js-apply-filters-btn'
   },
 
   setHandlers() {
-    this.ui.applyBtn.on('click', this.applyFilters.bind(this));
-    this.ui.fields.on('change', this.onFieldChange.bind(this));
+    this.ui.applyBtn.on('click', this.onApplyFilters.bind(this));
+    this.ui.fields.on('change', this.onSelectFilters.bind(this));
   },
 
-  applyFilters(e) {
+  onApplyFilters(e) {
     let btn = e.currentTarget;
 
-    this.serializeFilterFields();
+    if ((this.selectedFilters.length > 0 || this.searchTerm !== '')) {
+      this.appliedFilters.search = this.searchTerm;
+      this.appliedFilters.filters = this.selectedFilters;
 
-    
-    if (this.selectedFilters.length > 0) {
-      this.appliedFilters = this.selectedFilters;
-      this.selectedFilters = [];
-
-      this.ui.applyBtn.attr('disabled', true);
+      // this.setFilterChanged();
+      this.resetForm();
 
       document.querySelector('.js-modal-close-btn').click();
-    }
+    }console.log(this.appliedFilters);
   },
 
-  onFieldChange(e) {
+  onSelectFilters(e) {
     let field = e.currentTarget;
+    let arr = this.selectedFilters;
 
-    if (field.value !== '' || field.checked === true) {
-      this.ui.applyBtn.attr('disabled', false);
+    if (field.checked && !arr.includes(field.name)) {
+      arr.push(field.name);
+    } else {
+      // remove a checked filter
+      if (arr.includes(field.name)) {
+        this.selectedFilters = arr.filter((name) => name !== field.name);
+      }
+    }
+
+    if ((this.selectedFilters.length > 0 || this.searchTerm !== '') && this.ui.applyBtn.hasAttribute('disabled')) {
+      this.ui.applyBtn.removeAttribute('disabled');
+    } else if (this.selectedFilters.length === 0 && this.searchTerm === '') {
+      this.ui.applyBtn.attr('disabled', true);
     }
   },
 
-  serializeFilterFields() {
-    this.ui.fields.each((field) => {
-      switch(field.type) {
-        case 'search':
-          if (field.value !== '') {
-            this.selectedFilters.push(field.value);
-          }
+  setFilterChanged() {
+    // We need to ensure control whether or not new filters have been applied.
+    for (let i = 0; this.selectedFilters.length; i++) {
+      let filter = this.selectedFilters[i];
 
-          break;
-        default: 
-          if (field.checked) {
-            this.selectedFilters.push(field.name);
-          }
+      if (this.appliedFilters.filters.includes(filter)) {
+        this.hasChanged = false;
+      } else {
+        this.hasChanged = true;
       }
-    });
-
-    if (this.selectedFilters.length > 0) {
-      this.selectedFilters = this.uniqueArray(this.selectedFilters);
     }
+  },
+
+  resetForm() {
+    this.searchTerm = '';
+    this.selectedFilters = [];
+
+    // if (this.selectedFilters.length < 1) {
+    //   this.ui.fields.attr('checked', false);
+    // }
+
+    this.ui.applyBtn.attr('disabled', true);
   },
 
   start() {
