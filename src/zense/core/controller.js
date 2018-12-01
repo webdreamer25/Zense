@@ -29,14 +29,14 @@ Controller.setBehaviors = function () {
   if (this.behaviors.length > 0) {
     for (let i = 0; i < this.behaviors.length; i++) {
       let behavior = this.behaviors[i];
- 
+      
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
         let customizedBehaviorOptions = this.behaviors[i].options;
 
         behavior = this.behaviors[i].name;
 
-        // Necessary if we want to have specific behavior on any given component/module
+        // Necessary if we want to have specific behavior changes on any given component/module
         if (customizedBehaviorOptions) {
           if (typeof customizedBehaviorOptions !== 'function') {
             for (let key in customizedBehaviorOptions) {
