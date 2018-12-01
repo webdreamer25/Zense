@@ -2,7 +2,5 @@
 node_modules/
 dist/app.js
 dist/index.html
-src/app/
-src/app.js
 notes.txt
 npm-debug.log

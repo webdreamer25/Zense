@@ -19,7 +19,7 @@ ModalBehavior.config({
     e.preventDefault();
     let btn = e.currentTarget;
     this.modal = this.dom(btn.dataset.modal);
-    debugger;
+
     if (!this.isOpen) {
       this.modal.classList.add('show');
 
