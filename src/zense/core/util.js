@@ -56,26 +56,31 @@ Util.dom = function (selector) {
       }
     }
   };
-
-  selector.each = function (callback) {
-    try {
-      for (let i = 0; i < this.length; i++) {
-        let el = this[i];
-
-        callback(el, i, this);
+  
+  // only register for multi-selector types like classes.
+  if (selector.length) {
+    selector.each = function (callback) {
+      try {
+        for (let i = 0; i < this.length; i++) {
+          let el = this[i];
+  
+          callback(el, i, this);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    };
 
-  selector.setAttribute = function (name, value) {
-    if (this.length > 0) {
+    selector.attr = function (name, value) {
       for (let i = 0; i < this.length; i++) {
-        this[i].setAttribute(name, value);
+        if (typeof value !== 'undefined') {
+          this[i].setAttribute(name, value);    
+        } else {
+          this[i].getAttribute(name);
+        }
       }
-    }
-  };
+    };
+  }
 
   return selector;
 };

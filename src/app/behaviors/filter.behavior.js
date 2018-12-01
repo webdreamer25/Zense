@@ -26,7 +26,7 @@ FilterBehavior.config({
       this.appliedFilters = this.selectedFilters;
       this.selectedFilters = [];
 
-      this.ui.applyBtn.setAttribute('disabled', true);
+      this.ui.applyBtn.attr('disabled', true);
 
       document.querySelector('.js-modal-close-btn').click();
     }
@@ -36,7 +36,7 @@ FilterBehavior.config({
     let field = e.currentTarget;
 
     if (field.value !== '' || field.checked === true) {
-      this.ui.applyBtn.setAttribute('disabled', false);
+      this.ui.applyBtn.attr('disabled', false);
     }
   },
 
