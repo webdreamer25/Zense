@@ -13,7 +13,7 @@ Behavior.config = function (options) {
 Behavior.bindUIElements = function () {
   if (!this.ui) { return null; }
   
-  Object.keys(this.ui).forEach(function (key) {
+  Object.keys(this.ui).forEach(key => {
     let uiElement = this.ui[key];
 
     // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
@@ -27,7 +27,7 @@ Behavior.bindUIElements = function () {
     }
 
     this.ui[key] = this.dom(uiElement);
-  }.bind(this));
+  });
 };
 
 Behavior.start = function () {
