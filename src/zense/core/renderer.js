@@ -11,14 +11,14 @@ Renderer.beforeRender = function () {
   return null;
 };
 
-Renderer.render = function () {
+Renderer.render = function (model) {
   this.beforeRender();
   this.setDOMSelector();
   
   try {
     this.errorCheck();
 
-    let data = this.serializeData(this.store);
+    let data = this.serializeData(model ? model : this.store);
 
     this.addTemplateToDOM(data);
   } catch (e) {

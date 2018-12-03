@@ -15,10 +15,10 @@ ConsultantModule.create({
 
   template() {
     return `
-      <div class="consultant-hub container">
+      <div class="consultant container">
         <div id="filter-region">
         </div>
-        <div id="filter-results" class="row">
+        <div id="filter-results" class="consultant-results row">
         </div>
       </div>
     `;

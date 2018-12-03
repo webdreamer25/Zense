@@ -4,9 +4,9 @@ const FilterBehavior = Object.create(Behavior);
 
 FilterBehavior.config({
   behaviorName: 'filter',
-  searchTerm: '',
+  searchTerm: null,
   selectedFilters: [],
-  appliedFilters: {},
+  appliedFilters: [],
   hasChanged: false,
   ui: {
     search: '.js-filter-search',
@@ -23,10 +23,11 @@ FilterBehavior.config({
   onApplyFilters(e) {
     let btn = e.currentTarget;
 
-    this.appliedFilters = {
-      search: this.searchTerm,
-      fitlers: this.selectedFilters
-    };
+    this.selectedFilters.push(this.searchTerm);
+
+    this.appliedFilters = this.parent.store.filter(function (item) {
+      return this.selectedFilters.indexOf(item.make) >= 0;
+    }.bind(this));
 
     let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
 

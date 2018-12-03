@@ -14,7 +14,11 @@ FilterComponent.create({
     FilterBehavior
   ],
 
-  template() {
+  serializeData() {
+    return ['ford', 'toyota', 'mazda', 'mitsubishi', 'honda', 'chevrolet', 'kia', 'honda']
+  },
+
+  template(data) {
     return `
       <div class="consultant-hub-filter row justify-content-center">
         <div class="col-auto">
@@ -52,21 +56,15 @@ FilterComponent.create({
                     </div>
                   </li>
                   <li>
-                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">Cars</button>
+                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">Make</button>
                     <div class="accordion-drawer collapse">
                       <div class="accordion-drawer-content">
-                        <div class="from-group form-check-inline">
-                          <input type="checkbox" name="mercedez" class="form-check-input js-filter-field" />
-                          <label class="form-check-label">Mercedez</label>
-                        </div>
-                        <div class="from-group form-check-inline">
-                          <input type="checkbox" name="kia" class="form-check-input js-filter-field" />
-                          <label class="form-check-label">Kia</label>
-                        </div>
-                        <div class="from-group form-check-inline">
-                          <input type="checkbox" name="mitsubishi" class="form-check-input js-filter-field" />
-                          <label class="form-check-label">Mitsubishi</label>
-                        </div>
+                        ${data.map(make => {
+                          return `<div class="from-group form-check-inline">
+                            <input type="checkbox" name="${make}" class="form-check-input js-filter-field" />
+                            <label class="form-check-label">${make}</label>
+                          </div>`
+                        }).join('')}
                       </div>
                     </div>
                   </li>
