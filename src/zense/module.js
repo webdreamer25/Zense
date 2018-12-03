@@ -32,7 +32,7 @@ Module.addComponents = function (res) {
     component.store = this.api ? res : null;
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
-    if (this.shouldRenderChildren && component.template !== '') {
+    if ((component.shouldRender || this.shouldRenderChildren) && component.template !== '') {
         component.render();
     } else {
       // console.log('Component: ' + componentName + ' Error: Nees a template!');

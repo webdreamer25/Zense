@@ -17,20 +17,23 @@ FilterBehavior.config({
   setHandlers() {
     this.ui.applyBtn.on('click', this.onApplyFilters.bind(this));
     this.ui.fields.on('change', this.onSelectFilters.bind(this));
+    this.ui.search.on('keyup', this.onSearch.bind(this));
   },
 
   onApplyFilters(e) {
     let btn = e.currentTarget;
 
-    if ((this.selectedFilters.length > 0 || this.searchTerm !== '')) {
-      this.appliedFilters.search = this.searchTerm;
-      this.appliedFilters.filters = this.selectedFilters;
+    this.appliedFilters = {
+      search: this.searchTerm,
+      fitlers: this.selectedFilters
+    };
 
-      // this.setFilterChanged();
-      this.resetForm();
+    let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
 
-      document.querySelector('.js-modal-close-btn').click();
-    }console.log(this.appliedFilters);
+    this.ui.applyBtn.attr('disabled', true);
+
+    document.querySelector('.js-modal-close-btn').click();
+    document.dispatchEvent(filtered);
   },
 
   onSelectFilters(e) {
@@ -46,35 +49,21 @@ FilterBehavior.config({
       }
     }
 
-    if ((this.selectedFilters.length > 0 || this.searchTerm !== '') && this.ui.applyBtn.hasAttribute('disabled')) {
+    this.enableApplyButton();
+  },
+
+  onSearch(e) {
+    let search = e.currentTarget;
+
+    this.searchTerm = search.value;
+
+    this.enableApplyButton();
+  },
+
+  enableApplyButton() {
+    if (this.ui.applyBtn.hasAttribute('disabled')) {
       this.ui.applyBtn.removeAttribute('disabled');
-    } else if (this.selectedFilters.length === 0 && this.searchTerm === '') {
-      this.ui.applyBtn.attr('disabled', true);
-    }
-  },
-
-  setFilterChanged() {
-    // We need to ensure control whether or not new filters have been applied.
-    for (let i = 0; this.selectedFilters.length; i++) {
-      let filter = this.selectedFilters[i];
-
-      if (this.appliedFilters.filters.includes(filter)) {
-        this.hasChanged = false;
-      } else {
-        this.hasChanged = true;
-      }
-    }
-  },
-
-  resetForm() {
-    this.searchTerm = '';
-    this.selectedFilters = [];
-
-    // if (this.selectedFilters.length < 1) {
-    //   this.ui.fields.attr('checked', false);
-    // }
-
-    this.ui.applyBtn.attr('disabled', true);
+    } 
   },
 
   start() {

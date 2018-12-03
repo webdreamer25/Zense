@@ -4,6 +4,7 @@ const Component = Object.create(Controller);
 
 Component.id = 0;
 Component.type = 'component';
+Component.shouldRender = true;
 
 Component.setName = function (selector) {
   selector = selector.toLowerCase();
