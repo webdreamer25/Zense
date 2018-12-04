@@ -8,7 +8,7 @@ ResultsBehavior.config({
 
   updateTemplate() {
     document.addEventListener('filtered', (e) => {
-      if (e.detail.length > 0) {
+      if ((Array.isArray(e.detail) && e.detail.length > 0 || e.detail === 'not found')) {
         this.parent.render(e.detail);
       } else {
         this.parent.render();

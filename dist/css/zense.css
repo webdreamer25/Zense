@@ -42,6 +42,12 @@
   margin-bottom: 10px;
 }
 
+.accordion-drawer {
+  max-height: 200px;
+  transition: all 1s ease-in-out;
+  -webkit-transition: all 1s ease-in-out;
+}
+
 .accordion-drawer.collapse {
   height: 0;
   overflow: hidden;

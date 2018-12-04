@@ -21,13 +21,17 @@ FilterBehavior.config({
   },
 
   onApplyFilters(e) {
-    let btn = e.currentTarget;
+    if (this.searchTerm !== null) {
+      this.selectedFilters.push(this.searchTerm);
+    }
 
-    this.selectedFilters.push(this.searchTerm);
-
-    this.appliedFilters = this.parent.store.filter(function (item) {
+    this.appliedFilters = this.parent.store.filter(item => {
       return this.selectedFilters.indexOf(item.make) >= 0;
-    }.bind(this));
+    });
+
+    if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
+      this.appliedFilters = 'not found';
+    }
 
     let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
 
@@ -35,6 +39,9 @@ FilterBehavior.config({
 
     document.querySelector('.js-modal-close-btn').click();
     document.dispatchEvent(filtered);
+
+    // Ensures continued functionality of filtering.
+    this.appliedFilters = [];
   },
 
   onSelectFilters(e) {
@@ -57,6 +64,11 @@ FilterBehavior.config({
     let search = e.currentTarget;
 
     this.searchTerm = search.value;
+    this.selectedFilters = this.appliedFilters.filter((item) => item !== this.searchTerm);
+
+    if (search.value === '') {
+      this.searchTerm = null;
+    }
 
     this.enableApplyButton();
   },
