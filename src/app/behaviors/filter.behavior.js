@@ -11,11 +11,13 @@ FilterBehavior.config({
   ui: {
     search: '.js-filter-search',
     fields: '.js-filter-field',
-    applyBtn: '.js-apply-filters-btn'
+    applyBtn: '.js-apply-filters-btn',
+    clearBtn: '.js-clear-filters-btn'
   },
 
   setHandlers() {
     this.ui.applyBtn.on('click', this.onApplyFilters.bind(this));
+    this.ui.clearBtn.on('click', this.onClearFilters.bind(this));
     this.ui.fields.on('change', this.onSelectFilters.bind(this));
     this.ui.search.on('keyup', this.onSearch.bind(this));
   },
@@ -25,9 +27,11 @@ FilterBehavior.config({
       this.selectedFilters.push(this.searchTerm);
     }
 
-    this.appliedFilters = this.parent.store.filter(item => {
-      return this.selectedFilters.indexOf(item.make) >= 0;
-    });
+    if (this.selectedFilters.length > 0) {
+      this.appliedFilters = this.parent.store.filter(item => {
+        return this.selectedFilters.indexOf(item.make) >= 0;
+      });
+    }
 
     if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
       this.appliedFilters = 'not found';
@@ -35,13 +39,23 @@ FilterBehavior.config({
 
     let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
 
-    this.ui.applyBtn.attr('disabled', true);
+    this.ui.applyBtn.prop('disabled', true);
 
     document.querySelector('.js-modal-close-btn').click();
     document.dispatchEvent(filtered);
 
     // Ensures continued functionality of filtering.
     this.appliedFilters = [];
+  },
+
+  onClearFilters(e) {
+    this.ui.search.val('');
+    this.ui.fields.prop('checked', false);
+
+    this.selectedFilters = [];
+    this.appliedFilters = [];
+
+    this.ui.applyBtn.prop('disabled', false);
   },
 
   onSelectFilters(e) {
