@@ -45,7 +45,10 @@ FilterComponent.create({
               <div class="modal-body">
                 <ul class="accordion">
                   <li>
-                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">Search</button>
+                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">
+                      <i class="fas fa-chevron-down"></i>
+                      Search
+                    </button>
                     <div class="accordion-drawer collapse">
                       <div class="accordion-drawer-content">
                         <div class="from-group">
@@ -56,7 +59,10 @@ FilterComponent.create({
                     </div>
                   </li>
                   <li>
-                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">Make</button>
+                    <button class="accordion-header js-accordion-toggle" data-collapsed="true">
+                      <i class="fas fa-chevron-down"></i>
+                      Make
+                    </button>
                     <div class="accordion-drawer collapse">
                       <div class="accordion-drawer-content">
                         ${data.map(make => {
@@ -72,7 +78,7 @@ FilterComponent.create({
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary js-modal-close-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary js-clear-filters-btn" data-dismiss="modal">Clear Filters</button>
                 <button type="button" class="btn btn-primary js-apply-filters-btn" disabled="true">Apply Filters</button>
               </div>
             </div>

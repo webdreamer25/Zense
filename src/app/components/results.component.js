@@ -12,7 +12,6 @@ ResultsComponent.create({
   ],
 
   template(carList) {
-    console.log(carList);
     let tplList = '';
 
     if (Array.isArray(carList)) {
