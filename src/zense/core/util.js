@@ -1,6 +1,6 @@
 import Xhr from './xhr';
 
-const Methods = {
+const SelectorMethods = {
   on(event, callback, bubble = true) {
     if (!this.length) {
       this.addEventListener(event, callback, bubble);
@@ -123,9 +123,9 @@ Util.dom = function (selector) {
   }
 
   // Add selector chain methods to dom object.
-  for (let key in Methods) {
-    if (Methods.hasOwnProperty(key)) {
-      selector[key] = Methods[key];
+  for (let key in SelectorMethods) {
+    if (SelectorMethods.hasOwnProperty(key)) {
+      selector[key] = SelectorMethods[key];
     }
   }
 

@@ -8,7 +8,6 @@ AccordionBehavior.config({
     trigger: '.js-accordion-toggle',
     drawer: '.accordion-drawer'
   },
-
   setHandlers() {
     this.ui.trigger.on('click', this.toggleAccordion.bind(this));
   },
@@ -16,7 +15,7 @@ AccordionBehavior.config({
   toggleAccordion(e) {
     e.preventDefault();
     let btn = e.currentTarget;
-    let drawer = e.currentTarget.nextElementSibling;
+    let drawer = btn.nextElementSibling;
     let isCollapsed = btn.dataset.collapsed;
 
     if (isCollapsed === 'true') {

@@ -28,21 +28,23 @@ FilterComponent.create({
         </div>
 
         <div id="filter-modal" 
-          class="modal modal--backdrop fade" 
+          class="modal-2" 
           tabindex="-1" 
           role="dialog" 
           aria-hidden="true">
 
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Filter by</h5>
-                <button type="button" class="close js-modal-close-btn" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+          <div class="container" role="document">
+            <div class="modal-2-content row">
+              <div class="col-md-12 text-align-right">
+                <button type="button" class="close-btn js-modal-close-btn" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
                 </button>
               </div>
+              <div class="modal-2-header col-auto">
+                <h5 class="modal-2-title" id="exampleModalLongTitle">Filter by</h5>
+              </div>
 
-              <div class="modal-body">
+              <div class="modal-2-body col-md-9">
                 <ul class="accordion">
                   <li>
                     <button class="accordion-header js-accordion-toggle" data-collapsed="true">
@@ -75,11 +77,13 @@ FilterComponent.create({
                     </div>
                   </li>
                 </ul>
-              </div>
 
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary js-clear-filters-btn" data-dismiss="modal">Clear Filters</button>
-                <button type="button" class="btn btn-primary js-apply-filters-btn" disabled="true">Apply Filters</button>
+                <div class="modal-2-footer row justify-content-center">
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-secondary js-clear-filters-btn" data-dismiss="modal">Clear Filters</button>
+                    <button type="button" class="btn btn-primary js-apply-filters-btn" disabled="true">Apply Filters</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
