@@ -1,5 +1,6 @@
 import { Component } from '../../zense/index';
 import ModalBehavior from '../behaviors/modal.behavior';
+// import StorageBehavior from '../behaviors/storage.behavior';
 import AccordionBehavior from '../behaviors/accordion.behavior';
 import FilterBehavior from '../behaviors/filter.behavior';
 
@@ -34,14 +35,16 @@ FilterComponent.create({
           aria-hidden="true">
 
           <div class="container" role="document">
-            <div class="modal-2-content row">
-              <div class="col-md-12 text-align-right">
+            <div class="model-2-top row justify-content-end">
+              <div class="col-auto">
                 <button type="button" class="close-btn js-modal-close-btn" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true"><i class="fas fa-times"></i></span>
                 </button>
               </div>
+            </div>
+            <div class="modal-2-content row">
               <div class="modal-2-header col-auto">
-                <h5 class="modal-2-title" id="exampleModalLongTitle">Filter by</h5>
+                <h5 class="modal-2-title" id="exampleModalLongTitle">Filter by:</h5>
               </div>
 
               <div class="modal-2-body col-md-9">

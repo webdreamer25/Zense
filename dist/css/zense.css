@@ -57,7 +57,7 @@
 
 .accordion-drawer-content {
   border-bottom: 1px solid #fff;
-  padding: 0 5px 10px;
+  padding: 0 10px 10px;
 }
 
 /*samples*/
@@ -105,8 +105,12 @@
   visibility: visible;
 }
 
-.modal-2-content {
+.model-2-top {
   margin-top: 3rem;
+}
+
+.modal-2-content {
+  margin-top: 1rem;
 }
 
 .modal-2-footer {
