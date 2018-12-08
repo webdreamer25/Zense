@@ -7,7 +7,7 @@ ResultsBehavior.config({
   filteredResults: [],
 
   initialize() {
-    let filters = this.getStoredData('filters');console.log(this);
+    let filters = this.getStoredData('filters');
 
     if (filters && filters.applied.length > 0) {
       this.parent.render(filters.applied);
