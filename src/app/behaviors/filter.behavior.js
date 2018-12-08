@@ -1,4 +1,5 @@
 import { Behavior } from '../../zense/index';
+import { timingSafeEqual } from 'crypto';
 
 const FilterBehavior = Object.create(Behavior);
 
@@ -13,6 +14,23 @@ FilterBehavior.config({
     fields: '.js-filter-field',
     applyBtn: '.js-apply-filters-btn',
     clearBtn: '.js-clear-filters-btn'
+  },
+
+  initialize() {
+    let stored = this.getStoredData('filters');
+
+    if (Array.isArray(stored.applied)) {
+      this.searchTerm = stored.search;
+      // this.selectedFilters = stored.filters;
+
+      this.ui.search.val(this.searchTerm);
+
+      for (let i = 0; i < stored.applied.length; i++) {
+        this.dom('[name="' + stored.applied[i].make + '"]').prop('checked', true);
+      }
+
+      this.appliedFilters = stored.applied;
+    }
   },
 
   setHandlers() {
@@ -35,14 +53,13 @@ FilterBehavior.config({
 
     if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
       this.appliedFilters = 'not found';
+      this.removeStoredItem('filters');
+    } else {
+      // Handle session Storage
+      this.storeData('filters', { search: this.searchTerm, applied: this.appliedFilters });
     }
 
-    let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
-
-    this.ui.applyBtn.prop('disabled', true);
-
-    document.querySelector('.js-modal-close-btn').click();
-    document.dispatchEvent(filtered);
+    this.triggerRenderUpdate();
 
     // Ensures continued functionality of filtering.
     this.appliedFilters = [];
@@ -52,6 +69,7 @@ FilterBehavior.config({
     this.ui.search.val('');
     this.ui.fields.prop('checked', false);
 
+    this.searchTerm = null;
     this.selectedFilters = [];
     this.appliedFilters = [];
 
@@ -87,6 +105,15 @@ FilterBehavior.config({
     this.enableApplyButton();
   },
 
+  triggerRenderUpdate() {
+    let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
+
+    this.enableApplyButton();
+
+    document.querySelector('.js-modal-close-btn').click();
+    document.dispatchEvent(filtered);
+  },
+
   enableApplyButton() {
     if (this.ui.applyBtn.hasAttribute('disabled')) {
       this.ui.applyBtn.removeAttribute('disabled');
@@ -94,6 +121,7 @@ FilterBehavior.config({
   },
 
   start() {
+    this.initialize();
     this.setHandlers();
   }
 });

@@ -1,5 +1,6 @@
 import { Component } from '../../zense/index';
 import ResultsBehavior from '../behaviors/results.behavior';
+import StorageExtender from '../extenders/storage.extender';
 
 const ResultsComponent = Object.create(Component);
 
@@ -8,7 +9,10 @@ ResultsComponent.create({
   renderType: 'html',
   selector: '#filter-results',
   behaviors: [
-    ResultsBehavior
+    { 
+      name: ResultsBehavior, 
+      options: StorageExtender 
+    }
   ],
 
   template(carList) {

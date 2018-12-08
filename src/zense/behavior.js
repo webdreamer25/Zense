@@ -4,6 +4,7 @@ const Behavior = Object.create(Util);
 
 Behavior.ui = {};
 Behavior.strUI = {};
+Behavior.delegates = {};
 Behavior.behaviorName = '';
 Behavior.customized = false;
 
@@ -25,6 +26,21 @@ Behavior.config = function (options) {
     console.error(e);
   }
 };
+
+// Behavior.setDelegateBehaviors = function (delegates) {
+//   if (Array.isArray(delegates)) {
+//     for (let i = 0; i < delegates.length; i++) {
+//       let delegate = delegates[i];
+//       let delegateName = delegate.behaviorName.split('-');
+
+//       this[delegateName[0]] = delegate;
+
+//       if (i === delegates.length) {
+//         delegate = null;
+//       }
+//     }
+//   }
+// };
 
 Behavior.bindUIElements = function () {
   if (!this.ui) { return null; }

@@ -3,6 +3,7 @@ import { Component } from '../../zense/index';
 const NavigationComponent = Object.create(Component);
 
 NavigationComponent.create({
+  name: 'navigation',
   selector: '#navigation',
 
   template(data) {

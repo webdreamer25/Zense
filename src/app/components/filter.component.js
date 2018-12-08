@@ -1,8 +1,9 @@
 import { Component } from '../../zense/index';
 import ModalBehavior from '../behaviors/modal.behavior';
-// import StorageBehavior from '../behaviors/storage.behavior';
 import AccordionBehavior from '../behaviors/accordion.behavior';
 import FilterBehavior from '../behaviors/filter.behavior';
+
+import StorageExtender from '../extenders/storage.extender';
 
 const FilterComponent = Object.create(Component);
 
@@ -12,11 +13,14 @@ FilterComponent.create({
   behaviors: [
     ModalBehavior,
     AccordionBehavior,
-    FilterBehavior
+    { 
+      name: FilterBehavior, 
+      options: StorageExtender
+    }
   ],
 
   serializeData() {
-    return ['ford', 'toyota', 'mazda', 'mitsubishi', 'honda', 'chevrolet', 'kia', 'honda']
+    return ['ford', 'toyota', 'mazda', 'mitsubishi', 'honda', 'chevrolet', 'kia']
   },
 
   template(data) {

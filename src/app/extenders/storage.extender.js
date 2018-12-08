@@ -1,13 +1,9 @@
-import { Behavior } from '../../zense/index';
-
-const StorageBehavior = Object.create(Behavior);
-
-StorageBehavior.config({
-  storeData(key, payload) {
+const StorageExtender = {
+  storeData: function (key, payload) {
     sessionStorage.setItem(key, JSON.stringify(payload));
   },
 
-  getStoredData(key) {
+  getStoredData: function (key) {
     let storeItem = sessionStorage.getItem(key);
 
     if (typeof storeItem !== 'undefined' && storeItem !== null) {
@@ -17,11 +13,11 @@ StorageBehavior.config({
     return false;
   },
 
-  removeStoredItem(key) {
+  removeStoredItem: function (key) {
     if (this.getStoredData(key)) {
       sessionStorage.removeItem(key);
     }
   }
-});
+};
 
-export default StorageBehavior;
+export default StorageExtender;

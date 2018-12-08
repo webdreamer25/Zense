@@ -4,6 +4,7 @@ const Controller = Object.create(Renderer);
 
 Controller.name = '';
 Controller.behaviors = [];
+Controller.shouldSetBehaviors = true;
 
 Controller.create = function (options) {
   Object.assign(this, options);
@@ -36,12 +37,13 @@ Controller.bindUIElements = function () {
 };
 
 Controller.setBehaviors = function () {
-  if (this.behaviors.length > 0) {
+  if (this.shouldSetBehaviors && this.behaviors.length > 0) {
     for (let i = 0; i < this.behaviors.length; i++) {
       let behavior = this.behaviors[i];
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
+        // let delegates = this.behaviors[i].delegates;
         let customizedOptions = this.behaviors[i].options;
 
         behavior = this.behaviors[i].name;
@@ -50,20 +52,20 @@ Controller.setBehaviors = function () {
         if (customizedOptions) {
           if (typeof customizedOptions !== 'function') {
             Object.keys(customizedOptions).forEach(key => {
-              behavior[key] = this.extend({}, behavior[key], customizedOptions[key]);
+              if (behavior[key] === customizedOptions[key]) {
+                behavior[key] = this.extend({}, behavior[key], customizedOptions[key]);
+              } else {
+                behavior[key] = customizedOptions[key];
+              }
             });
           } else {
             // Allow developers to figure out how they with overwite behaviors
             behavior = this.behaviors[i].options();
           }
-
-          // We need to let the current behavior there has been a change
-          behavior.customized = true;
-        } else {
-          // This ensures the next invocation of a behavior has a reset customized state.
-          behavior.customized = false;
         }
       }
+
+      this.shouldSetBehaviors = false;
 
       // The parent will be the component/module that references the behavior
       behavior.parent = this;
@@ -76,7 +78,13 @@ Controller.setBehaviors = function () {
 Controller.getBehavior = function (behaviorName) {
   if (this.behaviors.length === 0) { return false; }
   
-  let result = this.behaviors.filter(item => item.behaviorName === behaviorName);
+  let result = this.behaviors.filter(item => {
+    if (item.name) {
+      item = item.name;
+    }
+
+    return item.behaviorName === behaviorName;
+  });
 
   return result[0];
 };
