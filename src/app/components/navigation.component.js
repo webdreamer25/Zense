@@ -6,6 +6,14 @@ NavigationComponent.create({
   name: 'navigation',
   selector: '#navigation',
 
+  serializeData() {
+    return {
+      link1: 'Home',
+      link2: 'About',
+      link3: 'Contact'
+    }
+  },
+
   template(data) {
     return `
       <ul class="nav justify-content-end">
@@ -21,7 +29,7 @@ NavigationComponent.create({
         </li>
         <li>
           <a href="#" class="nav-link">
-            ${data.link2}
+            ${data.link3}
           </a>
         </li>
       </ul>

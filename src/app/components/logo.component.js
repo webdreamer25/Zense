@@ -6,8 +6,8 @@ LogoComponent.create({
   name: 'logo',
   selector: '#header-logo',
 
-  serializeData(data) {
-    return data.companyName;
+  serializeData() {
+    return 'Zense'
   },
 
   template(companyName) {
