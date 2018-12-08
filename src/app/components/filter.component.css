@@ -1,0 +1,35 @@
+.accordion {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.accordion-header {
+  width: 100%;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  border: none;
+  border-bottom: 1px solid #fff;
+  text-align: left;
+  background: transparent;
+  padding: 0 5px 10px;
+  margin-bottom: 10px;
+}
+
+.accordion-drawer {
+  transition: height 0.4s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.accordion-drawer.collapse {
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.accordion-drawer-content {
+  border-bottom: 1px solid #fff;
+  padding: 0 10px 10px;
+}

@@ -7,7 +7,8 @@ module.exports = {
   watch: true,
   // mode: 'development',
   entry: {
-    app: ['@babel/polyfill', './src/app/app.entry.js']
+    app: ['@babel/polyfill', './src/app/app.entry.js'],
+    styles: './src/zense.css'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -24,7 +25,7 @@ module.exports = {
     rules: [
       { 
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader','css-loader']
       },
       {
         test: /\.html$/,

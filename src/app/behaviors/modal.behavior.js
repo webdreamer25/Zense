@@ -23,6 +23,7 @@ ModalBehavior.config({
 
     if (!this.isOpen) {
       this.modal.classList.add('show');
+      this.dom('#app').classList.add('no-scroll');
 
       this.isOpen = true;
     }
