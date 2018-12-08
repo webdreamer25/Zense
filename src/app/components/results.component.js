@@ -18,6 +18,8 @@ ResultsComponent.create({
   template(carList) {
     let tplList = '';
 
+    tplList += '<div class="consultant-results row">';
+
     if (Array.isArray(carList)) {
       for (let i = 0; i < carList.length; i++) {
         tplList += '<div class="col-md-3 pb-3"><div class="card">';
@@ -30,6 +32,8 @@ ResultsComponent.create({
     } else {
       tplList += '<p>No results were found.</p>';
     }
+
+    tplList += '</div>';
 
     return tplList;
   }
