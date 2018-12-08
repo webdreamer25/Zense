@@ -1,9 +1,5 @@
-// [
-      
-//   "@babel/preset-env", {
-//     "loose": true,
-//     "targets": {
-//       "node": "10.13"
-//     }
-//   }
-// ]
+// use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+// new MiniCssExtractPlugin({
+    //   filename: '[name].css',
+    //   chunkFilename: '[id].css'
+    // })

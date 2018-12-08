@@ -1,0 +1,42 @@
+[
+  {
+    "make": "ford",
+    "model": "focus"
+  },
+  {
+    "make": "ford",
+    "model": "f150"
+  },
+  {
+    "make": "toyota",
+    "model": "prius"
+  },
+  {
+    "make": "toyota",
+    "model": "camry"
+  },
+  {
+    "make": "mazda",
+    "model": "cx5"
+  },
+  {
+    "make": "mitsubishi",
+    "model": "eclipse"
+  },
+  {
+    "make": "mitsubishi",
+    "model": "lancer"
+  },
+  {
+    "make": "honda",
+    "model": "accord"
+  },
+  {
+    "make": "chevrolet",
+    "model": "malibu"
+  },
+  {
+    "make": "kia",
+    "model": "sorento"
+  }
+]

@@ -1,6 +1,12 @@
 {
   "presets": [
-    "@babel/preset-react",
+    [
+      "@babel/preset-react", {
+        "pragma": "dom",
+        "pragmaFrag": "DomFrag",
+        "throwIfNamespace": false
+      }
+    ],
     [
       "@babel/preset-env", {
         "loose": true,

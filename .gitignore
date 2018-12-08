@@ -1,7 +1,6 @@
 #Ignore file
 node_modules/
-dist/
-src/app/
-src/app.js
+dist/app.js
+dist/index.html
 notes.txt
 npm-debug.log
