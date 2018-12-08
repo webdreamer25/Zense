@@ -23,7 +23,7 @@ ModalBehavior.config({
 
     if (!this.isOpen) {
       this.modal.classList.add('show');
-      this.dom('#app').classList.add('no-scroll');
+      this.dom('body').classList.add('no-scroll');
 
       this.isOpen = true;
     }
@@ -34,6 +34,7 @@ ModalBehavior.config({
     
     if (this.isOpen) {
       this.modal.classList.remove('show');
+      this.dom('body').classList.remove('no-scroll');
 
       this.isOpen = false;
       this.modal = null;

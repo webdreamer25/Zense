@@ -111,10 +111,12 @@ Util.dom = function (selector) {
     switch (selector.charAt(0)) {
       case '#':
         selector = document.getElementById(selector.slice(1));
-
+        break;
+      case '.':
+        selector = document.querySelectorAll(selector); 
         break;
       default:
-        selector = document.querySelectorAll(selector);         
+        selector = document.querySelector(selector);
     }
   }
 
