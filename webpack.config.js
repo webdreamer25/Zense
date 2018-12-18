@@ -8,6 +8,7 @@ module.exports = {
   // mode: 'development',
   entry: {
     app: ['@babel/polyfill', './src/app/app.entry.js'],
+    // zense: ['./src/zense/index.js'],
     styles: './src/zense.css'
   },
   output: {
