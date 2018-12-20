@@ -43,7 +43,6 @@ Controller.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
-        // let delegates = this.behaviors[i].delegates;
         let customizedOptions = this.behaviors[i].options;
 
         behavior = this.behaviors[i].name;
@@ -65,6 +64,7 @@ Controller.setBehaviors = function () {
         }
       }
 
+      // Ensures that behaviors are only set one time.
       this.shouldSetBehaviors = false;
 
       // The parent will be the component/module that references the behavior
