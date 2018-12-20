@@ -25,14 +25,20 @@ Renderer.render = function (model) {
     Internal.errors.push(e);
   }
 
-  this.bindUIElements();
-  this.setBehaviors();
+  this.internalPostHook();
+  this.afterRender();
+};
 
-  if (this.handleAPIUse) {
+Renderer.internalPostHook = function () {
+  this.bindUIElements();
+
+  if (this.setBehaviors !== undefined) {
+    this.setBehaviors();
+  }
+
+  if (this.handleAPIUse !== undefined) {
     this.handleAPIUse();
   }
-  
-  this.afterRender();
 };
 
 Renderer.afterRender = function () {
