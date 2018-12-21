@@ -57,4 +57,12 @@ Module.checkUniqueName = function (component) {
   }
 };
 
+Module.getChildComponent = function (componentName) {
+  for (let i = 0; i < this.components.length; i++) {
+    if (this.components[i].name === componentName) {
+      return this.components[i];
+    }
+  }
+};
+
 export default Module;

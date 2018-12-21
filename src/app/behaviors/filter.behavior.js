@@ -59,6 +59,12 @@ FilterBehavior.config({
       this.storeData('filters', { search: this.searchTerm, applied: this.appliedFilters });
     }
 
+    if (this.appliedFilters.length > 0 && this.appliedFilters.length < 8) {
+      this.dom('#filter-paginator').classList.add('d-none');
+    } else {
+      this.dom('#filter-paginator').classList.remove('d-none');
+    }
+
     this.triggerRenderUpdate();
 
     // Ensures continued functionality of filtering.

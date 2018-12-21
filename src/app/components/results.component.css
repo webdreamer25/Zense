@@ -3,3 +3,7 @@
   border-bottom: 1px solid #ccc;
   padding-top: .8rem;
 }
+
+.card {
+  height: 100%;
+}

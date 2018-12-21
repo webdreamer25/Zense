@@ -3,6 +3,7 @@ import Renderer from './renderer';
 const Controller = Object.create(Renderer);
 
 Controller.name = '';
+Controller.strUI = {};
 
 Controller.create = function (options) {
   Object.assign(this, options);
@@ -21,7 +22,7 @@ Controller.bindUIElements = function () {
     let uiElement = this.ui[key];
 
     // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-    if (typeof this.ui[key] === 'string' || (this.strUI !== null && this.ui[key] === this.strUI[key])) {
+    if (typeof this.ui[key] === 'string' || (Object.keys(this.strUI).length > 0 && this.ui[key] === this.strUI[key])) {
       this.strUI[key] = this.ui[key];
     }
 

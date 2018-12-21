@@ -30,8 +30,6 @@ Renderer.render = function (model) {
 };
 
 Renderer.internalPostHook = function () {
-  this.bindUIElements();
-
   if (this.setBehaviors !== undefined) {
     this.setBehaviors();
   }
