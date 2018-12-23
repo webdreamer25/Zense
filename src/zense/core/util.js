@@ -1,4 +1,5 @@
 import Xhr from './xhr';
+import Eventor from './eventor';
 
 const SelectorMethods = {
   on(event, callback, bubble = true) {
@@ -100,6 +101,8 @@ const SelectorMethods = {
 
 const Util = Object.create(Xhr);
 
+Util.events = Object.create(Eventor);
+
 Util.dom = function (selector) {
   // We need to preserve a string version of selector for error handling later on.
   let selectorStr = '';
@@ -134,7 +137,6 @@ Util.dom = function (selector) {
   return selector;
 };
 
-// I did it for the children :-)
 Util.each = function (arr, callback) {
   if (Array.isArray(arr)) {
     for (let i = 0; i < arr.length; i++) {

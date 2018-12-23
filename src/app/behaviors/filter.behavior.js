@@ -106,12 +106,10 @@ FilterBehavior.config({
   },
 
   triggerRenderUpdate() {
-    let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
-
     this.enableApplyButton();
 
     document.querySelector('.js-modal-close-btn').click();
-    document.dispatchEvent(filtered);
+    this.events.publish('filtered', this.appliedFilters, true);
   },
 
   enableApplyButton() {
