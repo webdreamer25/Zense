@@ -28,7 +28,7 @@ Module.addComponents = function (res) {
     this.checkUniqueName(component);
 
     // Let the component know whos their daddy.
-    component.parent = this;
+    component.module = this;
     component.store = this.api ? res : null;
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.

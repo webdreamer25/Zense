@@ -18,15 +18,21 @@ ResultsComponent.create({
   ],
 
   serializeData(data) {
-    this.parent.pagiLength = Math.ceil(data.length / this.parent.resultsMax);
+    let filters = JSON.parse(sessionStorage.getItem('filters'));
 
-    if (this.parent.currentPage > 0) {
-      let startIndex = this.parent.resultsMax * this.parent.currentPage;
-      let endIndex = startIndex + this.parent.resultsMax;
+    if (filters && filters.applied.length > 0) {
+      data = filters.applied;
+    }
+
+    this.module.pagiLength = Math.ceil(data.length / this.module.resultsMax);
+
+    if (this.module.currentPage > 0) {
+      let startIndex = this.module.resultsMax * this.module.currentPage;
+      let endIndex = startIndex + this.module.resultsMax;
 
       data = data.slice(startIndex, endIndex);
     } else {
-      data = data.slice(0, this.parent.resultsMax);
+      data = data.slice(0, this.module.resultsMax);
     }
 
     return data;

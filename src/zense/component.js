@@ -26,8 +26,10 @@ Component.setBehaviors = function () {
       // Ensures that behaviors are only set one time.
       this.shouldSetBehaviors = false;
 
-      // The parent will be the component/module that references the behavior
-      behavior.parent = this;
+      // We need to let the behavior who the parent and grandparent caller are.
+      behavior.component = this;
+      behavior.module = this.module;
+
       behavior.bindUIElements();
       behavior.start();
     }

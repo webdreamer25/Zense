@@ -10,22 +10,27 @@ ResultsBehavior.config({
     let filters = this.getStoredData('filters');
 
     if (filters && filters.applied.length > 0) {
-      this.parent.render(filters.applied);
+      this.component.render(filters.applied);
     }
   },
 
   updateTemplate() {
+    let paginatorComponent = this.module.getChildComponent('paginator');
+
     document.addEventListener('filtered', (e) => {
       if ((Array.isArray(e.detail) && e.detail.length > 0 || e.detail === 'not found')) {
-        this.parent.render(e.detail);
+        this.component.render(e.detail);
+        paginatorComponent.render();
       } else {
-        this.parent.render();
+        this.component.render();
+        paginatorComponent.render();
       }
     });
   },
 
   start() {
-    this.parent.fullStore = this.parent.store;
+    this.component.fullStore = this.component.store;
+
     this.initialize();
     this.updateTemplate();
   }

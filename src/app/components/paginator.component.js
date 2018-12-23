@@ -14,7 +14,7 @@ PaginatorComponent.create({
   },
 
   afterRender() {
-    this.resultComponent = this.parent.getChildComponent('results');
+    this.resultsComponent = this.module.getChildComponent('results');
 
     this.bindUIElements();
 
@@ -22,10 +22,10 @@ PaginatorComponent.create({
       let btn = e.target;
       let currentPage = btn.dataset.pagiIdx;
 
-      this.parent.currentPage = parseInt(currentPage);
+      this.module.currentPage = parseInt(currentPage);
 
       this.render();
-      this.resultComponent.render();
+      this.resultsComponent.render();
     });
 
     this.ui.prevBtn.on('click', this.onPrev.bind(this));
@@ -33,7 +33,7 @@ PaginatorComponent.create({
   },
 
   setDefaultActive(idx) {
-    if (this.parent.currentPage === idx) {
+    if (this.module.currentPage === idx) {
       return 'active';
     }
 
@@ -43,21 +43,29 @@ PaginatorComponent.create({
   setDefaultDisable(prev) {
     let result = '';
 
-    if (prev && this.parent.currentPage === 0) {
+    if (prev && this.module.currentPage === 0) {
       result = 'disabled';
     }
 
-    if (!prev && this.parent.currentPage === (this.parent.pagiLength-1)) {
+    if (!prev && this.module.currentPage === (this.module.pagiLength-1)) {
       result = 'disabled';
     }
     
     return result;
   },
 
+  shouldHidePaginator() {
+    if (this.module.pagiLength <= 1) {
+      return 'd-none'
+    }
+
+    return '';
+  },
+
   addPagiBtns() {
     let tpl = '';
 
-    for (let i = 0; i < this.parent.pagiLength; i++) {
+    for (let i = 0; i < this.module.pagiLength; i++) {
       tpl += `
         <li class="page-item ${this.setDefaultActive(i)}">
           <button class="page-link js-page-link" data-pagi-idx="${i}">
@@ -71,22 +79,22 @@ PaginatorComponent.create({
   },
 
   onPrev() {
-    this.parent.currentPage--;
+    this.module.currentPage--;
 
     this.render();
-    this.resultComponent.render();
+    this.resultsComponent.render();
   },
 
   onNext() {
-    this.parent.currentPage++;
+    this.module.currentPage++;
 
     this.render();
-    this.resultComponent.render();
+    this.resultsComponent.render();
   },
 
   template() {
     return `
-      <div class="paginator pt-3 row justify-content-center">
+      <div class="paginator pt-3 row justify-content-center ${this.shouldHidePaginator()}">
         <nav class="col-auto">
           <ul class="pagination">
             <li class="page-item ${this.setDefaultDisable(true)}">

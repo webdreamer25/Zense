@@ -1,5 +1,4 @@
 import { Behavior } from '../../zense/index';
-import { timingSafeEqual } from 'crypto';
 
 const FilterBehavior = Object.create(Behavior);
 
@@ -21,7 +20,6 @@ FilterBehavior.config({
 
     if (Array.isArray(stored.applied)) {
       this.searchTerm = stored.search;
-      // this.selectedFilters = stored.filters;
 
       this.ui.search.val(this.searchTerm);
 
@@ -41,12 +39,14 @@ FilterBehavior.config({
   },
 
   onApplyFilters(e) {
+    this.module.currentPage = 0;
+
     if (this.searchTerm !== null) {
       this.selectedFilters.push(this.searchTerm);
     }
 
     if (this.selectedFilters.length > 0) {
-      this.appliedFilters = this.parent.store.filter(item => {
+      this.appliedFilters = this.component.store.filter(item => {
         return this.selectedFilters.indexOf(item.make) >= 0;
       });
     }
@@ -57,12 +57,6 @@ FilterBehavior.config({
     } else {
       // Handle session Storage
       this.storeData('filters', { search: this.searchTerm, applied: this.appliedFilters });
-    }
-
-    if (this.appliedFilters.length > 0 && this.appliedFilters.length < 8) {
-      this.dom('#filter-paginator').classList.add('d-none');
-    } else {
-      this.dom('#filter-paginator').classList.remove('d-none');
     }
 
     this.triggerRenderUpdate();
