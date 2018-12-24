@@ -39,7 +39,7 @@ ResultsComponent.create({
   },
 
   handleResults(data) {
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) && data.length > 0) {
       return data.map((car) => {
         return `<div class="col-md-3 pb-3">
           <div class="card">

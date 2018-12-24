@@ -4,17 +4,17 @@ import Modal2Component from '../components/modal2.component';
 import ResultsComponent from '../components/results.component';
 import PaginatorComponent from '../components/paginator.component';
 
-import style from './consultant.module.css';
+import style from './car-hub.module.css';
 
-const ConsultantModule = Object.create(Module);
+const CarHubModule = Object.create(Module);
 
-ConsultantModule.create({
+CarHubModule.create({
   name: 'consultant-hub',
   selector: '#main-region',
 
   currentPage: 0,
   resultsMax: 8,
-
+  showPaginator: true,
 
   api: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/cars',
 
@@ -36,4 +36,4 @@ ConsultantModule.create({
   }
 });
 
-export default ConsultantModule;
+export default CarHubModule;

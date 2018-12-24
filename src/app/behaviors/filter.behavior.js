@@ -52,9 +52,11 @@ FilterBehavior.config({
     }
 
     if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
-      this.appliedFilters = 'not found';
+      // this.appliedFilters = 'not found';
+      this.module.showPaginator = false;
       this.removeStoredItem('filters');
     } else {
+      this.module.showPaginator = true;
       // Handle session Storage
       this.storeData('filters', { search: this.searchTerm, applied: this.appliedFilters });
     }

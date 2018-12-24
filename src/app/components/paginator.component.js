@@ -3,7 +3,7 @@ import { Component } from '../../zense/index';
 const PaginatorComponent = Object.create(Component);
 
 PaginatorComponent.create({
-  name: 'paginator',
+  // name: 'paginator',
   renderType: 'html',
   selector: '#filter-paginator',
 
@@ -55,8 +55,8 @@ PaginatorComponent.create({
   },
 
   shouldHidePaginator() {
-    if (this.module.pagiLength <= 1) {
-      return 'd-none'
+    if (this.module.pagiLength <= 1 || !this.module.showPaginator) {
+      return 'visibility-hidden'
     }
 
     return '';

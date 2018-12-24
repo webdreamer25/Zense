@@ -18,14 +18,9 @@ ResultsBehavior.config({
 
   updateTemplate(e) {
     let paginatorComponent = this.module.getChildComponent('paginator');
-    
-    if ((Array.isArray(e.detail) && e.detail.length > 0 || e.detail === 'not found')) {
+
       this.component.render(e.detail);
       paginatorComponent.render();
-    } else {
-      this.component.render();
-      paginatorComponent.render();
-    }
   },
 
   start() {
