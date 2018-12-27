@@ -12,6 +12,7 @@ Renderer.beforeRender = function () {
 };
 
 Renderer.render = function (model) {
+  this.destroy();
   this.beforeRender();
   this.setDOMSelector();
   
@@ -44,7 +45,7 @@ Renderer.afterRender = function () {
 };
 
 Renderer.destroy = function () {
-  this.selector.remove();
+  return null;
 };
 
 Renderer.setDOMSelector = function () {

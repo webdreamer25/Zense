@@ -29,7 +29,7 @@ Module.addComponents = function (res) {
 
     // Let the component know whos their daddy.
     component.module = this;
-    component.store = this.api ? res : null;
+    component.store = this.api || res ? res : null;
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
     if ((component.shouldRender || this.shouldRenderChildren) && component.template !== '') {

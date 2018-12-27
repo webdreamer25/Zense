@@ -3,7 +3,7 @@ import { Component } from '../../zense/index';
 const PaginatorComponent = Object.create(Component);
 
 PaginatorComponent.create({
-  // name: 'paginator',
+  name: 'paginator',
   renderType: 'html',
   selector: '#filter-paginator',
 

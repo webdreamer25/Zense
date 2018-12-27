@@ -22,6 +22,8 @@ ResultsComponent.create({
 
     if (filters && filters.applied.length > 0) {
       data = filters.applied;
+    } else {
+      data = this.store;
     }
 
     this.module.pagiLength = Math.ceil(data.length / this.module.resultsMax);

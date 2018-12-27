@@ -24,8 +24,6 @@ ResultsBehavior.config({
   },
 
   start() {
-    this.component.fullStore = this.component.store;
-
     this.initialize();
   }
 });
