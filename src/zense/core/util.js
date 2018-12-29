@@ -36,18 +36,6 @@ const SelectorMethods = {
     }
   },
 
-  each(callback) {
-    try {
-      for (let i = 0; i < this.length; i++) {
-        let el = this[i];
-
-        callback(el, i, this);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  },
-
   attr(attribute, property) {
     for (let i = 0; i < this.length; i++) {
       if (typeof property !== 'undefined') {
@@ -96,12 +84,33 @@ const SelectorMethods = {
     for (let i = 0; i < this.length; i++) {
       this[i].removeAttribute(attribute);
     }
+  },
+
+  each(callback) {
+    try {
+      for (let i = 0; i < this.length; i++) {
+        let el = this[i];
+
+        // Add selector chain methods to dom object.
+        for (let key in this) {
+          if (this.hasOwnProperty(key) && typeof this[key] === 'function') {
+            el[key] = this[key];
+          }
+        }
+
+        callback(el, i, this);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 };
 
 const Util = Object.create(Xhr);
 
 Util.events = Object.create(Eventor);
+
+Util.classSelector = false;
 
 Util.dom = function (selector) {
   // We need to preserve a string version of selector for error handling later on.
@@ -116,6 +125,7 @@ Util.dom = function (selector) {
         selector = document.getElementById(selector.slice(1));
         break;
       case '.':
+        this.classSelector = true;
         selector = document.querySelectorAll(selector); 
         break;
       default:

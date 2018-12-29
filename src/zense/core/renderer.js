@@ -13,8 +13,8 @@ Renderer.beforeRender = function () {
 
 Renderer.render = function (model) {
   this.destroy();
-  this.beforeRender();
   this.setDOMSelector();
+  this.beforeRender();
   
   try {
     this.errorCheck();
@@ -23,7 +23,7 @@ Renderer.render = function (model) {
 
     this.addTemplateToDOM(data);
   } catch (e) {
-    Internal.errors.push(e);
+    console.error(e);
   }
 
   this.internalPostHook();
