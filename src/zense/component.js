@@ -23,9 +23,6 @@ Component.setBehaviors = function () {
         }
       }
 
-      // Ensures that behaviors are only set one time.
-      this.shouldSetBehaviors = false;
-
       // We need to let the behavior who the parent and grandparent caller are.
       behavior.component = this;
       behavior.module = this.module;
@@ -33,6 +30,9 @@ Component.setBehaviors = function () {
       behavior.bindUIElements();
       behavior.start();
     }
+
+    // Ensures that behaviors are only set one time.
+    this.shouldSetBehaviors = false;
   }
 };
 

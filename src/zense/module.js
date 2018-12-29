@@ -3,9 +3,11 @@ import Controller from './core/controller';
 const Module = Object.create(Controller);
 
 Module.type = 'module';
+Module.behaviors = [];
 Module.components = [];
 Module.componentNameArray = [];
 Module.shouldRenderChildren = true;
+Module.shouldSetBehaviors = true;
 
 Module.handleAPIUse = function () {
   if (this.api) {
@@ -42,6 +44,33 @@ Module.addComponents = function (res) {
         description: 'This component needs a template!'
       });
     }
+  }
+};
+
+Module.setBehaviors = function () {
+  if (this.shouldSetBehaviors && this.behaviors.length > 0) {
+    for (let i = 0; i < this.behaviors.length; i++) {
+      let behavior = this.behaviors[i];
+      
+      // This check is to ensure we are also handling extending the behavior.
+      if (behavior.name) {
+        behavior = this.behaviors[i].name;
+
+        // Necessary if we want to have specific behavior changes on any given component/module
+        if (this.behaviors[i].options) {
+          behavior = this.customizeObject(behavior, this.behaviors[i].options);
+        }
+      }
+
+      // We need to let the behavior who the parent caller is.
+      behavior.module = this;
+
+      behavior.bindUIElements();
+      behavior.start();
+    }
+
+    // Ensures that behaviors are only set one time.
+    this.shouldSetBehaviors = false;
   }
 };
 
