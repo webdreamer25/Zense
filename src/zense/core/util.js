@@ -132,7 +132,7 @@ Util.dom = function (selector) {
     }
   } 
 
-  if (selector === null || selector.length === 0) {
+  if (selector === null || selector.length === 0 && selector !== (window || document)) {
     throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };
   }
 
