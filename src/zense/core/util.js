@@ -26,12 +26,12 @@ const SelectorMethods = {
     }
   },
 
-  append(html) {
+  insertHTML(position, html) {
     if (!this.length) {
-      this.insertAdjacentHTML('beforeend', html);
+      this.insertAdjacentHTML(position, html);
     } else {
       for (let i = 0; i < this.length; i++) {
-        this[i].insertAdjacentHTML('beforeend', html);
+        this[i].insertAdjacentHTML(position, html);
       }
     }
   },
@@ -125,13 +125,12 @@ Util.dom = function (selector) {
         selector = document.getElementById(selector.slice(1));
         break;
       case '.':
-        this.classSelector = true;
         selector = document.querySelectorAll(selector); 
         break;
       default:
         selector = document.querySelector(selector);
     }
-  }
+  } 
 
   if (selector === null || selector.length === 0) {
     throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };

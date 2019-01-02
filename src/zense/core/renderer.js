@@ -66,7 +66,7 @@ Renderer.addTemplateToDOM = function (data) {
   if (this.renderType !== 'append') {
     this.selector.html(tpl);
   } else {
-    this.selector.append(tpl);
+    this.selector.insertHTML('beforeend', tpl);
   }
 };
 
