@@ -45,7 +45,14 @@ Renderer.afterRender = function () {
 };
 
 Renderer.destroy = function () {
-  return null;
+  let firstChildNode = this.selector.firstChild;
+
+  while (firstChildNode) {
+    this.selector.removeChild(firstChildNode);
+    firstChildNode = this.selector.firstChild;
+  }
+
+  return this;
 };
 
 Renderer.setDOMSelector = function () {
