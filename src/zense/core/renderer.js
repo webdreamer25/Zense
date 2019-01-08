@@ -5,6 +5,7 @@ const Renderer = Object.create(Util);
 Renderer.regions = [];
 Renderer.selector = null;
 Renderer.template = null;
+Renderer.hasRendered = false;
 Renderer.renderType = 'append';
 
 Renderer.beforeRender = function () {
@@ -45,11 +46,18 @@ Renderer.afterRender = function () {
 };
 
 Renderer.destroy = function () {
+  // We want to destroy only if it has render
+  if (!this.hasRendered) { return null; }
+
   let firstChildNode = this.selector.firstChild;
 
   while (firstChildNode) {
     this.selector.removeChild(firstChildNode);
     firstChildNode = this.selector.firstChild;
+  }
+
+  if (this.selector instanceof Object) {
+    this.selector = this.strSelector;
   }
 
   return this;

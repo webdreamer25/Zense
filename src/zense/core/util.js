@@ -34,6 +34,8 @@ const SelectorMethods = {
         this[i].insertAdjacentHTML(position, html);
       }
     }
+
+    return this;
   },
 
   attr(attribute, property) {
@@ -44,6 +46,8 @@ const SelectorMethods = {
         return this[i].getAttribute(attribute);
       }
     }
+
+    return this;
   },
 
   val(value) {
@@ -62,6 +66,8 @@ const SelectorMethods = {
         }
       }
     }
+
+    return this;
   },
 
   prop(property, value) {
@@ -72,6 +78,8 @@ const SelectorMethods = {
         this[i][property] = value;
       }
     }
+
+    return this;
   },
 
   hasAttribute(attribute) {
@@ -110,15 +118,19 @@ const Util = Object.create(Xhr);
 
 Util.events = Object.create(Eventor);
 
+Util.strSelector = null;
 Util.classSelector = false;
 
 Util.dom = function (selector) {
-  // We need to preserve a string version of selector for error handling later on.
-  let selectorStr = '';
+  if (!selector) { return this; }
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
-    selectorStr = selector;
+
+    // We need to preserve a string copy of the selector to for reseting purposes.
+    if (this.strSelector === null) {
+      this.selectorStr = selector;
+    }
 
     switch (selector.charAt(0)) {
       case '#':
@@ -133,7 +145,7 @@ Util.dom = function (selector) {
   } 
 
   if (selector === null || selector.length === 0 && selector !== (window || document)) {
-    throw { message: 'Selector "' + selectorStr + '" does not exist in the DOM.' };
+    throw { message: 'Selector "' + this.selectorStr + '" does not exist in the DOM.' };
   }
 
   // Add selector chain methods to dom object.
