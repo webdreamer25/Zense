@@ -22,12 +22,12 @@ Controller.bindUIElements = function () {
     let uiElement = this.ui[key];
 
     // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-    if (typeof this.ui[key] === 'string' || (Object.keys(this.strUI).length > 0 && this.ui[key] === this.strUI[key])) {
+    if (typeof this.ui[key] === 'string' && this.ui[key] !== this.strUI[key]) {
       this.strUI[key] = this.ui[key];
     }
 
     // Needed to ensure ui dom elements are rebound
-    if (this.customized || typeof uiElement !== 'string') {
+    if ((this.customized || typeof uiElement !== 'string')) {
       uiElement = this.strUI[key];
     }
 

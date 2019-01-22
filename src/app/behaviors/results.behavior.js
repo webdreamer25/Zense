@@ -13,7 +13,7 @@ ResultsBehavior.config({
   updateTemplate(e) {
     let paginatorComponent = this.module.getChildComponent('paginator');
 
-    if (e.detail.length > 0) {
+    if (e.detail.length > 0 || e.detail === 'not found') {
       this.component.render(e.detail);
     } else {
       this.component.render();

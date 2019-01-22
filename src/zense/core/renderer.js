@@ -39,6 +39,8 @@ Renderer.internalPostHook = function () {
   if (this.handleAPIUse !== undefined) {
     this.handleAPIUse();
   }
+  
+  this.hasRendered = true;
 };
 
 Renderer.afterRender = function () {
@@ -54,6 +56,10 @@ Renderer.destroy = function () {
   while (firstChildNode) {
     this.selector.removeChild(firstChildNode);
     firstChildNode = this.selector.firstChild;
+  }
+
+  if (this.setBehaviors !== undefined) {
+    this.unbindBehaviorEvents();
   }
 
   if (this.selector instanceof Object) {

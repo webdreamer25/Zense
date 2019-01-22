@@ -52,7 +52,7 @@ FilterBehavior.config({
     }
 
     if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
-      // this.appliedFilters = 'not found';
+      this.appliedFilters = 'NF';
       this.module.showPaginator = false;
       this.removeStoredItem('filters');
     } else {

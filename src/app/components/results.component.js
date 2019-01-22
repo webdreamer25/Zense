@@ -20,21 +20,22 @@ ResultsComponent.create({
   serializeData(data) {
     let filters = JSON.parse(sessionStorage.getItem('filters'));
 
-    if (filters && filters.applied.length > 0) {
-      data = filters.applied;
-    } else {
-      data = this.store;
-    }
+    // Handle no result vs clear
+    if (data !== 'NF') {
+      if (filters && filters.applied.length > 0) {
+        data = filters.applied;
+      }
 
-    this.module.pagiLength = Math.ceil(data.length / this.module.resultsMax);
+      this.module.pagiLength = Math.ceil(data.length / this.module.resultsMax);
 
-    if (this.module.currentPage > 0) {
-      let startIndex = this.module.resultsMax * this.module.currentPage;
-      let endIndex = startIndex + this.module.resultsMax;
+      if (this.module.currentPage > 0) {
+        let startIndex = this.module.resultsMax * this.module.currentPage;
+        let endIndex = startIndex + this.module.resultsMax;
 
-      data = data.slice(startIndex, endIndex);
-    } else {
-      data = data.slice(0, this.module.resultsMax);
+        data = data.slice(startIndex, endIndex);
+      } else {
+        data = data.slice(0, this.module.resultsMax);
+      }
     }
 
     return data;

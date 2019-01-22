@@ -8,19 +8,6 @@ Component.behaviors = [];
 Component.shouldRender = true;
 Component.shouldSetBehaviors = true;
 
-// Component.hasStore = function () {
-//   // We want to ensure that if there is a store being passed into the component
-//   // and but it holds no data we dont render the component and let the developer
-//   // the state and why its not rendering.
-//   if (typeof this.store !== 'undefined' && this.store !== null) {
-//     if (Array.isArray(this.store) && this.store.length === 0 || 
-//       typeof this.store === 'Object' && Object.keys(this.store).length === 0) {
-//       this.shouldRender = false;
-//       console.error({ message: 'Store seems to be '});
-//     }
-//   }
-// };
-
 Component.setBehaviors = function () {
   if (this.shouldSetBehaviors && this.behaviors.length > 0) {
     for (let i = 0; i < this.behaviors.length; i++) {
@@ -47,6 +34,21 @@ Component.setBehaviors = function () {
     // Ensures that behaviors are only set one time.
     this.shouldSetBehaviors = false;
   }
+};
+
+Component.unbindBehaviorEvents = function () {
+  for (let i = 0; i < this.behaviors.length; i++) {
+    if (this.behaviors[i].ui) {
+      this.behaviors[i].unbindUIElements();
+
+      // This is incase of a re-render where we need to set and start the associated behaviors.
+      this.shouldSetBehaviors = true;
+    } else {
+      this.shouldSetBehaviors = false;
+    }
+  }
+
+  return this;
 };
 
 Component.setName = function (selector) {

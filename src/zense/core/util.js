@@ -4,11 +4,35 @@ import Eventor from './eventor';
 const SelectorMethods = {
   on(event, callback, bubble = true) {
     if (!this.length) {
+      this.info = { event, callback };
+
       this.addEventListener(event, callback, bubble);
+
+      return this;
     } else {
       for (let i = 0; i < this.length; i++) {
+        this[i].info = { event, callback };
+
         this[i].addEventListener(event, callback, bubble);
       }
+
+      return this;
+    }
+  },
+
+  off() {
+    if (!this.length && this.info) {
+      this.removeEventListener(this.info.event, this.info.callback, true);
+
+      return this;
+    } else {
+      for (let i = 0; i < this.length; i++) {
+        if (this[i].info) {
+          this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
+        }
+      }
+
+      return this;
     }
   },
 
@@ -119,7 +143,6 @@ const Util = Object.create(Xhr);
 Util.events = Object.create(Eventor);
 
 Util.strSelector = null;
-Util.classSelector = false;
 
 Util.dom = function (selector) {
   if (!selector) { return this; }
@@ -129,15 +152,17 @@ Util.dom = function (selector) {
 
     // We need to preserve a string copy of the selector to for reseting purposes.
     if (this.strSelector === null) {
-      this.selectorStr = selector;
+      this.strSelector = selector;
     }
 
     switch (selector.charAt(0)) {
       case '#':
         selector = document.getElementById(selector.slice(1));
+
         break;
       case '.':
         selector = document.querySelectorAll(selector); 
+
         break;
       default:
         selector = document.querySelector(selector);
@@ -145,7 +170,7 @@ Util.dom = function (selector) {
   } 
 
   if (selector === null || selector.length === 0 && selector !== (window || document)) {
-    throw { message: 'Selector "' + this.selectorStr + '" does not exist in the DOM.' };
+    throw { message: 'Selector "' + this.strSelector + '" does not exist in the DOM.' };
   }
 
   // Add selector chain methods to dom object.

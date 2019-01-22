@@ -16,7 +16,7 @@ CarHubModule.create({
   resultsMax: 8,
   showPaginator: true,
 
-  api: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/cars',
+  api: '/mocks/cars.json',
 
   components: [
     Modal2Component,
