@@ -1,42 +1,92 @@
 [
   {
     "make": "ford",
-    "model": "focus"
+    "model": "focus",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "ford",
-    "model": "f150"
+    "model": "f150",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "ford",
+    "model": "f250",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "toyota",
-    "model": "prius"
+    "model": "corolla",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "toyota",
-    "model": "camry"
+    "model": "prius",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "toyota",
+    "model": "camry",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "mazda",
-    "model": "cx5"
+    "model": "cx5",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "mazda",
+    "model": "cx7",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "mazda",
+    "model": "cx9",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "mazda",
+    "model": "miata",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "mazda",
+    "model": "rx-8",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "mitsubishi",
-    "model": "eclipse"
+    "model": "eclipse",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "mitsubishi",
-    "model": "lancer"
+    "model": "lancer",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "mitsubishi",
+    "model": "durango",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "honda",
-    "model": "accord"
+    "model": "accord",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "chevrolet",
-    "model": "malibu"
+    "model": "malibu",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
+  },
+  {
+    "make": "chevrolet",
+    "model": "camaro",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   },
   {
     "make": "kia",
-    "model": "sorento"
+    "model": "sorento",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sodales rutrum magna, vitae placerat tellus iaculis at."
   }
 ]

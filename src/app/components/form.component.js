@@ -5,9 +5,10 @@ const FormComponent = Object.create(Component);
 
 FormComponent.create({
   name: 'footer-form',
-  selector: '#footer-region',
+  selector: '#form-component',
+  renderType: 'html',
   behaviors: [
-    { name: FormBehavior, options: null }
+    FormBehavior
   ],
 
   template() {

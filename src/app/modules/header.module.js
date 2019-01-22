@@ -7,7 +7,6 @@ const HeaderModule = Object.create(Module);
 HeaderModule.create({
   name: 'header-module',
   selector: '#header-region',
-  api: 'mocks/test.json',
   components: [
     LogoComponent,
     NavigationComponent

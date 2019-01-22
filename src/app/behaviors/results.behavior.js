@@ -6,19 +6,24 @@ ResultsBehavior.config({
   behaviorName: 'results',
   filteredResults: [],
 
-  updateTemplate() {
-    document.addEventListener('filtered', (e) => {
-      if ((Array.isArray(e.detail) && e.detail.length > 0 || e.detail === 'not found')) {
-        this.parent.render(e.detail);
-      } else {
-        this.parent.render();
-      }
-    });
+  initialize() {
+    this.events.subscribe('filtered', this.updateTemplate.bind(this));
+  },
+
+  updateTemplate(e) {
+    let paginatorComponent = this.module.getChildComponent('paginator');
+
+    if (e.detail.length > 0 || e.detail === 'not found') {
+      this.component.render(e.detail);
+    } else {
+      this.component.render();
+    }
+    
+    paginatorComponent.render();
   },
 
   start() {
-    this.parent.fullStore = this.parent.store;
-    this.updateTemplate();
+    this.initialize();
   }
 });
 

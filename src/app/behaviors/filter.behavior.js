@@ -15,6 +15,22 @@ FilterBehavior.config({
     clearBtn: '.js-clear-filters-btn'
   },
 
+  initialize() {
+    let stored = this.getStoredData('filters');
+
+    if (Array.isArray(stored.applied)) {
+      this.searchTerm = stored.search;
+
+      this.ui.search.val(this.searchTerm);
+
+      for (let i = 0; i < stored.applied.length; i++) {
+        this.dom('[name="' + stored.applied[i].make + '"]').prop('checked', true);
+      }
+
+      this.appliedFilters = stored.applied;
+    }
+  },
+
   setHandlers() {
     this.ui.applyBtn.on('click', this.onApplyFilters.bind(this));
     this.ui.clearBtn.on('click', this.onClearFilters.bind(this));
@@ -23,26 +39,29 @@ FilterBehavior.config({
   },
 
   onApplyFilters(e) {
+    this.module.currentPage = 0;
+
     if (this.searchTerm !== null) {
       this.selectedFilters.push(this.searchTerm);
     }
 
     if (this.selectedFilters.length > 0) {
-      this.appliedFilters = this.parent.store.filter(item => {
+      this.appliedFilters = this.component.store.filter(item => {
         return this.selectedFilters.indexOf(item.make) >= 0;
       });
     }
 
     if (this.selectedFilters.length > 0 && this.appliedFilters.length === 0) {
-      this.appliedFilters = 'not found';
+      this.appliedFilters = 'NF';
+      this.module.showPaginator = false;
+      this.removeStoredItem('filters');
+    } else {
+      this.module.showPaginator = true;
+      // Handle session Storage
+      this.storeData('filters', { search: this.searchTerm, applied: this.appliedFilters });
     }
 
-    let filtered = new CustomEvent('filtered', { detail: this.appliedFilters });
-
-    this.ui.applyBtn.prop('disabled', true);
-
-    document.querySelector('.js-modal-close-btn').click();
-    document.dispatchEvent(filtered);
+    this.triggerRenderUpdate();
 
     // Ensures continued functionality of filtering.
     this.appliedFilters = [];
@@ -52,6 +71,7 @@ FilterBehavior.config({
     this.ui.search.val('');
     this.ui.fields.prop('checked', false);
 
+    this.searchTerm = null;
     this.selectedFilters = [];
     this.appliedFilters = [];
 
@@ -87,6 +107,13 @@ FilterBehavior.config({
     this.enableApplyButton();
   },
 
+  triggerRenderUpdate() {
+    this.enableApplyButton();
+
+    document.querySelector('.js-modal-close-btn').click();
+    this.events.publish('filtered', this.appliedFilters, true);
+  },
+
   enableApplyButton() {
     if (this.ui.applyBtn.hasAttribute('disabled')) {
       this.ui.applyBtn.removeAttribute('disabled');
@@ -94,6 +121,7 @@ FilterBehavior.config({
   },
 
   start() {
+    this.initialize();
     this.setHandlers();
   }
 });

@@ -28,20 +28,20 @@ FormBehavior.config({
 
   handleFormSubmit(payload) {
     console.log(payload);
-    this.ajax({
-      url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
-      method: 'POST',
-      headers: [
-        { 
-          name: 'Content-Type',
-          value: 'application/json'
-        }
-      ],
-      data: JSON.stringify(payload),
-      success: function(e, xhr)  {
-        console.log(e, xhr);
-      }
-    })
+    // this.ajax({
+    //   url: 'https://5bfafb95a6af660013f1a105.mockapi.io/api/v1/comments',
+    //   method: 'POST',
+    //   headers: [
+    //     { 
+    //       name: 'Content-Type',
+    //       value: 'application/json'
+    //     }
+    //   ],
+    //   data: JSON.stringify(payload),
+    //   success: function(e, xhr)  {
+    //     console.log(e, xhr);
+    //   }
+    // })
   },
 
   setHandlers() {

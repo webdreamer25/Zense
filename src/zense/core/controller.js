@@ -3,7 +3,7 @@ import Renderer from './renderer';
 const Controller = Object.create(Renderer);
 
 Controller.name = '';
-Controller.behaviors = [];
+Controller.strUI = {};
 
 Controller.create = function (options) {
   Object.assign(this, options);
@@ -22,12 +22,12 @@ Controller.bindUIElements = function () {
     let uiElement = this.ui[key];
 
     // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-    if (typeof this.ui[key] === 'string' || (this.strUI !== null && this.ui[key] === this.strUI[key])) {
+    if (typeof this.ui[key] === 'string' && this.ui[key] !== this.strUI[key]) {
       this.strUI[key] = this.ui[key];
     }
 
     // Needed to ensure ui dom elements are rebound
-    if (this.customized || typeof uiElement !== 'string') {
+    if ((this.customized || typeof uiElement !== 'string')) {
       uiElement = this.strUI[key];
     }
 
@@ -35,48 +35,39 @@ Controller.bindUIElements = function () {
   });
 };
 
-Controller.setBehaviors = function () {
-  if (this.behaviors.length > 0) {
-    for (let i = 0; i < this.behaviors.length; i++) {
-      let behavior = this.behaviors[i];
+Controller.customizeObject = function (customObj, options) {
+  if (typeof options !== 'function') {
+    Object.keys(options).forEach(key => {
       
-      // This check is to ensure we are also handling extending the behavior.
-      if (behavior.name) {
-        let customizedOptions = this.behaviors[i].options;
-
-        behavior = this.behaviors[i].name;
-
-        // Necessary if we want to have specific behavior changes on any given component/module
-        if (customizedOptions) {
-          if (typeof customizedOptions !== 'function') {
-            Object.keys(customizedOptions).forEach(key => {
-              behavior[key] = this.extend({}, behavior[key], customizedOptions[key]);
-            });
-          } else {
-            // Allow developers to figure out how they with overwite behaviors
-            behavior = this.behaviors[i].options();
-          }
-
-          // We need to let the current behavior there has been a change
-          behavior.customized = true;
-        } else {
-          // This ensures the next invocation of a behavior has a reset customized state.
-          behavior.customized = false;
-        }
+      // We only want to extend existing porperties under customObj
+      if (customObj[key] === options[key]) {
+        customObj[key] = this.extend({}, customObj[key], options[key]);
+      } else {
+        customObj[key] = options[key];
       }
+      
+    });
+  } else {
 
-      // The parent will be the component/module that references the behavior
-      behavior.parent = this;
-      behavior.bindUIElements();
-      behavior.start();
-    }
+    // Allow developers to figure out how they with overwite behaviors
+    customObj = obj();
+    
   }
+
+  return customObj;
 };
 
 Controller.getBehavior = function (behaviorName) {
   if (this.behaviors.length === 0) { return false; }
   
-  let result = this.behaviors.filter(item => item.behaviorName === behaviorName);
+  let result = this.behaviors.filter(item => {
+    // Ensures that if a behavior was extended we look for the behavior under the .name context
+    if (item.name) {
+      item = item.name;
+    }
+
+    return item.behaviorName === behaviorName;
+  });
 
   return result[0];
 };

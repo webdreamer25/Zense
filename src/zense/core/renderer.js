@@ -5,6 +5,7 @@ const Renderer = Object.create(Util);
 Renderer.regions = [];
 Renderer.selector = null;
 Renderer.template = null;
+Renderer.hasRendered = false;
 Renderer.renderType = 'append';
 
 Renderer.beforeRender = function () {
@@ -12,8 +13,9 @@ Renderer.beforeRender = function () {
 };
 
 Renderer.render = function (model) {
-  this.beforeRender();
+  this.destroy();
   this.setDOMSelector();
+  this.beforeRender();
   
   try {
     this.errorCheck();
@@ -22,17 +24,23 @@ Renderer.render = function (model) {
 
     this.addTemplateToDOM(data);
   } catch (e) {
-    Internal.errors.push(e);
+    console.error(e);
   }
 
-  this.bindUIElements();
-  this.setBehaviors();
+  this.internalPostHook();
+  this.afterRender();
+};
 
-  if (this.handleAPIUse) {
+Renderer.internalPostHook = function () {
+  if (this.setBehaviors !== undefined) {
+    this.setBehaviors();
+  }
+
+  if (this.handleAPIUse !== undefined) {
     this.handleAPIUse();
   }
   
-  this.afterRender();
+  this.hasRendered = true;
 };
 
 Renderer.afterRender = function () {
@@ -40,7 +48,25 @@ Renderer.afterRender = function () {
 };
 
 Renderer.destroy = function () {
-  this.selector.remove();
+  // We want to destroy only if it has render
+  if (!this.hasRendered) { return null; }
+
+  let firstChildNode = this.selector.firstChild;
+
+  while (firstChildNode) {
+    this.selector.removeChild(firstChildNode);
+    firstChildNode = this.selector.firstChild;
+  }
+
+  if (this.setBehaviors !== undefined) {
+    this.unbindBehaviorEvents();
+  }
+
+  if (this.selector instanceof Object) {
+    this.selector = this.strSelector;
+  }
+
+  return this;
 };
 
 Renderer.setDOMSelector = function () {
@@ -61,7 +87,7 @@ Renderer.addTemplateToDOM = function (data) {
   if (this.renderType !== 'append') {
     this.selector.html(tpl);
   } else {
-    this.selector.append(tpl);
+    this.selector.insertHTML('beforeend', tpl);
   }
 };
 
