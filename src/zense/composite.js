@@ -4,15 +4,16 @@ const Composite = Object.create(Controller);
 
 Composite.modules = [];
 
-Composite.initialize = function () {
-  this.render();
-
+Composite.internalPostHook = function () {
   this.bootstrapModules();
 };
-
 Composite.bootstrapModules = function () {
   for (let i = 0; i < this.modules.length; i++) {
     let mod = this.modules[i];
+
+    if (this.store) {
+      mod.store = this.store;
+    }
 
     mod.render();
   }

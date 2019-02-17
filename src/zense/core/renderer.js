@@ -58,7 +58,8 @@ Renderer.destroy = function () {
     firstChildNode = this.selector.firstChild;
   }
 
-  if (this.setBehaviors !== undefined) {
+  // Ensure we don't get a reference error.
+  if (this.unbindBehaviorEvents !== undefined && typeof this.unbindBehaviorEvents === 'function') {
     this.unbindBehaviorEvents();
   }
 
