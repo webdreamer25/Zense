@@ -151,7 +151,7 @@ Util.dom = function (selector) {
   if (typeof selector === 'string') {
 
     // We need to preserve a string copy of the selector to for reseting purposes.
-    if (this.strSelector === null) {
+    if (this.strSelector === null || this.strSelector !== selector) {
       this.strSelector = selector;
     }
 

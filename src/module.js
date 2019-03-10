@@ -23,26 +23,31 @@ Module.addComponents = function (res) {
     return null;
   }
 
+  // Don't render children if we have no DATA!
+  if (res !== undefined && Object.keys(res).length === 0) {
+    shouldRenderChildren = false;
+  }
+
   for (let i = 0; i < this.components.length; i++) {
     let component = this.components[i];
-
-    // We need to ensure every component has a unique name set for debugging and error handling purposes.
-    this.checkUniqueName(component);
 
     // Let the component know whos their daddy.
     component.module = this;
     component.store = this.api || res ? res : null;
+
+    // We need to ensure every component has a unique name set for debugging and error handling purposes.
+    this.checkUniqueName(component);
 
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
     if ((component.shouldRender || this.shouldRenderChildren) && component.template !== '') {
         component.render();
     } else {
       // console.log('Component: ' + componentName + ' Error: Nees a template!');
-      Internal.errors.push({
-        selector: component.selector,
-        component: component.name,
-        description: 'This component needs a template!'
-      });
+      // Internal.errors.push({
+      //   selector: component.selector,
+      //   component: component.name,
+      //   description: 'This component needs a template!'
+      // });
     }
   }
 };
@@ -74,6 +79,7 @@ Module.setBehaviors = function () {
   }
 };
 
+// Needed to ensure that if we have more than 1 of the same component we give it a unique name.
 Module.checkUniqueName = function (component) {
   this.componentNameArray.push(component.name);
 

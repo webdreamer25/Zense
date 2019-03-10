@@ -1,42 +1,34 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
+const UglifyPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  // target: 'web',
-  watch: true,
-  // mode: 'development',
+  // watch: true,
+  devtool: false,
+  mode: 'development',
   entry: {
-    app: ['@babel/polyfill', './src/app/app.entry.js'],
-    // zense: ['./src/zense/index.js'],
-    styles: './src/zense.css'
+    zense: ['@babel/polyfill', './src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: 'zense.min.js'
   },
-  devServer: {
-    publicPath: './dist',
-    contentBase: path.resolve(__dirname, 'dist'),
-    watchContentBase: true,
-    compress: true,
-    port: 8000
+  optimization: {
+    minimizer: [
+      new UglifyPlugin({
+        sourceMap: true,
+        extractComments: true,
+        uglifyOptions: {
+          mangle: true,
+          output: {
+            comments: false
+          }
+        }
+      })
+    ]
   },
   module: {
     rules: [
-      { 
-        test: /\.css$/,
-        use: ['style-loader','css-loader']
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: { minimize: true }
-          }
-        ]
-      },
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
@@ -55,16 +47,15 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: './index.html'
-    })
-  ],
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
     modules: [
       'node_modules'
     ]
-  }
+  },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].map'
+    })
+  ]
 };
