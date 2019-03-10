@@ -1,0 +1,8 @@
+# directories
+node_modules
+.vscode
+
+# files
+.babelrc
+.gitignore
+webpack.config.js
