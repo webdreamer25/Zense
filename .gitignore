@@ -1,5 +1,6 @@
 #Ignore file
 node_modules/
-dist/
+dist/app.js
+dist/index.html
+notes.txt
 npm-debug.log
-LICENSE

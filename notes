@@ -1,0 +1,5 @@
+// use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+// new MiniCssExtractPlugin({
+    //   filename: '[name].css',
+    //   chunkFilename: '[id].css'
+    // })

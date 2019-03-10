@@ -6,19 +6,13 @@ The library that not only gives you peace of mind, but just makes more sense tha
 - No hassle!
 - peace of mind!!!!!!!!!!!!!!
 
-## Installing Zense
-
-```
-npm install --save-dev zense
-```
-
 ## Creating a Component
 Components are small pieces of the application that can be used to create larger pieces known in zense as modules.
 
 ```
-import { Zense } from 'zense';
+import { Component } from '../../zense/index';
 
-const LogoComponent = Object.create(Zense.Component);
+const LogoComponent = Object.create(Component);
 
 LogoComponent.create({
   // (OPTIONAL) By default your component will use 'selector' property to set the component name.
@@ -44,10 +38,10 @@ LogoComponent.create({
 ## Creating a Module
 
 ```
-import { Zense } from 'zense';
+import { Module } from '../../zense/index';
 import LogoComponent from '../components/logo.component';
 
-const HeaderModule = Object.create(Zense.Module);
+const HeaderModule = Object.create(Module);
 
 HeaderModule.create({
   // When this property is set and given a url an ajax call is made to retrieve the data.
@@ -91,9 +85,9 @@ Behaviors allow for developers to maintain DRY code in their JavaScript. Need ac
 ### Creating a behavior
 
 ```
-import { Zense } from 'zense';
+import { Behavior } from '../../zense/index';
 
-const ModalBehavior = Object.create(Zense.Behavior);
+const ModalBehavior = Object.create(Behavior);
 
 ModalBehavior.config({
   // Arbitrary properties
@@ -145,10 +139,10 @@ ModalBehavior.config({
 In the example above we create a modal behavior that can be passed into a generic Modal component like so:
 
 ```
-import { Zense } from 'zense';
+import { Component } from '../../zense/index';
 import ModalBehavior from '../behaviors/form.behavior';
 
-const ModalComponent = Object.create(Zense.Component);
+const ModalComponent = Object.create('Component');
 
 const ModalComponent.create({
   name: 'results-modal',
@@ -169,10 +163,10 @@ const ModalComponent.create({
 What if you want to extend a behavior and it's defined properties/values?
 
 ```
-import { Zense } from 'zense';
+import { Component } from '../../zense/index';
 import ModalBehavior from '../behaviors/form.behavior';
 
-const ResultsModalComponent = Object.create(Zense.Component);
+const ResultsModalComponent = Object.create('Component');
 
 const extendBehavior = {
   ui: {
