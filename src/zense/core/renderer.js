@@ -32,12 +32,12 @@ Renderer.render = function (model) {
 };
 
 Renderer.internalPostHook = function () {
-  if (this.setBehaviors !== undefined) {
-    this.setBehaviors();
-  }
-
   if (this.handleAPIUse !== undefined) {
     this.handleAPIUse();
+  }
+
+  if (this.setBehaviors !== undefined) {
+    this.setBehaviors();
   }
   
   this.hasRendered = true;
@@ -48,8 +48,10 @@ Renderer.afterRender = function () {
 };
 
 Renderer.destroy = function () {
-  // We want to destroy only if it has render
-  if (!this.hasRendered) { return null; }
+  // We want to destroy only if it has rendered.
+  if (!this.hasRendered || !this.hasRendered && this.shouldRender) { 
+    return null; 
+  }
 
   let firstChildNode = this.selector.firstChild;
 
@@ -83,16 +85,21 @@ Renderer.setDOMSelector = function () {
 };
 
 Renderer.addTemplateToDOM = function (data) {
-  let tpl = this.template(data);
+  if (this.shouldRender) {
+    let tpl = this.template(data);
 
-  if (this.renderType !== 'append') {
-    this.selector.html(tpl);
+    if (this.renderType !== 'append') {
+      this.selector.html(tpl);
+    } else {
+      this.selector.insertHTML('beforeend', tpl);
+    }
   } else {
-    this.selector.insertHTML('beforeend', tpl);
+    // Assumes that if shouldRender is being set to false manually we also dont want the container in the DOM.
+    this.selector.remove();
   }
 };
 
-Renderer.serializeData = function (data = false) {
+Renderer.serializeData = function (data) {
   if (data) { 
     return data;
   } 

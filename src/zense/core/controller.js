@@ -4,6 +4,8 @@ const Controller = Object.create(Renderer);
 
 Controller.name = '';
 Controller.strUI = {};
+Controller.shouldRender = true;
+Controller.shouldSetBehaviors = true;
 
 Controller.create = function (options) {
   Object.assign(this, options);
@@ -33,6 +35,25 @@ Controller.bindUIElements = function () {
 
     this.ui[key] = this.dom(uiElement);
   });
+};
+
+Controller.unbindBehaviorEvents = function () {
+  if (this.behaviors.length === 0) {
+    return false;
+  }
+
+  for (let i = 0; i < this.behaviors.length; i++) {
+    if (this.behaviors[i].ui) {
+      this.behaviors[i].unbindUIElements();
+
+      // This is incase of a re-render where we need to set and start the associated behaviors.
+      this.shouldSetBehaviors = true;
+    } else {
+      this.shouldSetBehaviors = false;
+    }
+  }
+
+  return this;
 };
 
 Controller.customizeObject = function (customObj, options) {

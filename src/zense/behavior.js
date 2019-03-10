@@ -37,6 +37,7 @@ Behavior.config = function (options) {
         message: 'Behavior name has not been declared'
       }
     } else {
+      // Gives our behaviorName property a suffix.
       if (this.behaviorName.indexOf('-behavior') === -1) {
         this.behaviorName += '-behavior';
       }
@@ -46,8 +47,9 @@ Behavior.config = function (options) {
   }
 };
 
+// This will gather the DOM elements specified in ui:{} object.
 Behavior.bindUIElements = function () {
-  if (!this.ui) { return null; }
+  if (!this.ui) { return false; }
 
   Object.keys(this.ui).forEach(key => {
     let uiElement = this.ui[key];
@@ -68,11 +70,16 @@ Behavior.bindUIElements = function () {
 
 Behavior.unbindUIElements = function () {
   for (let key in this.ui) {
-    if (this.ui.hasOwnProperty(key)) {
+    // Needed to prevent type error not a function when no element doesnt have registered listener.
+    if (this.ui.hasOwnProperty(key) && this.ui[key].info !== undefined) {
       this.ui[key].off();
       this.ui[key] = this.strUI[key];
     }
   }
+};
+
+Behavior.handlers = function () {
+  return null;
 };
 
 Behavior.start = function () {

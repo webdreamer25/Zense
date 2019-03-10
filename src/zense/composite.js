@@ -3,19 +3,30 @@ import Controller from './core/controller';
 const Composite = Object.create(Controller);
 
 Composite.modules = [];
+Composite.components = [];
 
 Composite.internalPostHook = function () {
-  this.bootstrapModules();
+  if (this.modules.length > 0) {
+    this.bootstraper(this.modules);
+  }
+
+  if (this.components.length > 0) {
+    this.bootstraper(this.components);
+  }
+
+  return false;
 };
-Composite.bootstrapModules = function () {
-  for (let i = 0; i < this.modules.length; i++) {
-    let mod = this.modules[i];
+
+Composite.bootstraper = function (arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let strapee = arr[i];
 
     if (this.store) {
-      mod.store = this.store;
+      strapee.store = this.store;
     }
 
-    mod.render();
+    strapee.composite = this;
+    strapee.render();
   }
 };
 
