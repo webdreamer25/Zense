@@ -1,19 +1,15 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   // target: 'web',
   watch: true,
   // mode: 'development',
   entry: {
-    app: ['@babel/polyfill', './src/app/app.entry.js'],
-    // zense: ['./src/zense/index.js'],
-    styles: './src/zense.css'
+    library: ['@babel/polyfill', './src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: 'zense.js'
   },
   devServer: {
     publicPath: './dist',
@@ -24,19 +20,6 @@ module.exports = {
   },
   module: {
     rules: [
-      { 
-        test: /\.css$/,
-        use: ['style-loader','css-loader']
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: { minimize: true }
-          }
-        ]
-      },
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
@@ -55,12 +38,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: './index.html'
-    })
-  ],
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
     modules: [

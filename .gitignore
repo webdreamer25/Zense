@@ -1,7 +1,4 @@
 #Ignore file
 node_modules/
-dist/styles.js
-dist/app.js
-dist/index.html
-notes.txt
+dist/zense.js
 npm-debug.log
