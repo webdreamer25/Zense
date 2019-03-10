@@ -1,0 +1,12 @@
+#tests
+
+#dirs
+src/
+.vscode/
+node_modules/
+
+#tools
+.babelrc
+.gitignore
+webpack.config.js
+LICENSE

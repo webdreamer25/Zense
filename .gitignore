@@ -1,4 +1,5 @@
 #Ignore file
 node_modules/
-dist/zense.js
+dist/
 npm-debug.log
+LICENSE

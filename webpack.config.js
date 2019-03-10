@@ -1,22 +1,31 @@
 const path = require('path');
+const webpack = require('webpack');
+const UglifyPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  // target: 'web',
-  watch: true,
-  // mode: 'development',
+  // watch: true,
+  devtool: false,
+  mode: 'development',
   entry: {
-    library: ['@babel/polyfill', './src/index.js'],
+    zense: ['@babel/polyfill', './src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'zense.js'
+    filename: 'zense.min.js'
   },
-  devServer: {
-    publicPath: './dist',
-    contentBase: path.resolve(__dirname, 'dist'),
-    watchContentBase: true,
-    compress: true,
-    port: 8000
+  optimization: {
+    minimizer: [
+      new UglifyPlugin({
+        sourceMap: true,
+        extractComments: true,
+        uglifyOptions: {
+          mangle: true,
+          output: {
+            comments: false
+          }
+        }
+      })
+    ]
   },
   module: {
     rules: [
@@ -43,5 +52,10 @@ module.exports = {
     modules: [
       'node_modules'
     ]
-  }
+  },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].map'
+    })
+  ]
 };

@@ -13,14 +13,14 @@ const Zense = {
   Composite,
   Component,
   Module
-}
+};
 
-Zense.VERSION = '1.1.2';
+Zense.VERSION = '1.1.3';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API.
-if (typeof exports != 'undefined' && !exports.nodeType) {
-  if (typeof module != 'undefined' && !module.nodeType && module.exports) {
+if (typeof exports !== 'undefined' && !exports.nodeType) {
+  if (typeof module !== 'undefined' && !module.nodeType && module.exports) {
     exports = module.exports = Zense;
   }
 
