@@ -13,7 +13,7 @@ I've worked in the application development sphere for many years. I've been a so
 
 **Complexity makes you look like you know what you are doing, not really...**
 
-It might seem like a simple thing to do but all developers are guilty of overly complicating their code. It migth be in the spirit of optimization or just because you want "clean code", but you have to remember, you wont always be around to change or answer the why, what or how that developers need to edit that code without introducing new bugs every sprint. This is why I felt the need, NAY! the desire NAY! the duty NAY! the call to create a development library for your everyday developer or development team that is readable and maintainable without the need of JS gurus.
+It might seem like a simple thing to do but all developers are guilty of overly complicating their code. It might be in the spirit of optimization or just because you want "clean code", but you have to remember, you wont always be around to change or answer the why, what or how that developers need to edit that code without introducing new bugs every sprint. This is why I felt the need, NAY! the desire NAY! the duty NAY! the call (pun intended) to create a development library for your everyday developer or development team that is readable and maintainable without the need of JS gurus.
 
 **I love angular, vue and react they are so easy to understand, but... so is a car until you look under the hood.**
 
