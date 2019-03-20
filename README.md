@@ -11,11 +11,11 @@ My passion, My art, My true love... Just don't tell my wife.
 
 I've worked in the application development sphere for many years. I've been a solo act doing everything as a one man army and I have also been in teams that have ranged from 5 to 20+ engineers. I have worked for smaller agencies and large fortune 500 companies. I've experienced everything from doing small remedial tasks like enhancing existing components and debugging to being responsible for re-writting entire applications and throughout my experience I have learned 2 big things that echoe in my infinite developing brain, "KEEP IT SIMPLE STUPID!" & "LEARN WHATS UNDER THE HOOD!". 
 
-###Complexity makes you look like you know what you are doing, not really...
+#### Complexity makes you look like you know what you are doing, not really...
 
 It might seem like a simple thing to do but all developers are guilty of overly complicating their code. It migth be in the spirit of optimization or just because you want "clean code", but you have to remember, you wont always be around to change or answer the why, what or how that developers need to edit that code without introducing new bugs every sprint. This is why I felt the need, NAY! the desire NAY! the duty NAY! the call to create a development library for your everyday developer or development team that is readable and maintainable without the need of JS gurus.
 
-### I love angular, vue and react they are so easy to understand, so is a car until you look under the hood...
+#### I love angular, vue and react they are so easy to understand, but so is a car until you look under the hood...
 
 Zense at its core uses OLOO to achieve its magic, which means "this" is just "this" no matter where you use "this". No more lengthy mentoring sessions with your developers to try to explain how and why it works. I wrote Zense so even those teams who lack in JS Jedi Mastery (JSJM trying to make it a thing) can stop being the fat starwars kid and actually learn to use the force to guide them trhough the trials.
 
