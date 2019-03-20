@@ -23,6 +23,11 @@ Zense at its core uses OLOO to achieve its magic, which means "this" is just "th
 At its core Zense uses Native JS. ES6 infact transpiled using babel. what!!?!? Am I dreaming! no and your stupid for saying that... JK =P
 Zense has been tried and tested on IE 11+ and do I really need to mention any other browsers? #LETINTERNETEXPLORER10BELOWDIE join the revolution!
 
+## Usage
+```
+npm i --save-dev zense
+```
+
 ## Creating a Component
 Components are small pieces of the application that can be used to create larger pieces known in zense as modules.
 
