@@ -180,7 +180,7 @@ ModalBehavior.config({
     closeBtn: '.js-modal-close-btn'
   },
 
-  setHandlers() {
+  handlers() {
     // See Zense DOM manipulation section to under how the below code is achieved.
     this.ui.trigger.on('click', this.open.bind(this));
     this.ui.closeBtn.on('click', this.close.bind(this));
@@ -209,9 +209,9 @@ ModalBehavior.config({
     }
   },
 
-  // Exists on the original behavior object and can be used to invoke all of your behavior's magic!
+  // Can overwite to invoke more methods but by default handlers() method is invoked.
   start() {
-    this.setHandlers();
+    this.handlers();
   }
 });
 ```
