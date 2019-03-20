@@ -11,11 +11,11 @@ My passion, My art, My true love... Just don't tell my wife.
 
 I've worked in the application development sphere for many years. I've been a solo act doing everything as a one man army and I have also been in teams that have ranged from 5 to 20+ engineers. I have worked for smaller agencies and large fortune 500 companies. I've experienced everything from doing small remedial tasks like enhancing existing components and debugging to being responsible for re-writting entire applications and throughout my experience I have learned 2 big things that echoe in my infinite developing brain, "KEEP IT SIMPLE STUPID!" & "LEARN WHATS UNDER THE HOOD!". 
 
-#### Complexity makes you look like you know what you are doing, not really...
+**Complexity makes you look like you know what you are doing, not really...**
 
 It might seem like a simple thing to do but all developers are guilty of overly complicating their code. It migth be in the spirit of optimization or just because you want "clean code", but you have to remember, you wont always be around to change or answer the why, what or how that developers need to edit that code without introducing new bugs every sprint. This is why I felt the need, NAY! the desire NAY! the duty NAY! the call to create a development library for your everyday developer or development team that is readable and maintainable without the need of JS gurus.
 
-#### I love angular, vue and react they are so easy to understand, but so is a car until you look under the hood...
+**I love angular, vue and react they are so easy to understand, but... so is a car until you look under the hood.**
 
 Zense at its core uses OLOO to achieve its magic, which means "this" is just "this" no matter where you use "this". No more lengthy mentoring sessions with your developers to try to explain how and why it works. I wrote Zense so even those teams who lack in JS Jedi Mastery (JSJM trying to make it a thing) can stop being the fat starwars kid and actually learn to use the force to guide them trhough the trials.
 
@@ -24,14 +24,14 @@ At its core Zense uses Native JS. ES6 infact transpiled using babel. what!!?!? A
 Zense has been tried and tested on IE 11+ and do I really need to mention any other browsers? #LETINTERNETEXPLORER10BELOWDIE join the revolution!
 
 ## Usage
-```
+```bash
 npm i --save-dev zense
 ```
 
 ## Creating a Component
 Components are small pieces of the application that can be used to create larger pieces known in zense as modules.
 
-```
+```js
 import { Zense } from 'zense';
 
 const LogoComponent = Object.create(Zense.Component);
@@ -77,7 +77,7 @@ LogoComponent.render()
 
 ## Creating a Module
 
-```
+```js
 import { Zense } from 'zense';
 import LogoComponent from '../components/logo.component';
 
@@ -135,7 +135,7 @@ HeaderModule.render();
 ## Composites
 Sometimes you might want to have a way to render or bootstrap together a series of modules and/or components. Zense allows you to do this via the use of Composites.
 
-```
+```js
 import { Zense } from 'zense';
 
 const HomeComposite = Object.create(Zense.Composite);
@@ -164,7 +164,7 @@ Behaviors allow for developers to maintain DRY code in their JavaScript. Need ac
 
 ### Creating a behavior
 
-```
+```js
 import { Zense } from 'zense';
 
 const ModalBehavior = Object.create(Zense.Behavior);
@@ -219,7 +219,7 @@ ModalBehavior.config({
 ### Ways to behave
 In the example above we create a modal behavior that can be passed into a generic Modal component like so:
 
-```
+```js
 import { Zense } from 'zense';
 import ModalBehavior from '../behaviors/form.behavior';
 
@@ -243,11 +243,11 @@ const ModalComponent.create({
 
 What if you want to extend a behavior and it's defined properties/values?
 
-```
-import { Component } from 'zense';
+```js
+import { Zense } from 'zense';
 import ModalBehavior from '../behaviors/form.behavior';
 
-const ResultsModalComponent = Object.create('Component');
+const ResultsModalComponent = Object.create(Zense.Component);
 
 const extendBehavior = {
   ui: {
@@ -278,14 +278,14 @@ jQuery, Sizzle and Other DOM T&M libraries were wonderful when first introduced 
 All defined methods are encapsulated within Zense objects and can be used on any Zense component, module, composite, etc...
 
 ### Use it to get elements from the DOM.
-```
+```js
 // Supports single string css selector.
 // '#someid', '.someclass', '[data-target]', 'div'.
 this.dom('');
 ```
 
 ### Custom methods for chaining with "this.dom()".
-```
+```js
 // This method sets "info" object on the selector.
 // info = { event, callback };
 .on(event, callback, bubble); 
@@ -322,7 +322,7 @@ this.dom('');
 
 ### Custom standalone methods
 
-```
+```js
 // If array is passed in params: value, index and list.
 // If object is passed in params: value, key and obj.
 this.each(array or object, callback);
@@ -339,6 +339,6 @@ this.extend(object1, object2, object3);
 this.uniqueArray(array);
 ```
 
-Because the above method returns a DOM node you may use any JS method in the spec as well.
+**Because the above method returns a DOM node you may use any JS method in the spec as well.**
 
 
