@@ -9,7 +9,7 @@ The library that not only gives you peace of mind, but just makes more sense tha
 ## The idea
 My passion, My art, My true love... Just don't tell my wife.
 
-I've worked in the application development sphere for many years. I've been a solo act doing everything as a one man army and I have also been in teams that have ranged from 5 to 20+ engineers. I have worked for smaller agencies and large fortune 500 companies. I've experienced everything from doing small remedial tasks like enhancing existing components and debugging to being responsible for re-writting entire applications and throughout my experience I have learned 2 big things that echoe in my infinite developing brain, "KEEP IT SIMPLE STUPID!" & "LEARN WHATS UNDER THE HOOD!". 
+I've worked in the application development sphere for many years. I've been a solo act doing everything as a one man army and I have also been in teams that have ranged from 5 to 20+ engineers. I have worked for smaller agencies and large fortune 500 companies. I've experienced everything from doing small remedial tasks like enhancing existing components and debugging to being responsible for re-writting entire applications and throughout my experience I have learned 2 big things that echoe in my infinite developing brain, **"KEEP IT SIMPLE STUPID!" & "LEARN WHATS UNDER THE HOOD!"**. 
 
 **Complexity makes you look like you know what you are doing, not really...**
 
@@ -21,7 +21,7 @@ Zense at its core uses OLOO to achieve its magic, which means "this" is just "th
 
 ## Browser support
 At its core Zense uses Native JS. ES6 infact transpiled using babel. what!!?!? Am I dreaming! no and your stupid for saying that... JK =P
-Zense has been tried and tested on IE 11+ and do I really need to mention any other browsers? #LETINTERNETEXPLORER10BELOWDIE join the revolution!
+Zense has been tried and tested on IE 11+ and do I really need to mention any other browsers? **#LETINTERNETEXPLORER10BELOWDIE** join the revolution!
 
 ## Usage
 ```bash
@@ -62,6 +62,10 @@ LogoComponent.create({
   serializeData(data) {
     return data;
   },
+  
+  // Lifecycle hooks
+  beforeRender() {},
+  afterRender() {},
 
   // Required: Your component will need a template in order to work.
   // By default the template method gets passed in any data that comes for "api" or "store" via the serializeData method. 
@@ -120,6 +124,10 @@ HeaderModule.create({
   addTemplateToDOM() {
     // rendering logic here
   },
+  
+  // Lifecycle hooks
+  beforeRender() {},
+  afterRender() {},
 
   template() {
     return `
@@ -149,6 +157,10 @@ HomeComposite.create({
 
   // This allows you to pass in generic components with no module parent.
   components: [],
+  
+  // Lifecycle hooks
+  beforeRender() {},
+  afterRender() {},
 
   // Required for now but working on making this optional only for composites in late versions.
   template() {
