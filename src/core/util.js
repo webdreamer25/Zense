@@ -10,13 +10,20 @@ const SelectorMethods = {
 
       return this;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      let i = 0;
+
+      do {
         this[i].info = { event, callback };
 
         this[i].addEventListener(event, callback, bubble);
-      }
 
-      return this;
+        // Make sure that if we only have 1 node, return that specific node for chaining
+        if (this.length === 1) {
+          return this[i];
+        }
+
+        i++
+      } while (i < this.length);
     }
   },
 
@@ -40,13 +47,21 @@ const SelectorMethods = {
     if (!this.length) {
       this.innerHTML = html;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      let i = 0;
+
+      do {
         if (this[i].innerHTML !== '') {
           this[i].innerHTML = '';
         }
 
         this[i].innerHTML = html;
-      }
+
+        if (this.length === 1) {
+          return this[i];
+        }
+
+        return this;
+      } while (i < this.length);
     }
   },
 
@@ -104,18 +119,6 @@ const SelectorMethods = {
     }
 
     return this;
-  },
-
-  hasAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      return this[i].hasAttribute(attribute);
-    }
-  },
-
-  removeAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      this[i].removeAttribute(attribute);
-    }
   },
 
   each(callback) {
