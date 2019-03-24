@@ -1,7 +1,7 @@
 {
   "name": "zense",
   "title": "zense",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dis/zense.min.js",
   "description": "Application development library",
   "scripts": {
