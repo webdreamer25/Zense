@@ -7,8 +7,6 @@ const SelectorMethods = {
       this.info = { event, callback };
 
       this.addEventListener(event, callback, bubble);
-
-      return this;
     } else {
       let i = 0;
 
@@ -17,30 +15,25 @@ const SelectorMethods = {
 
         this[i].addEventListener(event, callback, bubble);
 
-        // Make sure that if we only have 1 node, return that specific node for chaining
-        if (this.length === 1) {
-          return this[i];
-        }
-
         i++
       } while (i < this.length);
     }
+
+    return this;
   },
 
   off() {
     if (!this.length && this.info) {
       this.removeEventListener(this.info.event, this.info.callback, true);
-
-      return this;
     } else {
       for (let i = 0; i < this.length; i++) {
         if (this[i].info) {
           this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
         }
       }
-
-      return this;
     }
+
+    return this;
   },
 
   html(html) {
@@ -56,13 +49,11 @@ const SelectorMethods = {
 
         this[i].innerHTML = html;
 
-        if (this.length === 1) {
-          return this[i];
-        }
-
-        return this;
+        i++;
       } while (i < this.length);
     }
+
+    return this;
   },
 
   insertHTML(position, html) {
@@ -70,8 +61,15 @@ const SelectorMethods = {
       this.insertAdjacentHTML(position, html);
     } else {
       for (let i = 0; i < this.length; i++) {
-        this[i].insertAdjacentHTML(position, html);
+        
       }
+      let i = 0;
+
+      do {
+        this[i].insertAdjacentHTML(position, html);
+
+        i++;
+      } while (i < this.length);
     }
 
     return this;
@@ -181,6 +179,11 @@ Util.dom = function (selector) {
     if (SelectorMethods.hasOwnProperty(key)) {
       selector[key] = SelectorMethods[key];
     }
+  }
+
+  // Needed incase we have multi selector type (class, tag, etc) and only 1 exists.
+  if (selector.length === 1) {
+    selector[0];
   }
 
   return selector;
