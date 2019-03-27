@@ -60,9 +60,6 @@ const SelectorMethods = {
     if (!this.length) {
       this.insertAdjacentHTML(position, html);
     } else {
-      for (let i = 0; i < this.length; i++) {
-        
-      }
       let i = 0;
 
       do {
@@ -211,15 +208,23 @@ Util.isObject = function (val) {
 };
 
 Util.extend = function () {
-  for (let i = 1; i < arguments.length; i++) {
-    for (let key in arguments[i]) {
-      if (arguments[i].hasOwnProperty(key)) {
-        arguments[0][key] = arguments[i][key];
+  try {
+    for (let i = 1; i < arguments.length; i++) {
+      if (typeof arguments[i] !== 'object') {
+        throw new Error('One or more arguments is not an "Object".');
+      }
+
+      for (let key in arguments[i]) {
+        if (arguments[i].hasOwnProperty(key)) { 
+          arguments[0][key] = arguments[i][key];
+        }
       }
     }
-  }
 
-  return arguments[0];
+    return arguments[0];
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 Util.uniqueArray = function (arr) {
