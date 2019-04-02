@@ -2,7 +2,7 @@
   "name": "zense",
   "title": "zense",
   "version": "1.1.2",
-  "main": "dis/zense.min.js",
+  "main": "dist/zense.min.js",
   "description": "Application development library",
   "scripts": {
     "build": "webpack",
