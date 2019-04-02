@@ -1,6 +1,7 @@
 # directories
 node_modules
 .vscode
+src
 
 # files
 .babelrc

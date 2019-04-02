@@ -7,7 +7,7 @@ module.exports = {
   devtool: false,
   mode: 'development',
   entry: {
-    zense: ['@babel/polyfill', './src/index.js'],
+    zense: ['./src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
