@@ -1,31 +1,13 @@
-const path = require('path');
-const webpack = require('webpack');
-const UglifyPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  // watch: true,
   devtool: false,
   mode: 'development',
   entry: {
     zense: ['./src/index.js'],
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'zense.min.js'
-  },
-  optimization: {
-    minimizer: [
-      new UglifyPlugin({
-        sourceMap: true,
-        extractComments: true,
-        uglifyOptions: {
-          mangle: true,
-          output: {
-            comments: false
-          }
-        }
-      })
-    ]
+    path: __dirname,
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -52,10 +34,5 @@ module.exports = {
     modules: [
       'node_modules'
     ]
-  },
-  plugins: [
-    new webpack.SourceMapDevToolPlugin({
-      filename: '[name].map'
-    })
-  ]
+  }
 };
