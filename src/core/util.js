@@ -133,6 +133,53 @@ const SelectorMethods = {
     } catch (e) {
       console.error(e);
     }
+  },
+
+  find(node) {
+    let result;
+    let selector = this;
+    let match = selectorRegex.exec(node);
+
+    // Return early from calls with invalid selector or context
+    if (typeof node !== 'string') {
+      return false;
+    }
+
+    if (match[1]) {
+      result = selector.getElementById(match[1]);
+    } else if (match[2]) {
+      result = selector.getElementsByTagName(match[2]);
+    } else if (match[3]) {
+      result = selector.getElementsByClassName(match[3]);
+    }
+
+    if (result.length) {
+      let i = 0;
+
+      do {
+
+        // Add selector chain methods to dom object.
+        for (let key in SelectorMethods) {
+          if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+            
+            // Needed so we only do an each when multi selector is returned.
+            if (key === 'each') {
+              result[key] = SelectorMethods[key];
+            }
+
+            result[i][key] = SelectorMethods[key];
+          }
+        }
+
+        i++;
+      } while (i < result.length);
+
+      if (result.length === 1) {
+        return result[0];
+      }
+    }
+
+    return result;
   }
 };
 
@@ -147,23 +194,19 @@ Util.dom = function (selector) {
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
+    let match = selectorRegex.exec(selector);
 
     // We need to preserve a string copy of the selector to for reseting purposes.
     if (this.strSelector === null || this.strSelector !== selector) {
       this.strSelector = selector;
     }
 
-    switch (selector.charAt(0)) {
-      case '#':
-        selector = document.getElementById(selector.slice(1));
-
-        break;
-      case '.':
-        selector = document.querySelectorAll(selector); 
-
-        break;
-      default:
-        selector = document.querySelector(selector);
+    if (match[1]) {
+      selector = document.getElementById(match[1]);
+    } else if (match[2]) {
+      selector = document.getElementsByTagName(match[2]);
+    } else if (match[3]) {
+      selector = document.getElementsByClassName(match[3]);
     }
   } 
 
@@ -171,16 +214,22 @@ Util.dom = function (selector) {
     throw { message: 'Selector "' + this.strSelector + '" does not exist in the DOM.' };
   }
 
-  // Add selector chain methods to dom object.
-  for (let key in SelectorMethods) {
-    if (SelectorMethods.hasOwnProperty(key)) {
-      selector[key] = SelectorMethods[key];
-    }
-  }
+  if (selector.length > 1) {
+    selector['each'] = SelectorMethods['each'];
+  } else {
 
-  // Needed incase we have multi selector type (class, tag, etc) and only 1 exists.
-  if (selector.length === 1) {
-    selector[0];
+    // Add selector chain methods to dom object.
+    for (let key in SelectorMethods) {
+      if (SelectorMethods.hasOwnProperty(key)) {
+        selector[key] = SelectorMethods[key];
+      }
+    }
+
+    // Needed incase we have multi selector type (class, tag, etc) and only 1 exists.
+    if (selector.length === 1) {
+      return selector[0];
+    }
+
   }
 
   return selector;
