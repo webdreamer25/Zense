@@ -1,62 +1,74 @@
 import Xhr from './xhr';
 import Eventor from './eventor';
 
+const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
+
 const SelectorMethods = {
   on(event, callback, bubble = true) {
     if (!this.length) {
       this.info = { event, callback };
 
       this.addEventListener(event, callback, bubble);
-
-      return this;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      let i = 0;
+
+      do {
         this[i].info = { event, callback };
 
         this[i].addEventListener(event, callback, bubble);
-      }
 
-      return this;
+        i++
+      } while (i < this.length);
     }
+
+    return this;
   },
 
   off() {
     if (!this.length && this.info) {
       this.removeEventListener(this.info.event, this.info.callback, true);
-
-      return this;
     } else {
       for (let i = 0; i < this.length; i++) {
         if (this[i].info) {
           this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
         }
       }
-
-      return this;
     }
+
+    return this;
   },
 
   html(html) {
     if (!this.length) {
       this.innerHTML = html;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      let i = 0;
+
+      do {
         if (this[i].innerHTML !== '') {
           this[i].innerHTML = '';
         }
 
         this[i].innerHTML = html;
-      }
+
+        i++;
+      } while (i < this.length);
     }
+
+    return this;
   },
 
   insertHTML(position, html) {
     if (!this.length) {
       this.insertAdjacentHTML(position, html);
     } else {
-      for (let i = 0; i < this.length; i++) {
+      let i = 0;
+
+      do {
         this[i].insertAdjacentHTML(position, html);
-      }
+
+        i++;
+      } while (i < this.length);
     }
 
     return this;
@@ -106,18 +118,6 @@ const SelectorMethods = {
     return this;
   },
 
-  hasAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      return this[i].hasAttribute(attribute);
-    }
-  },
-
-  removeAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      this[i].removeAttribute(attribute);
-    }
-  },
-
   each(callback) {
     try {
       for (let i = 0; i < this.length; i++) {
@@ -135,6 +135,61 @@ const SelectorMethods = {
     } catch (e) {
       console.error(e);
     }
+  },
+
+  find(node) {
+    let result;
+    let selector = this;
+    let match = selectorRegex.exec(node);
+
+    // Return early from calls with invalid selector or context
+    if (typeof node !== 'string') {
+      return false;
+    }
+
+    if (match[1]) {
+      result = selector.getElementById(match[1]);
+    } else if (match[2]) {
+      result = selector.getElementsByTagName(match[2]);
+    } else if (match[3]) {
+      result = selector.getElementsByClassName(match[3]);
+    }
+
+    if (result.length) {
+      let i = 0;
+
+      do {
+
+        // Add selector chain methods to dom object.
+        for (let key in SelectorMethods) {
+          if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+
+            // Set methods on dom object list returned.
+            result[key] = SelectorMethods[key];
+
+            // Set methods to each dom object list item.
+            result[i][key] = SelectorMethods[key];
+          }
+        }
+
+        i++;
+      } while (i < result.length);
+
+      if (result.length === 1) {
+        return result[0];
+      }
+    } else {
+
+      // Add selector chain methods to dom object.
+      for (let key in SelectorMethods) {
+        if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+          result[key] = SelectorMethods[key];
+        }
+      }
+  
+    }
+
+    return result;
   }
 };
 
@@ -149,23 +204,19 @@ Util.dom = function (selector) {
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
+    let match = selectorRegex.exec(selector);
 
     // We need to preserve a string copy of the selector to for reseting purposes.
     if (this.strSelector === null || this.strSelector !== selector) {
       this.strSelector = selector;
     }
 
-    switch (selector.charAt(0)) {
-      case '#':
-        selector = document.getElementById(selector.slice(1));
-
-        break;
-      case '.':
-        selector = document.querySelectorAll(selector); 
-
-        break;
-      default:
-        selector = document.querySelector(selector);
+    if (match[1]) {
+      selector = document.getElementById(match[1]);
+    } else if (match[2]) {
+      selector = document.getElementsByTagName(match[2]);
+    } else if (match[3]) {
+      selector = document.getElementsByClassName(match[3]);
     }
   } 
 
@@ -173,11 +224,38 @@ Util.dom = function (selector) {
     throw { message: 'Selector "' + this.strSelector + '" does not exist in the DOM.' };
   }
 
-  // Add selector chain methods to dom object.
-  for (let key in SelectorMethods) {
-    if (SelectorMethods.hasOwnProperty(key)) {
-      selector[key] = SelectorMethods[key];
+  if (selector.length) {
+    let i = 0;
+
+    do {
+
+      // Add selector chain methods to dom object.
+      for (let key in SelectorMethods) {
+        if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+          
+          // Set methods on dom object list returned.
+          selector[key] = SelectorMethods[key];
+
+          // Set methods to each dom object list item.
+          selector[i][key] = SelectorMethods[key];
+        }
+      }
+
+      i++;
+    } while (i < selector.length);
+
+    if (selector.length === 1) {
+      return selector[0];
     }
+  } else {
+
+    // Add selector chain methods to dom object.
+    for (let key in SelectorMethods) {
+      if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+        selector[key] = SelectorMethods[key];
+      }
+    }
+
   }
 
   return selector;
@@ -205,15 +283,23 @@ Util.isObject = function (val) {
 };
 
 Util.extend = function () {
-  for (let i = 1; i < arguments.length; i++) {
-    for (let key in arguments[i]) {
-      if (arguments[i].hasOwnProperty(key)) {
-        arguments[0][key] = arguments[i][key];
+  try {
+    for (let i = 1; i < arguments.length; i++) {
+      if (typeof arguments[i] !== 'object') {
+        throw new Error('One or more arguments is not an "Object".');
+      }
+
+      for (let key in arguments[i]) {
+        if (arguments[i].hasOwnProperty(key)) { 
+          arguments[0][key] = arguments[i][key];
+        }
       }
     }
-  }
 
-  return arguments[0];
+    return arguments[0];
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 Util.uniqueArray = function (arr) {
