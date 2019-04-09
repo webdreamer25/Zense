@@ -1,6 +1,8 @@
 import Xhr from './xhr';
 import Eventor from './eventor';
 
+const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
+
 const SelectorMethods = {
   on(event, callback, bubble = true) {
     if (!this.length) {
@@ -161,12 +163,11 @@ const SelectorMethods = {
         // Add selector chain methods to dom object.
         for (let key in SelectorMethods) {
           if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
-            
-            // Needed so we only do an each when multi selector is returned.
-            if (key === 'each') {
-              result[key] = SelectorMethods[key];
-            }
 
+            // Set methods on dom object list returned.
+            result[key] = SelectorMethods[key];
+
+            // Set methods to each dom object list item.
             result[i][key] = SelectorMethods[key];
           }
         }
@@ -177,6 +178,15 @@ const SelectorMethods = {
       if (result.length === 1) {
         return result[0];
       }
+    } else {
+
+      // Add selector chain methods to dom object.
+      for (let key in SelectorMethods) {
+        if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+          result[key] = SelectorMethods[key];
+        }
+      }
+  
     }
 
     return result;
@@ -214,20 +224,36 @@ Util.dom = function (selector) {
     throw { message: 'Selector "' + this.strSelector + '" does not exist in the DOM.' };
   }
 
-  if (selector.length > 1) {
-    selector['each'] = SelectorMethods['each'];
+  if (selector.length) {
+    let i = 0;
+
+    do {
+
+      // Add selector chain methods to dom object.
+      for (let key in SelectorMethods) {
+        if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+          
+          // Set methods on dom object list returned.
+          selector[key] = SelectorMethods[key];
+
+          // Set methods to each dom object list item.
+          selector[i][key] = SelectorMethods[key];
+        }
+      }
+
+      i++;
+    } while (i < selector.length);
+
+    if (selector.length === 1) {
+      return selector[0];
+    }
   } else {
 
     // Add selector chain methods to dom object.
     for (let key in SelectorMethods) {
-      if (SelectorMethods.hasOwnProperty(key)) {
+      if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
         selector[key] = SelectorMethods[key];
       }
-    }
-
-    // Needed incase we have multi selector type (class, tag, etc) and only 1 exists.
-    if (selector.length === 1) {
-      return selector[0];
     }
 
   }
