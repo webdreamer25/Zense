@@ -75,15 +75,17 @@ const SelectorMethods = {
   },
 
   attr(attribute, property) {
-    for (let i = 0; i < this.length; i++) {
-      if (typeof property !== 'undefined') {
-        this[i].setAttribute(attribute, property);    
-      } else {
-        return this[i].getAttribute(attribute);
+    if (this.length) {
+      for (let i = 0; i < this.length; i++) {
+        if (typeof property !== 'undefined') {
+          this[i].setAttribute(attribute, property);    
+        } else {
+          return this[i].getAttribute(attribute);
+        }
       }
     }
 
-    return this;
+    return this.getAttribute(attribute);
   },
 
   val(value) {

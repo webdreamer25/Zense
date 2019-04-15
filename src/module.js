@@ -31,6 +31,16 @@ Module.addComponents = function (res) {
   for (let i = 0; i < this.components.length; i++) {
     let component = this.components[i];
 
+    // This check is to ensure we are also handling extending the component.
+    if (component.name) {
+      component = this.components[i].name;
+
+      // Necessary if we want to have specific component changes on any given component/module
+      if (this.components[i].options) {
+        component = this.customizeObject(component, this.components[i].options);
+      }
+    }
+
     // Let the component know whos their daddy.
     component.module = this;
     component.store = this.api || res ? res : null;

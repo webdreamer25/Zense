@@ -61,7 +61,7 @@ Controller.customizeObject = function (customObj, options) {
     Object.keys(options).forEach(key => {
       
       // We only want to extend existing porperties under customObj
-      if (customObj[key] === options[key]) {
+      if (Object.keys(customObj).some((masterKey) => masterKey === key) && typeof options[key] !== 'string') {
         customObj[key] = this.extend({}, customObj[key], options[key]);
       } else {
         customObj[key] = options[key];
