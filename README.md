@@ -353,4 +353,16 @@ this.uniqueArray(array);
 
 **Because the above method returns a DOM node you may use any JS method in the spec as well.**
 
+### Additional properties to tap into
 
+```js
+// Available in composites, modules and components.
+this.hasRendered = true/false;
+
+// Available only in modules (for now) has array of the names of all the components
+// Used to ensure internally we do not have duplicate names.
+this.componentNameArray = [];
+
+// Will return the named component context
+this.getChildComponent(componentName);
+```
