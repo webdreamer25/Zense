@@ -83,6 +83,8 @@ const SelectorMethods = {
           return this[i].getAttribute(attribute);
         }
       }
+    } else if (!this.length && property !== undefined) {
+      this.setAttribute(attribute, property);
     }
 
     return this.getAttribute(attribute);
@@ -223,7 +225,9 @@ Util.dom = function (selector) {
   } 
 
   if (selector === null || selector.length === 0 && selector !== (window || document)) {
-    throw { message: 'Selector "' + this.strSelector + '" does not exist in the DOM.' };
+    let unitName = this.name ? this.name : this.behaviorName;
+
+    new Error('Component: ' + unitName  + 'Selector "' + this.strSelector + '" does not exist in the DOM.');
   }
 
   if (selector.length) {

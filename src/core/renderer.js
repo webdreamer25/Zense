@@ -24,7 +24,7 @@ Renderer.render = function (model) {
 
     this.addTemplateToDOM(data);
   } catch (e) {
-    console.error(e);
+    new Error(e);
   }
 
   this.internalPostHook();
@@ -38,6 +38,10 @@ Renderer.internalPostHook = function () {
 
   if (this.setBehaviors !== undefined) {
     this.setBehaviors();
+  }
+
+  if (this.ui !== undefined && Object.keys(this.ui).length > 0) {
+    this.bindUIElements();
   }
   
   this.hasRendered = true;

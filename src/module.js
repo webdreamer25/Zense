@@ -32,7 +32,7 @@ Module.addComponents = function (res) {
     let component = this.components[i];
 
     // This check is to ensure we are also handling extending the component.
-    if (component.name) {
+    if (component.name && component.options) {
       component = this.components[i].name;
 
       // Necessary if we want to have specific component changes on any given component/module
