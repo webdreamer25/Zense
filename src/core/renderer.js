@@ -57,6 +57,11 @@ Renderer.destroy = function () {
     return null; 
   }
 
+  // Remove Children (composites & modules only).
+  if (this.destroyChildren !== undefined) {
+    this.destroyChildren();
+  }
+
   let firstChildNode = this.selector.firstChild;
 
   while (firstChildNode) {
@@ -70,7 +75,7 @@ Renderer.destroy = function () {
   }
 
   if (this.selector instanceof Object) {
-    this.selector = this.strSelector;
+    this.selector = this.selector.strName;
   }
 
   return this;

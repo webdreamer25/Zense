@@ -43,8 +43,12 @@ Controller.unbindBehaviorEvents = function () {
   }
 
   for (let i = 0; i < this.behaviors.length; i++) {
-    if (this.behaviors[i].ui) {
-      this.behaviors[i].unbindUIElements();
+    let behavior = this.behaviors[i];
+
+    behavior = behavior.name ? behavior.name : behavior;
+
+    if (behavior.ui) {
+      behavior.unbindUIElements();
 
       // This is incase of a re-render where we need to set and start the associated behaviors.
       this.shouldSetBehaviors = true;

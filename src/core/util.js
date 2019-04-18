@@ -208,12 +208,8 @@ Util.dom = function (selector) {
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
+    let strSelector = selector;
     let match = selectorRegex.exec(selector);
-
-    // We need to preserve a string copy of the selector to for reseting purposes.
-    if (this.strSelector === null || this.strSelector !== selector) {
-      this.strSelector = selector;
-    }
 
     if (match[1]) {
       selector = document.getElementById(match[1]);
@@ -222,12 +218,17 @@ Util.dom = function (selector) {
     } else if (match[3]) {
       selector = document.getElementsByClassName(match[3]);
     }
+
+    // We need to preserve a string copy of the selector to for reseting purposes.
+    if (strSelector === null || strSelector !== selector) {
+      selector.strName = strSelector;
+    }
   } 
 
   if (selector === null || selector.length === 0 && selector !== (window || document)) {
     let unitName = this.name ? this.name : this.behaviorName;
 
-    new Error('Component: ' + unitName  + 'Selector "' + this.strSelector + '" does not exist in the DOM.');
+    throw new Error('Component: ' + unitName  + 'Selector "' + this.strSelector + '" does not exist in the DOM.');
   }
 
   if (selector.length) {

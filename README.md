@@ -317,7 +317,6 @@ this.dom('');
 .insertHTML(position, value);
 
 // Use to set or get and attribute.
-// Deprecated: use native setAttribute and getAttribute instead.
 .attr(attribute, property);
 
 // will set or return a value if no argument is passed in.
