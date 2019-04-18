@@ -78,7 +78,7 @@ Renderer.destroy = function () {
     this.selector = this.selector.strName;
   }
 
-  return this;
+  this.hasRendered = false;
 };
 
 Renderer.setDOMSelector = function () {
