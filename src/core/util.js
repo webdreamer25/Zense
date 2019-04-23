@@ -211,12 +211,16 @@ Util.dom = function (selector) {
     let strSelector = selector;
     let match = selectorRegex.exec(selector);
 
-    if (match[1]) {
-      selector = document.getElementById(match[1]);
-    } else if (match[2]) {
-      selector = document.getElementsByTagName(match[2]);
-    } else if (match[3]) {
-      selector = document.getElementsByClassName(match[3]);
+    if (match !== null) {
+      if (match[1]) {
+        selector = document.getElementById(match[1]);
+      } else if (match[2]) {
+        selector = document.getElementsByTagName(match[2]);
+      } else if (match[3]) {
+        selector = document.getElementsByClassName(match[3]);
+      }
+    } else {
+      selector = document.querySelectorAll(selector);
     }
 
     // We need to preserve a string copy of the selector to for reseting purposes.
