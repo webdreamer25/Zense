@@ -365,3 +365,14 @@ this.componentNameArray = [];
 // Will return the named component context
 this.getChildComponent(componentName);
 ```
+
+### Dependencies ###
+Zense uses ES6 Symbols so I recommend importing babel core-js for symbol only when developing your application.
+
+```bash
+npm i --save @babel/polyfill
+```
+
+```js
+import 'core-js/modules/es6.symbol';
+```
