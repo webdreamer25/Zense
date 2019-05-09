@@ -2,7 +2,6 @@ import Util from './util';
 
 const Renderer = Object.create(Util);
 
-Renderer.regions = [];
 Renderer.selector = null;
 Renderer.template = null;
 Renderer.hasRendered = false;
