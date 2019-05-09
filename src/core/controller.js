@@ -75,7 +75,7 @@ Controller.customizeObject = function (customObj, options) {
   } else {
 
     // Allow developers to figure out how they with overwite behaviors
-    customObj = obj();
+    customObj = options();
     
   }
 

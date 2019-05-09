@@ -84,13 +84,11 @@ Renderer.destroy = function () {
 Renderer.setDOMSelector = function () {
   this.selector = this.dom(this.selector);
 
-  // We want to ensure that if no selector is specified the selector chosen is the parent modules selector
-  // this is incase we have an instance of appending purely on the parent element vs a specific container.
-  if (typeof this.selector === 'undefined' && this.selector === null) {
-    this.selector = this.regions[0];
-  }
+  if (!this.selector.exists) {
+    let name = this.name ? ' ' + this.name : '';
 
-  this.regions.push(this.selector);
+    throw new Error('Selector ' + this.selector.strName + ' defined in ' + this.type + name + ' does not exist in the DOM.');
+  }
 };
 
 Renderer.addTemplateToDOM = function (data) {

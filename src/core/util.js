@@ -9,66 +9,56 @@ const SelectorMethods = {
       this.info = { event, callback };
 
       this.addEventListener(event, callback, bubble);
-    } else {
-      let i = 0;
 
-      do {
+      return this;
+    } else {
+      for (let i = 0; i < this.length; i++) {
         this[i].info = { event, callback };
 
         this[i].addEventListener(event, callback, bubble);
+      }
 
-        i++
-      } while (i < this.length);
+      return this;
     }
-
-    return this;
   },
 
   off() {
     if (!this.length && this.info) {
       this.removeEventListener(this.info.event, this.info.callback, true);
+
+      return this;
     } else {
       for (let i = 0; i < this.length; i++) {
         if (this[i].info) {
           this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
         }
       }
-    }
 
-    return this;
+      return this;
+    }
   },
 
   html(html) {
     if (!this.length) {
       this.innerHTML = html;
     } else {
-      let i = 0;
-
-      do {
+      for (let i = 0; i < this.length; i++) {
         if (this[i].innerHTML !== '') {
           this[i].innerHTML = '';
         }
 
         this[i].innerHTML = html;
-
-        i++;
-      } while (i < this.length);
+      }
     }
-
-    return this;
   },
 
   insertHTML(position, html) {
     if (!this.length) {
       this.insertAdjacentHTML(position, html);
     } else {
-      let i = 0;
-
-      do {
+      for (let i = 0; i < this.length; i++) {
         this[i].insertAdjacentHTML(position, html);
-
-        i++;
-      } while (i < this.length);
+      }
     }
 
     return this;
@@ -122,15 +112,27 @@ const SelectorMethods = {
     return this;
   },
 
+  hasAttribute(attribute) {
+    for (let i = 0; i < this.length; i++) {
+      return this[i].hasAttribute(attribute);
+    }
+  },
+
+  removeAttribute(attribute) {
+    for (let i = 0; i < this.length; i++) {
+      this[i].removeAttribute(attribute);
+    }
+  },
+  
   each(callback) {
     try {
       for (let i = 0; i < this.length; i++) {
         let el = this[i];
 
         // Add selector chain methods to dom object.
-        for (let key in this) {
-          if (this.hasOwnProperty(key) && typeof this[key] === 'function') {
-            el[key] = this[key];
+        for (let key in SelectorMethods) {
+          if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+            el[key] = SelectorMethods[key];
           }
         }
 
@@ -197,19 +199,16 @@ const SelectorMethods = {
   }
 };
 
-const Util = Object.create(Xhr);
+const DOM = function (selector, context) {
+  if (!selector) { return context; }
 
-Util.events = Object.create(Eventor);
-
-Util.strSelector = null;
-
-Util.dom = function (selector) {
-  if (!selector) { return this; }
+  let match;
+  let strSelector;
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
-    let strSelector = selector;
-    let match = selectorRegex.exec(selector);
+    strSelector = selector;
+    match = selectorRegex.exec(selector);
 
     if (match !== null) {
       if (match[1]) {
@@ -224,52 +223,71 @@ Util.dom = function (selector) {
     }
 
     // We need to preserve a string copy of the selector to for reseting purposes.
-    if (strSelector === null || strSelector !== selector) {
+    if (selector && (selector.strName === undefined || selector.strName && selector.strName !== strSelector)) {
       selector.strName = strSelector;
     }
   } 
 
   if (selector === null || selector.length === 0 && selector !== (window || document)) {
-    let unitName = this.name ? this.name : this.behaviorName;
-
-    throw new Error('Component: ' + unitName  + 'Selector "' + this.strSelector + '" does not exist in the DOM.');
+    selector = false;
+  } else {
+    selector.exists = true;
   }
 
-  if (selector.length) {
-    let i = 0;
+  if (selector) {
+    if (selector.length) {
+      let i = 0;
 
-    do {
+      do {
+
+        // Add selector chain methods to dom object.
+        for (let key in SelectorMethods) {
+          if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
+            
+            // Set methods on dom object list returned.
+            selector[key] = SelectorMethods[key];
+
+            // Set methods to each dom object list item.
+            selector[i][key] = SelectorMethods[key];
+          }
+        }
+
+        i++;
+      } while (i < selector.length);
+
+      if (selector.length === 1) {
+        selector[0].exists = true;
+        
+        return selector[0];
+      }
+    } else {
 
       // Add selector chain methods to dom object.
       for (let key in SelectorMethods) {
         if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
-          
-          // Set methods on dom object list returned.
           selector[key] = SelectorMethods[key];
-
-          // Set methods to each dom object list item.
-          selector[i][key] = SelectorMethods[key];
         }
       }
 
-      i++;
-    } while (i < selector.length);
-
-    if (selector.length === 1) {
-      return selector[0];
     }
   } else {
-
-    // Add selector chain methods to dom object.
-    for (let key in SelectorMethods) {
-      if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
-        selector[key] = SelectorMethods[key];
-      }
+    selector = {
+      exists: false,
+      strName: strSelector
     }
-
   }
 
   return selector;
+};
+
+const Util = Object.create(Xhr);
+
+Util.events = Object.create(Eventor);
+
+Util.strSelector = null;
+
+Util.dom = function (selector) {
+  return new DOM(selector, this);
 };
 
 Util.each = function (arr, callback) {
@@ -294,23 +312,15 @@ Util.isObject = function (val) {
 };
 
 Util.extend = function () {
-  try {
-    for (let i = 1; i < arguments.length; i++) {
-      if (typeof arguments[i] !== 'object') {
-        throw new Error('One or more arguments is not an "Object".');
-      }
-
-      for (let key in arguments[i]) {
-        if (arguments[i].hasOwnProperty(key)) { 
-          arguments[0][key] = arguments[i][key];
-        }
+  for (let i = 1; i < arguments.length; i++) {
+    for (let key in arguments[i]) {
+      if (arguments[i].hasOwnProperty(key)) {
+        arguments[0][key] = arguments[i][key];
       }
     }
-
-    return arguments[0];
-  } catch (e) {
-    console.error(e);
   }
+
+  return arguments[0];
 };
 
 Util.uniqueArray = function (arr) {
