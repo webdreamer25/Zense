@@ -3,10 +3,10 @@
 
 [![Gitter](https://badges.gitter.im/Zense-developer/community.svg)](https://gitter.im/Zense-developer/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-**[Support](zupport645@gmail.com)**
+**Need Support?** - E-mail me at zupport645@gmail.com
 
 ## Description
-The library that not only gives you peace of mind, but just makes more sense than the competition. Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects at its core. This give development teams with minimal experience up to expert level JavaScript devs the ability to modify Zense to their own needs and desires and make more Zense out of Zense =).
+The application development library that not only gives you peace of mind, but just makes more sense than the competition. Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects at its core. This give development teams with minimal experience up to expert level JavaScript devs the ability to modify Zense to their own needs and desires and make more Zense out of Zense =).
 
 - No jQuery
 - No underscore
