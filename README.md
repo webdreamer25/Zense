@@ -1,5 +1,12 @@
-# Zense
-The library that not only gives you peace of mind, but just makes more sense than the competition. Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects at its core. This give development teams with minimal experience up to expert level JavaScript devs the ability to modify Zense to their own needs and desires and make more Zense out of Zense =).
+[Zense](https://webdreamer25.github.io/Zense/) — It just makes Zense.
+==================================================
+
+[![Gitter](https://badges.gitter.im/Zense-developer/community.svg)](https://gitter.im/Zense-developer/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+**Need Support?** - E-mail me at zupport645@gmail.com
+
+## Description
+The application development library that not only gives you peace of mind, but just makes more sense than the competition. Zense uses OLOO (Object Linked to Other Objects) pattern to link objects to other objects at its core. This give development teams with minimal experience up to expert level JavaScript devs the ability to modify Zense to their own needs and desires and make more Zense out of Zense =).
 
 - No jQuery
 - No underscore
@@ -17,7 +24,7 @@ It might seem like a simple thing to do but all developers are guilty of overly 
 
 **I love angular, vue and react they are so easy to understand, but... so is a car until you look under the hood.**
 
-Zense at its core uses OLOO to achieve its magic, which means "this" is just "this" no matter where you use "this". No more lengthy mentoring sessions with your developers to try to explain how and why it works. I wrote Zense so even those teams who lack in JS Jedi Mastery (JSJM trying to make it a thing) can stop being the fat starwars kid and actually learn to use the force to guide them trhough the trials.
+Zense at its core uses OLOO to achieve its magic, which means "this" is just "this" no matter where you use "this". No more lengthy mentoring sessions with your developers to try to explain how and why it works. I wrote Zense so even those teams who lack in JS Jedi Mastery (JSJM trying to make it a thing) can stop being the fat starwars kid and actually learn to use the force to guide them through the trials.
 
 ## Browser support
 At its core Zense uses Native JS. ES6 infact transpiled using babel. what!!?!? Am I dreaming! no and your stupid for saying that... JK =P
@@ -44,6 +51,10 @@ LogoComponent.create({
   // By default the renderType property is set to 'append'.
   // Set to 'html' if you wish to empty component region
   renderType: 'html'
+
+  // (NEW 1.3.5) 
+  // Set property to true to allow multiple renderings of the same none bootstrapped component.
+  renderMutliple: false, // default
   
   // Required: Tag, Class, Id
   // Any identifier passed into the selector property will get converted into a native DOM Object.
@@ -99,6 +110,10 @@ HeaderModule.create({
   name: 'header-module',
   selector: '#header-region',
   renderType: 'append' // default
+
+  // (NEW 1.3.5) 
+  // Set property to true to allow multiple renderings of the same none bootstrapped component.
+  renderMutliple: false, // default
   
   // Passed in an array of values or objects.
   // Parent context is passed into the behaviors by default and can be accessed using "this.module" to reach its key & value pairs.
@@ -113,10 +128,25 @@ HeaderModule.create({
     LogoComponent,
     NavigationComponent
   ],
+
+  before
   
+  // (NEW 1.3+) Renamed! addComponents to renderChildComponents.
   // Optional: Overwrite method to modify how and when components are rendered on the page
-  addComponents() {
-    // Add components code
+  renderChildComponents() {
+    // Add custom code here
+  },
+
+  // (NEW 1.3+) 
+  // Hook that fires before module child components are rendered.
+  beforeRenderingComponents() {
+    // Add logic here
+  },
+
+  // (NEW 1.3+) 
+  // Hook that fires after module child components are rendered.
+  afterRenderingComponents() {
+    // Add logic here
   },
 
   // Optional: Overwrite the way the render method adds the template to the DOM.
@@ -151,6 +181,10 @@ const HomeComposite = Object.create(Zense.Composite);
 HomeComposite.create({
   selector: '',
   renderType: 'append', // default
+
+  // (NEW 1.3.5) 
+  // Set property to true to allow multiple renderings of the same none bootstrapped component.
+  renderMutliple: false, // default
 
   // By default both the "modules" and "components" properties get access to the parent context via "this.composite".
   modules: [],
@@ -294,6 +328,12 @@ All defined methods are encapsulated within Zense objects and can be used on any
 // Supports single string css selector.
 // '#someid', '.someclass', '[data-target]', 'div'.
 this.dom('');
+
+// (NEW 1.3+) True if found in DOM, false if not.
+SELECTOR.exists = true/false;
+
+// (NEW 1.3+) Additional property that can be used for error handling
+SELECTOR.strName = '';
 ```
 
 ### Custom methods for chaining with "this.dom()".
@@ -355,6 +395,15 @@ this.uniqueArray(array);
 ### Additional properties to tap into
 
 ```js
+// (NEW 1.3+) Removed.
+this.regions = [];
+
+// (NEW 1.3+) Available in component, modules and composites
+this.selector.exists = true/false;
+
+// (NEW 1.3+) Can be used whether .exists is true/false
+this.selector.strName = '';
+
 // Available in composites, modules and components.
 this.hasRendered = true/false;
 
@@ -364,6 +413,9 @@ this.componentNameArray = [];
 
 // Will return the named component context
 this.getChildComponent(componentName);
+
+// Modify this method within components, modules or composites change how the selector is set.
+this.setDOMSelector()
 ```
 
 ### Dependencies ###

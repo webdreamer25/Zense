@@ -11,13 +11,13 @@ Module.shouldSetBehaviors = true;
 
 Module.handleAPIUse = function () {
   if (this.api) {
-    this.ajax({ url: this.api }).then(this.addComponents.bind(this));
+    this.ajax({ url: this.api }).then(this.renderChildComponents.bind(this));
   } else {
-    this.addComponents();
+    this.renderChildComponents();
   }
 };
 
-Module.addComponents = function (res) {
+Module.renderChildComponents = function (res) {
   // Do nothing if no child components exist
   if (!Array.isArray(this.components) && this.components.length === 0) {
     return null;
@@ -27,6 +27,8 @@ Module.addComponents = function (res) {
   if (res !== undefined && Object.keys(res).length === 0) {
     shouldRenderChildren = false;
   }
+
+  this.beforeRenderingComponents();
 
   for (let i = 0; i < this.components.length; i++) {
     let component = this.components[i];
@@ -52,14 +54,21 @@ Module.addComponents = function (res) {
     if ((component.shouldRender || this.shouldRenderChildren) && component.template !== '') {
         component.render();
     } else {
-      // console.log('Component: ' + componentName + ' Error: Nees a template!');
-      // Internal.errors.push({
-      //   selector: component.selector,
-      //   component: component.name,
-      //   description: 'This component needs a template!'
-      // });
+      if (component.template === '') {
+        throw new Error(component.name + ' needs a template!');
+      }
     }
+
+    this.afterRenderingComponents();
   }
+};
+
+Module.beforeRenderingComponents = function () {
+  return false;
+};
+
+Module.afterRenderingComponents = function () {
+  return false;
 };
 
 Module.setBehaviors = function () {
