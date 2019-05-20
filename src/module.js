@@ -58,9 +58,9 @@ Module.renderChildComponents = function (res) {
         throw new Error(component.name + ' needs a template!');
       }
     }
-
-    this.afterRenderingComponents();
   }
+
+  this.afterRenderingComponents();
 };
 
 Module.beforeRenderingComponents = function () {
