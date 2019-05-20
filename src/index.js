@@ -15,7 +15,7 @@ const Zense = {
   Module
 };
 
-Zense.VERSION = '1.3.5';
+Zense.VERSION = '1.3.6';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 
