@@ -82,14 +82,14 @@ const SelectorMethods = {
 
   val(value) {
     if (!this.length) {
-      if (typeof value !== undefined) {
+      if (typeof value !== 'undefined') {
         this.value = value;
       } else {
         return this.value;
       }
     } else {
       for (let i = 0; i < this.length; i++) {
-        if (typeof value !== undefined) {
+        if (typeof value !== 'undefined') {
           this[i].value = value;
         } else {
           return this[i].value;
@@ -143,64 +143,15 @@ const SelectorMethods = {
     }
   },
 
-  find(node) {
-    let result;
-    let selector = this;
-    let match = selectorRegex.exec(node);
-
-    // Return early from calls with invalid selector or context
-    if (typeof node !== 'string') {
-      return false;
-    }
-
-    if (match[1]) {
-      result = selector.getElementById(match[1]);
-    } else if (match[2]) {
-      result = selector.getElementsByTagName(match[2]);
-    } else if (match[3]) {
-      result = selector.getElementsByClassName(match[3]);
-    }
-
-    if (result.length) {
-      let i = 0;
-
-      do {
-
-        // Add selector chain methods to dom object.
-        for (let key in SelectorMethods) {
-          if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
-
-            // Set methods on dom object list returned.
-            result[key] = SelectorMethods[key];
-
-            // Set methods to each dom object list item.
-            result[i][key] = SelectorMethods[key];
-          }
-        }
-
-        i++;
-      } while (i < result.length);
-
-      if (result.length === 1) {
-        return result[0];
-      }
-    } else {
-
-      // Add selector chain methods to dom object.
-      for (let key in SelectorMethods) {
-        if (SelectorMethods.hasOwnProperty(key) && typeof SelectorMethods[key] === 'function') {
-          result[key] = SelectorMethods[key];
-        }
-      }
-  
-    }
-
-    return result;
+  find(selector) {
+    return new DOM(selector, this);
   }
 };
 
 const DOM = function (selector, context) {
-  if (!selector) { return context; }
+  if (!context) { 
+    context = document;
+  }
 
   let match;
   let strSelector;
@@ -287,7 +238,7 @@ Util.events = Object.create(Eventor);
 Util.strSelector = null;
 
 Util.dom = function (selector) {
-  return new DOM(selector, this);
+  return new DOM(selector);
 };
 
 Util.each = function (arr, callback) {

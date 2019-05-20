@@ -6,6 +6,7 @@ Renderer.selector = null;
 Renderer.template = null;
 Renderer.hasRendered = false;
 Renderer.renderType = 'append';
+Renderer.renderMultiple = false;
 
 Renderer.beforeRender = function () {
   return null;
@@ -52,7 +53,7 @@ Renderer.afterRender = function () {
 
 Renderer.destroy = function () {
   // We want to destroy only if it has rendered.
-  if (!this.hasRendered || !this.hasRendered && this.shouldRender) { 
+  if (!this.hasRendered || this.renderMultiple || !this.hasRendered && this.shouldRender) { 
     return null; 
   }
 
