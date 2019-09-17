@@ -1,6 +1,6 @@
-import Util from './util';
+import Traverse from './taverse';
 
-const Renderer = Object.create(Util);
+const Renderer = Object.create(Traverse);
 
 Renderer.selector = null;
 Renderer.template = null;
