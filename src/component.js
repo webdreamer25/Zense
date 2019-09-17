@@ -11,26 +11,44 @@ Component.setBehaviors = function () {
   if (this.shouldSetBehaviors && this.behaviors.length > 0 && !this.hasRendered) {
     for (let i = 0; i < this.behaviors.length; i++) {
       let behavior = this.behaviors[i];
+      
+      // This check is to ensure we are also handling extending the behavior.
+      if (behavior.name) {
+        let customBehavior = behavior.name;
+
+        try {
+          // Necessary if we want to have specific behavior changes on any given component/module
+          if (behavior.options) {
+            customBehavior.setUniqueIdAndName(this.name);
+
+            customBehavior = this.extend({}, customBehavior, behavior.options);
+
+            behavior = customBehavior;
+          } else {
+            throw {
+              type: 'Customization ' + behavior.name.behavior,
+              message: 'Customization options is either missing or mis-spelled.'
+            }
+          }
+        } catch(err) {
+          console.log(err);
+        }
+      } else {
+        behavior.setUniqueIdAndName(this.name);
+
+        behavior = this.extend({}, behavior);
+      }
+
+      behavior.component = Object.create(this);
+
+      if (this.module) {
+        behavior.module = Object.create(this.module);
+      }
 
       if (this.shouldPreventBehaviorFromStarting(behavior)) {
         continue;
       }
-      
-      // This check is to ensure we are also handling extending the behavior.
-      if (behavior.name) {
-        behavior = this.behaviors[i].name;
 
-        // Necessary if we want to have specific behavior changes on any given component/module
-        if (this.behaviors[i].options) {
-          behavior = this.customizeObject(behavior, this.behaviors[i].options);
-        }
-      }
-
-      // We need to let the behavior who the parent and grandparent caller are.
-      behavior.component = this;
-      behavior.module = this.module;
-
-      behavior.bindUIElements();
       behavior.start();
     }
 
@@ -50,10 +68,10 @@ Component.shouldPreventBehaviorFromStarting = function (behavior) {
 
     if (Array.isArray(this.preventBehaviorStart)) {
       result = this.preventBehaviorStart.some((item) => {
-        return item.behaviorName === behavior.behaviorName
+        return behavior.behaviorName.indexOf(item.behaviorName) > -1;
       });
     } else {
-      result = behavior.behaviorName === this.preventBehaviorStart;
+      result = behavior.behaviorName.indexOf(this.preventBehaviorStart) > -1;
     }
   }
 

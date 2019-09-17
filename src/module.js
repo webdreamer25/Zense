@@ -11,13 +11,13 @@ Module.shouldSetBehaviors = true;
 
 Module.handleAPIUse = function () {
   if (this.api) {
-    this.ajax({ url: this.api }).then(this.renderChildComponents.bind(this));
+    this.ajax({ url: this.api }).then(this.addComponents.bind(this));
   } else {
-    this.renderChildComponents();
+    this.addComponents();
   }
 };
 
-Module.renderChildComponents = function (res) {
+Module.addComponents = function (res) {
   // Do nothing if no child components exist
   if (!Array.isArray(this.components) && this.components.length === 0) {
     return null;
@@ -28,46 +28,53 @@ Module.renderChildComponents = function (res) {
     shouldRenderChildren = false;
   }
 
-  this.beforeRenderingComponents();
+  this.beforeAddComponents();
 
   for (let i = 0; i < this.components.length; i++) {
     let component = this.components[i];
 
     // This check is to ensure we are also handling extending the component.
     if (component.name && component.options) {
-      component = this.components[i].name;
+      let customComponent = this.components[i].name;
 
-      // Necessary if we want to have specific component changes on any given component/module
-      if (this.components[i].options) {
-        component = this.customizeObject(component, this.components[i].options);
-      }
+      customComponent.store = this.api || res ? res : null;
+
+      component = this.extend(customComponent, this.components[i].options);
+    } else {
+      component.store = this.api || res ? res : null;
     }
 
     // Let the component know whos their daddy.
-    component.module = this;
-    component.store = this.api || res ? res : null;
+    component.module = Object.create(this);
 
     // We need to ensure every component has a unique name set for debugging and error handling purposes.
     this.checkUniqueName(component);
 
+    if (!this.shouldRenderChildren) {
+      continue;
+    }
+
     // shouldRenderChildren property exists so you can decide where and/or when a component should render.
-    if ((component.shouldRender || this.shouldRenderChildren) && component.template !== '') {
+    if (component.shouldRender && component.template !== '') {
         component.render();
     } else {
-      if (component.template === '') {
-        throw new Error(component.name + ' needs a template!');
-      }
+      // console.log('Component: ' + componentName + ' Error: Nees a template!');
+      // Internal.errors.push({
+      //   selector: component.selector,
+      //   component: component.name,
+      //   description: 'This component needs a template!'
+      // });
     }
   }
 
-  this.afterRenderingComponents();
+  this.afterAddComponents();
 };
 
-Module.beforeRenderingComponents = function () {
+Module.beforeAddComponents = function () {
   return false;
 };
 
-Module.afterRenderingComponents = function () {
+Module.afterAddComponents = function () {
   return false;
 };
 
@@ -78,24 +85,58 @@ Module.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
-        behavior = this.behaviors[i].name;
+        let customBehavior = behavior.name;
 
-        // Necessary if we want to have specific behavior changes on any given component/module
-        if (this.behaviors[i].options) {
-          behavior = this.customizeObject(behavior, this.behaviors[i].options);
+        try {
+          // Necessary if we want to have specific behavior changes on any given component/module
+          if (behavior.options) {
+            customBehavior.setUniqueIdAndName(this.name);
+
+            customBehavior = this.extend({}, customBehavior, behavior.options);
+
+            behavior = customBehavior;
+          } else {
+            throw {
+              type: 'Customization ' + behavior.name.behavior,
+              message: 'Customization options is either missing or mis-spelled.'
+            }
+          }
+        } catch(err) {
+          console.log(err);
         }
+      } else {
+        behavior.setUniqueIdAndName(this.name);
+
+        behavior = this.extend({}, behavior);
       }
 
-      // We need to let the behavior who the parent caller is.
-      behavior.module = this;
+      // We need to let the behavior who the parent caller are.
+      behavior.module = Object.create(this);
 
-      behavior.bindUIElements();
       behavior.start();
     }
 
     // Ensures that behaviors are only set one time.
     this.shouldSetBehaviors = false;
   }
+};
+
+Module.destroyChildren = function () {
+  if (this.components.length === 0) { return false; }
+
+  let i = 0;2
+  let component = this.components[i];
+
+  // Ensure if component was customized we always have the appropriate referencing context.
+  component = component.name ? component.name : component;
+
+  do {
+    if (this.components[i].hasRendered) {
+      this.components[i].destroy();
+    }
+
+    i++;
+  } while (i < this.components.length);
 };
 
 // Needed to ensure that if we have more than 1 of the same component we give it a unique name.

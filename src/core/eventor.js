@@ -1,31 +1,59 @@
 const Eventor = {
-  events: {},
+  subscriptions: [],
+
+  nativeEvents: [
+    'focus',
+    'blur',
+    'click',
+    'keydown',
+    'keyup',
+    'change'
+  ],
 
   publish(eventName, eventDetails = null, trigger = false) {
-    let event;
+    let event = this.createEvent(eventName, eventDetails);
 
-    // If the event already exists do not create a duplicate.
-    if (typeof this.events[eventName] === undefined) { return null; }
-
-    if (eventDetails === null) {
-      event = new Event(eventName);
-    } else {
-      event = new CustomEvent(eventName, { detail: eventDetails });
-    }
-
-    this.events[eventName] = event;
+    this.isPublishedEvent = true;
 
     if (trigger) {
-      this.trigger(eventName);
+      this.trigger(event);
     }
   },
 
   subscribe(event, callback, bubble = false, elem = document) {
+
+    // Don't add listener if we already subscribed to the same event.
+    if (this.subscriptions.includes(event)) { return false; }
+
+    this.subscriptions.push(event);
+
     elem.addEventListener(event, callback, bubble);
   },
 
-  trigger(event, elem = document) {
-    elem.dispatchEvent(this.events[event]);
+  trigger(event, eventDetails = null, elem = document) {
+    if (!this.isPublishedEvent) {
+      event = this.createEvent(event, eventDetails);
+    }
+
+    this.isPublishedEvent = false;
+
+    elem.dispatchEvent(event);
+  },
+
+  createEvent(eventName, detail) {
+    let event;
+
+    if (this.nativeEvents.some((event) => event === eventName)) {
+      event = new Event(eventName);
+    } else {
+      if (detail === null) {
+        detail = {};
+      }
+
+      event = new CustomEvent(eventName, { detail });
+    }
+
+    return event;
   }
 };
 

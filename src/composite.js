@@ -10,13 +10,13 @@ Composite.children = [];
 Composite.internalPostHook = function () {
   if (this.modules.length > 0) {
     this.children.push('modules');
-    
+
     this.bootstraper(this.modules);
   }
 
   if (this.components.length > 0) {
     this.children.push('components');
-
+    
     this.bootstraper(this.components);
   }
 
@@ -32,6 +32,7 @@ Composite.bootstraper = function (arr) {
     }
 
     strapee.composite = this;
+    
     strapee.render();
   }
 };

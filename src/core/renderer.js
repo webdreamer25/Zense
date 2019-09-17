@@ -1,4 +1,4 @@
-import Traverse from './taverse';
+import Traverse from './traverse';
 
 const Renderer = Object.create(Traverse);
 
@@ -17,6 +17,8 @@ Renderer.render = function (model) {
   this.setDOMSelector();
   this.beforeRender();
   
+  if (!this.shouldRender) { return false; }
+  
   try {
     this.errorCheck();
 
@@ -24,7 +26,7 @@ Renderer.render = function (model) {
 
     this.addTemplateToDOM(data);
   } catch (e) {
-    new Error(e);
+    console.error(e);
   }
 
   this.internalPostHook();
@@ -57,7 +59,7 @@ Renderer.destroy = function () {
     return null; 
   }
 
-  // Remove Children (composites & modules only).
+  // Remove Children.
   if (this.destroyChildren !== undefined) {
     this.destroyChildren();
   }
