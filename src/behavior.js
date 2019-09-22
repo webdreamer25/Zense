@@ -1,4 +1,4 @@
-import Traverse from './core/taverse';
+import Traverse from './core/traverse';
 
 const Behavior = Object.create(Traverse);
 

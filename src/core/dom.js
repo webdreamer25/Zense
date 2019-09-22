@@ -231,18 +231,6 @@ const DOMSelectorMethods = {
     return this;
   },
 
-  hasAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      return this[i].hasAttribute(attribute);
-    }
-  },
-
-  removeAttribute(attribute) {
-    for (let i = 0; i < this.length; i++) {
-      this[i].removeAttribute(attribute);
-    }
-  },
-  
   each(callback) {
     try {
       for (let i = 0; i < this.length; i++) {

@@ -223,16 +223,21 @@ ModalBehavior.config({
   // Any class, id or tag will magically turn into a DOM selector
   ui: {
     trigger: '.js-toggle',
-    closeBtn: '.js-modal-close-btn'
+
+    // New Zense 1.4+ event delegation
+    '.js-modal-close-btn': {
+      event: 'click',
+      parent: '#modal', // Optional parent may be passed in
+      method: 'onClickCloseModal' // See actual method for more details
+    }
   },
 
   handlers() {
     // See Zense DOM manipulation section to under how the below code is achieved.
-    this.ui.trigger.on('click', this.open.bind(this));
-    this.ui.closeBtn.on('click', this.close.bind(this));
+    this.ui.trigger.on('click', this.onClickOpenModal.bind(this));
   },
 
-  open(e) {
+  onClickOpenModal(e) {
     e.preventDefault();
     let btn = e.currentTarget;
     this.modal = this.dom(btn.dataset.modal);
@@ -244,7 +249,9 @@ ModalBehavior.config({
     }
   },
 
-  close(e) {
+  // Zense 1.4+ params: event, currentTarget
+  // No need to stopPropagation since zense will fire it internally when delegate is found.
+  onClickCloseModal(e, elem) {
     e.preventDefault();
     
     if (this.isOpen) {
@@ -255,8 +262,9 @@ ModalBehavior.config({
     }
   },
 
-  // Can overwite to invoke more methods but by default handlers() method is invoked.
+  // Can overwite to invoke more methods but by default bindUIElements() method is invoked.
   start() {
+    this.bindUIElements();
     this.handlers();
   }
 });
@@ -338,9 +346,10 @@ SELECTOR.strName = '';
 
 ### Custom methods for chaining with "this.dom()".
 ```js
-// This method sets "info" object on the selector.
-// info = { event, callback };
-.on(event, callback, bubble); 
+
+// Zense 1.4+ Params event, delegate (optional NEW), callback, bubble (default true).
+// returns [selector].info = { event, callback };
+.on(); 
 
 // Accepts no arguments since it uses "info" object to remove listener form designated selector.
 .off();
@@ -362,13 +371,10 @@ SELECTOR.strName = '';
 // will set or return a value if no argument is passed in.
 .val(value);
 
-// Deprecated: use native .hasAttribute() instead.
-// Will be removed in the next version.
+// Zense 1.4+ removed methods
 .hasAttribute(attributeName);
-
-// Deprecated: use native .removeAttribute() instead.
-// Will be removed in the next version.
 .removeAttribute();
+
 ```
 
 ### Custom standalone methods
@@ -383,7 +389,7 @@ this.each(array or object, callback);
 this.isObject(object);
 
 // Pass in multiple objects.
-// Simple extend unlike the jQuery extend.
+// (NEW 1.4+) Now leverages lodash deep clone.
 this.extend(object1, object2, object3);
 
 // Returns an array with no duplicates.
@@ -395,13 +401,13 @@ this.uniqueArray(array);
 ### Additional properties to tap into
 
 ```js
-// (NEW 1.3+) Removed.
+// (Zense 1.3+) Removed.
 this.regions = [];
 
-// (NEW 1.3+) Available in component, modules and composites
+// (Zense 1.3+) Available in component, modules and composites
 this.selector.exists = true/false;
 
-// (NEW 1.3+) Can be used whether .exists is true/false
+// (Zense 1.3+) Can be used whether .exists is true/false
 this.selector.strName = '';
 
 // Available in composites, modules and components.
@@ -423,6 +429,9 @@ Zense uses ES6 Symbols so I recommend importing babel core-js for symbol only wh
 
 ```bash
 npm i --save @babel/polyfill
+
+## Zense 1.4+ don't need to re-invent the wheel on deep cloning.
+npm i --save lodash.clonedeep
 ```
 
 ```js
