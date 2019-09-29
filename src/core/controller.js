@@ -63,46 +63,32 @@ Controller.bindUIElements = function () {
 
 Controller.bindEventListeners = function (delegate, selectorObj, context) {
   let selector;
-  let uniqueMethod = selectorObj.method + '--' + this.behaviorName;
   
-  try {
-    if (this.component === undefined && this.module === undefined) {
-      throw {
-        type: this.behaviorName,
-        message: 'Behavior has no parent declared since it was started on its own.'
-      }
+  // Ensure we have a parent selector if none is specified
+  if (!selectorObj.parent) {
+    if (this.selector) {
+      selector = this.selector;
+    } else if (this.module) {
+      selector = this.module.selector;
+    }
+  } else {
+
+    // Allows for functional returns of parent objects under the right context.
+    if (typeof selectorObj.parent === 'function') {
+      selector = this.dom(selectorObj.parent.call(this));
     } else {
-
-      // Ensure we have a parent selector if none is specified
-      if (!selectorObj.parent) {
-        if (this.component) {
-          selector = this.component.selector;
-        } else if (this.module) {
-          selector = this.module.selector;
-        }
-      } else {
-
-        // Allows for functional returns of parent objects under the right context.
-        if (typeof selectorObj.parent === 'function') {
-          selector = this.dom(selectorObj.parent(this));
-        } else {
-          selector = this.dom(selectorObj.parent);
-        }
-
-      }
-
-      // Ensure that we are not rebinding the same event on re-rendering of a component.
-      selector.off();
-
-      // We pass in event, delegate, handler, context which is our behavior.
-      selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
-
+      selector = this.dom(selectorObj.parent);
     }
 
-    return selector.find(delegate);
-  } catch (err) {
-    console.error(err);
   }
+
+  // Ensure that we are not rebinding the same event on re-rendering of a component.
+  selector.off();
+
+  // We pass in event, delegate, handler, context which is our behavior.
+  selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
+
+  return selector.find(delegate);
 };
 
 Controller.unbindBehaviorEvents = function () {

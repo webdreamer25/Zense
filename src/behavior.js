@@ -113,7 +113,6 @@ Behavior.bindUIElements = function () {
 
 Behavior.bindEventListeners = function (delegate, selectorObj, context) {
   let selector;
-  let uniqueMethod = selectorObj.method + '--' + this.behaviorName;
   
   try {
     if (this.component === undefined && this.module === undefined) {
