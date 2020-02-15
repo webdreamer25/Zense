@@ -18,8 +18,10 @@ Module.handleAPIUse = function () {
 };
 
 Module.addComponents = function (res) {
+  let componentsLen = this.components.length;
+
   // Do nothing if no child components exist
-  if (!Array.isArray(this.components) && this.components.length === 0) {
+  if (!Array.isArray(this.components) && componentsLen === 0) {
     return null;
   }
 
@@ -30,7 +32,7 @@ Module.addComponents = function (res) {
 
   this.beforeAddComponents();
 
-  for (let i = 0; i < this.components.length; i++) {
+  for (let i = 0; i < componentsLen; i++) {
     let component = this.components[i];
 
     // This check is to ensure we are also handling extending the component.
@@ -79,8 +81,10 @@ Module.afterAddComponents = function () {
 };
 
 Module.setBehaviors = function () {
-  if (this.shouldSetBehaviors && this.behaviors.length > 0) {
-    for (let i = 0; i < this.behaviors.length; i++) {
+  let behaviorsLen = this.behaviors.length;
+
+  if (this.shouldSetBehaviors && behaviorsLen > 0) {
+    for (let i = 0; i < behaviorsLen; i++) {
       let behavior = this.behaviors[i];
       
       // This check is to ensure we are also handling extending the behavior.
@@ -97,7 +101,7 @@ Module.setBehaviors = function () {
             behavior = customBehavior;
           } else {
             throw {
-              type: 'Customization ' + behavior.name.behavior,
+              type: `Customization ${behavior.name.behavior}`,
               message: 'Customization options is either missing or mis-spelled.'
             }
           }
@@ -122,9 +126,13 @@ Module.setBehaviors = function () {
 };
 
 Module.destroyChildren = function () {
-  if (this.components.length === 0) { return false; }
+  let componentsLen = this.components.length;
 
-  let i = 0;2
+  if (componentsLen === 0) { 
+    return false; 
+  }
+
+  let i = 0;
   let component = this.components[i];
 
   // Ensure if component was customized we always have the appropriate referencing context.
@@ -136,25 +144,27 @@ Module.destroyChildren = function () {
     }
 
     i++;
-  } while (i < this.components.length);
+  } while (i < componentsLen);
 };
 
 // Needed to ensure that if we have more than 1 of the same component we give it a unique name.
 Module.checkUniqueName = function (component) {
-  this.componentNameArray.push(component.name);
+  if (!this.componentNameArray.includes(component.name)) {
+    this.componentNameArray.push(component.name);
+  }
 
-  for (let i = 0; i < this.componentNameArray.length; i++) {
+  for (let i = 0, len = this.componentNameArray.length; i < len; i++) {
     if (this.componentNameArray[i] !== component.name && component.name !== '') {
       return null;
     } else {
-      component.setName(component.selector);
+      this.componentNameArray.push(component.setName(component.selector));
     }
   }
 };
 
 Module.getChildComponent = function (componentName) {
-  for (let i = 0; i < this.components.length; i++) {
-    if (this.components[i].name === componentName) {
+  for (let i = 0, len = this.components.length; i < len; i++) {
+    if (this.components[i].name.indexOf(componentName) > -1) {
       return this.components[i];
     }
   }

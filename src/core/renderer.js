@@ -87,9 +87,7 @@ Renderer.setDOMSelector = function () {
   this.selector = this.dom(this.selector);
 
   if (!this.selector.exists) {
-    let name = this.name ? ' ' + this.name : '';
-
-    throw new Error('Selector ' + this.selector.strName + ' defined in ' + this.type + name + ' does not exist in the DOM.');
+    throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);
   }
 };
 
@@ -103,8 +101,10 @@ Renderer.addTemplateToDOM = function (data) {
       this.selector.insertHTML('beforeend', tpl);
     }
   } else {
+
     // Assumes that if shouldRender is being set to false manually we also dont want the container in the DOM.
     this.selector.remove();
+    
   }
 };
 

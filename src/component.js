@@ -8,8 +8,10 @@ Component.behaviors = [];
 Component.preventBehaviorStart = false;
 
 Component.setBehaviors = function () {
-  if (this.shouldSetBehaviors && this.behaviors.length > 0 && !this.hasRendered) {
-    for (let i = 0; i < this.behaviors.length; i++) {
+  let behaviorsLen = this.behaviors.length;
+
+  if (this.shouldSetBehaviors && behaviorsLen > 0 && !this.hasRendered) {
+    for (let i = 0; i < behaviorsLen; i++) {
       let behavior = this.behaviors[i];
       
       // This check is to ensure we are also handling extending the behavior.
@@ -17,6 +19,7 @@ Component.setBehaviors = function () {
         let customBehavior = behavior.name;
 
         try {
+
           // Necessary if we want to have specific behavior changes on any given component/module
           if (behavior.options) {
             customBehavior.setUniqueIdAndName(this.name);
@@ -26,10 +29,11 @@ Component.setBehaviors = function () {
             behavior = customBehavior;
           } else {
             throw {
-              type: 'Customization ' + behavior.name.behavior,
+              type: `Customization ${behavior.name.behavior}`,
               message: 'Customization options is either missing or mis-spelled.'
             }
           }
+
         } catch(err) {
           console.log(err);
         }
@@ -81,10 +85,12 @@ Component.shouldPreventBehaviorFromStarting = function (behavior) {
 Component.setName = function (selector) {
   selector = selector.toLowerCase();
 
-  this.name = selector.slice(1) + '-' + this.type + '-' + this.id;
+  this.name = `${selector.slice(1)}-${this.type}-${this.id}`;
 
   // Increment id after name is set so no duplication occurs
   this.id++
+
+  return this.name;
 };
 
 export default Component;

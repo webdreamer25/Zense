@@ -14,6 +14,7 @@ Behavior.config = function (options) {
 
   // Need to keep a string 
   if (this.setStringUIValues) {
+
     // We create a symbol to prevent Object.assign from overwritting this.strUI values assigned using this.ui
     let symbolUIKeyName = Symbol('stringUISelectors');
 
@@ -66,11 +67,10 @@ Behavior.setUniqueIdAndName = function (parentName) {
   this.behaviorName = this.behaviorName + name;
 };
 
-// This will gather the DOM elements specified in ui:{} object.
 Behavior.bindUIElements = function () {
   if (!this.ui) { return false; }
 
-  Object.keys(this.ui).forEach(key => {
+  for (let key in this.ui) {
     let uiElement = this.ui[key];
 
     // Ensures that even if we pass the class as key we re-get the dom node.
@@ -108,7 +108,7 @@ Behavior.bindUIElements = function () {
     } else {
       this.ui[key]['selector'] = this.bindEventListeners(key, this.ui[key], this);
     }
-  });
+  }
 };
 
 Behavior.bindEventListeners = function (delegate, selectorObj, context) {
@@ -156,11 +156,13 @@ Behavior.bindEventListeners = function (delegate, selectorObj, context) {
 
 Behavior.unbindUIElements = function () {
   for (let key in this.ui) {
+
     // Needed to prevent type error not a function when no element doesnt have registered listener.
     if (this.ui.hasOwnProperty(key) && this.ui[key].info !== undefined) {
       this.ui[key].off();
       this.ui[key] = this.strUI[key];
     }
+    
   }
 };
 
