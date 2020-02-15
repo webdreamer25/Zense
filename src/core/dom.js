@@ -45,9 +45,10 @@ const DOM = function (selector, context) {
   }
 
   if (selector) {
-    if (selector.length) {
-      let i = 0;
+    let len = selector.length;
 
+    if (len) {
+      let i = 0;
       do {
 
         // Add selector chain methods to dom object.
@@ -63,9 +64,9 @@ const DOM = function (selector, context) {
         }
 
         i++;
-      } while (i < selector.length);
+      } while (i < len);
 
-      if (selector.length === 1) {
+      if (len === 1) {
         selector[0].exists = true;
         
         return selector[0];
@@ -127,11 +128,12 @@ const DOMListener = function (args, context) {
 const DOMSelectorMethods = {
   on() {
     let selector;
+    let len = this.length;
 
-    if (!this.length) {
+    if (!len) {
       selector = new DOMListener(arguments, this);
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         selector = new DOMListener(arguments, this[i]);
       }
     }
@@ -140,26 +142,28 @@ const DOMSelectorMethods = {
   },
 
   off() {
-    if (!this.length && this.info) {
-      this.removeEventListener(this.info.event, this.info.callback, true);
+    let len = this.length;
 
-      return this;
+    if (!len && this.info) {
+      this.removeEventListener(this.info.event, this.info.callback, true);
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         if (this[i].info) {
           this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
         }
       }
-
-      return this;
     }
+
+    return this;
   },
 
   html(html) {
-    if (!this.length) {
+    let len = this.length;
+
+    if (!len) {
       this.innerHTML = html;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         if (this[i].innerHTML !== '') {
           this[i].innerHTML = '';
         }
@@ -172,10 +176,12 @@ const DOMSelectorMethods = {
   },
 
   insertHTML(position, html) {
-    if (!this.length) {
+    let len = this.length;
+
+    if (!len) {
       this.insertAdjacentHTML(position, html);
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         this[i].insertAdjacentHTML(position, html);
       }
     }
@@ -184,15 +190,17 @@ const DOMSelectorMethods = {
   },
 
   attr(attribute, property) {
-    if (this.length) {
-      for (let i = 0; i < this.length; i++) {
+    let len = this.length;
+
+    if (len) {
+      for (let i = 0; i < len; i++) {
         if (typeof property !== 'undefined') {
           this[i].setAttribute(attribute, property);    
         } else {
           return this[i].getAttribute(attribute);
         }
       }
-    } else if (!this.length && property !== undefined) {
+    } else if (!len && property !== undefined) {
       this.setAttribute(attribute, property);
     }
 
@@ -200,14 +208,16 @@ const DOMSelectorMethods = {
   },
 
   val(value) {
-    if (!this.length) {
+    let len = this.length;
+
+    if (!len) {
       if (typeof value !== 'undefined') {
         this.value = value;
       } else {
         return this.value;
       }
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         if (typeof value !== 'undefined') {
           this[i].value = value;
         } else {
@@ -220,10 +230,12 @@ const DOMSelectorMethods = {
   },
 
   prop(property, value) {
-    if (!this.length) {
+    let len = this.length;
+
+    if (!len) {
       this[property] = value;
     } else {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0; i < len; i++) {
         this[i][property] = value;
       }
     }
@@ -233,7 +245,7 @@ const DOMSelectorMethods = {
 
   each(callback) {
     try {
-      for (let i = 0; i < this.length; i++) {
+      for (let i = 0, len = this.length; i < len; i++) {
         let el = this[i];
 
         // Add selector chain methods to dom object.

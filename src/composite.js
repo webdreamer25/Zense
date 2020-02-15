@@ -24,7 +24,7 @@ Composite.internalPostHook = function () {
 };
 
 Composite.bootstraper = function (arr) {
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0, len = arr.length; i < len; i++) {
     let strapee = arr[i];
 
     if (this.store) {
@@ -38,17 +38,19 @@ Composite.bootstraper = function (arr) {
 };
 
 Composite.destroyChildren = function () {
-  if (this.chilren.length === 0) { 
+  let childrenLen = this.children.length;
+
+  if (childrenLen === 0) { 
     return false; 
   }
 
-  for (let c = 0; c < this.children.length; c++) {
+  for (let c = 0; c < childrenLen; c++) {
     let child = this.children[c];
 
     // Ensure if module or component was customized we always have the appropriate referencing context.
     child = child.name ? child.name : child;
 
-    for (let i = 0; i < this[child].length; i++) {
+    for (let i = 0, len = this[child].length; i < len; i++) {
       if (this[child][i].hasRendered) {
         this[child][i].destroy();
       }

@@ -20,7 +20,7 @@ Controller.initialize = function () {
 Controller.bindUIElements = function () {
   if (!this.ui) { return false; }
 
-  Object.keys(this.ui).forEach(key => {
+  for (let key in this.ui) {
     let uiElement = this.ui[key];
 
     // Ensures that even if we pass the class as key we re-get the dom node.
@@ -58,7 +58,7 @@ Controller.bindUIElements = function () {
     } else {
       this.ui[key]['selector'] = this.bindEventListeners(key, this.ui[key], this);
     }
-  });
+  }
 };
 
 Controller.bindEventListeners = function (delegate, selectorObj, context) {
