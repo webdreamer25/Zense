@@ -1,3 +1,4 @@
+import Storage from './core/storage';
 import Behavior from './behavior';
 import Composite from './composite';
 import Component from './component';
@@ -9,6 +10,7 @@ const root = typeof self == 'object' && self.self === self && self ||
   {};
 
 const Zense = {
+  Storage,
   Behavior,
   Composite,
   Component,

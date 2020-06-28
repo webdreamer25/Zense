@@ -4,7 +4,7 @@ const Storage = {
   storageType: 'sessionStorage',
   storage: false,
   settings: {},
-  storesToSave: [],
+  keysToStore: [],
 
   config(options) {
     if (options && typeof options === 'object') {
@@ -47,7 +47,7 @@ const Storage = {
     }
   },
 
-  setStorage(data) {
+  setStore(data) {
     let store = {
       uri: this.uri
     };
@@ -57,9 +57,9 @@ const Storage = {
     } else {
       let newStore = {};
 
-      if (this.storesToSave.length > 0) {
-        for (let i = 0, len = this.storesToSave.length; i < len; i++) {
-          let name = this.storesToSave[i];
+      if (this.keysToStore.length > 0) {
+        for (let i = 0, len = this.keysToStore.length; i < len; i++) {
+          let name = this.keysToStore[i];
 
           newStore[name] = this[name];
         }
@@ -71,7 +71,7 @@ const Storage = {
     this.storageType[this.storeName] = JSON.stringify(store);
   },
 
-  getStorage(keyName) {
+  getStore(keyName) {
     let stored = this.storageType[this.storeName];
 
     if (stored && stored !== null) {
@@ -80,7 +80,7 @@ const Storage = {
       return false;
     }
 
-    keyName && stored && stored.uri === stored.uri ? stored[keyName] : stored;
+    return keyName && stored && stored.uri === stored.uri ? stored[keyName] : stored;
   }
 };
 
