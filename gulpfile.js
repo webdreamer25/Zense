@@ -79,10 +79,6 @@ function css() {
 
 // Transpile, concatenate and minify scripts
 function scripts() {
-
-  // Ensures we build test app since wepack doesn't support multi output.
-  // webpackconfig.type = 'testing';
-
   if (util.env.production) {
     webpackconfig.mode = 'production';
   } else {

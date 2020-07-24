@@ -1,34 +1,16 @@
-const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const config = {
+let config = {
   devtool: false,
-  // type: 'default',
   mode: 'development',
   entry: {
-    zense: ['./src/index.js'],
-    app: ['./src/app/app.js']
+    zense: ['./src/index.js']
   },
   output: {
     path: __dirname,
     filename: '[name].js'
-  },
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        parallel: true,
-        extractComments: true,
-        uglifyOptions: {
-          mangle: true,
-          output: {
-            comments: false
-          }
-        }
-      }),
-      new OptimizeCSSAssetsPlugin()
-    ]
   },
   module: {
     rules: [
@@ -59,13 +41,6 @@ const config = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/app/index.html',
-      filename: './index.html',
-      excludeAssets: [/app.min.js/]
-    })
-  ],
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
     modules: [
@@ -74,41 +49,36 @@ const config = {
   }
 }
 
-// Needed for test app
-// if (config.type === 'testing') {
-//   config.entry = {
-//     app: './src/app/app.js'
-//   };
-
-//   config.output = {
-//     path: path.resolve(__dirname, 'app'),
-//     filename: this.mode ? '[name].js' : '[name].min.js'
-//   };
-
-//   config.optimization = {
-//     minimizer: [
-//       new UglifyJsPlugin({
-//         parallel: true,
-//         extractComments: true,
-//         uglifyOptions: {
-//           mangle: true,
-//           output: {
-//             comments: false
-//           }
-//         }
-//       }),
-//       new OptimizeCSSAssetsPlugin()
-//     ]
-//   };
-
-//   config.plugins = [
-//     new HtmlWebpackPlugin({
-//       template: './src/app/index.html',
-//       filename: './index.html',
-//       excludeAssets: [/app.min.js/]
-//     })
-//   ];
-// }
+//Needed for test app
+if (config.mode === 'development') {
+  config = Object.assign(config, {
+    entry: {
+      app: ['./src/app/app.js']
+    },
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          parallel: true,
+          extractComments: true,
+          uglifyOptions: {
+            mangle: true,
+            output: {
+              comments: false
+            }
+          }
+        }),
+        new OptimizeCSSAssetsPlugin()
+      ]
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './src/app/index.html',
+        filename: './index.html',
+        excludeAssets: [/app.min.js/]
+      })
+    ],
+  });
+}
 
 module.exports = config;
 
