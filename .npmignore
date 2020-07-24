@@ -2,6 +2,7 @@
 node_modules
 .vscode
 src
+api
 dist
 
 # files

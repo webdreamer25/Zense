@@ -1,5 +1,6 @@
 #Ignore file
 node_modules/
+api/
 dist/
 src/app/
 gulpfile.js

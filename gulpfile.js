@@ -44,7 +44,7 @@ function clean() {
 // Optimize Images
 function images() {
   return gulp
-    .src('./src/assets/**/*')
+    .src('./src/app/assets/**/*')
     .pipe(newer('./dist/assets'))
     .pipe(
       imagemin([
@@ -67,7 +67,7 @@ function images() {
 // CSS task
 function css() {
   return gulp
-    .src('./src/scss/**/*.scss')
+    .src('./src/app/scss/**/*.scss')
     .pipe(plumber())
     .pipe(sass({ outputStyle: 'expanded' }))
     .pipe(gulp.dest('./dist/css/'))
@@ -96,7 +96,7 @@ function scripts() {
 
 // Watch files
 function watchFiles() {
-  gulp.watch('./src/scss/**/**/*.scss', css);
+  gulp.watch('./src/app/scss/**/**/*.scss', css);
   gulp.watch('./src/app/**/*.js', gulp.series(scripts));
   gulp.watch('./src/app/*.html', gulp.series(browserSyncReload));
   gulp.watch('./src/assets/**/*', images);
