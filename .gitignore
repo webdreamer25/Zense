@@ -1,4 +1,5 @@
 #Ignore file
 node_modules/
-dist/
+public/
+src/app/
 npm-debug.log

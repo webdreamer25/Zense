@@ -3,7 +3,7 @@ const Storage = {
   storeName: '',
   storageType: 'sessionStorage',
   storage: false,
-  settings: {},
+  default: {},
   keysToStore: [],
 
   config(options) {
@@ -41,9 +41,7 @@ const Storage = {
     }
 
     for (let key in data) {
-      if (this[key]) {
-        this[key] = data[key];
-      }
+      this.add(key, data[key]);
     }
   },
 
@@ -71,7 +69,7 @@ const Storage = {
     this.storageType[this.storeName] = JSON.stringify(store);
   },
 
-  getStore(keyName) {
+  getStored(keyName) {
     let stored = this.storageType[this.storeName];
 
     if (stored && stored !== null) {

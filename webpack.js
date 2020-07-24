@@ -1,19 +1,17 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const config = {
-  devtool: false,
-  // type: 'default',
+module.exports = {
   mode: 'development',
   entry: {
-    zense: ['./src/index.js'],
-    app: ['./src/app/app.js']
+    app: './src/app/app.js',
   },
   output: {
-    path: __dirname,
-    filename: '[name].js'
+    path: path.resolve(__dirname, 'app'),
+    filename: this.mode ? '[name].js' : '[name].min.js'
   },
   optimization: {
     minimizer: [
@@ -32,6 +30,14 @@ const config = {
   },
   module: {
     rules: [
+      { 
+        test: /\.css$/,
+        use: [
+          // this.mode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'style-loader',
+          'css-loader'
+        ]
+      },
       {
         test: /\.html$/,
         use: [
@@ -48,11 +54,10 @@ const config = {
           loader: 'babel-loader',
           options: {
             presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
+              '@babel/preset-env'
             ],
             plugins: [
-              "@babel/plugin-transform-object-assign"
+              '@babel/plugin-transform-object-assign'
             ]
           }
         }
@@ -67,48 +72,9 @@ const config = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.css'],
     modules: [
       'node_modules'
     ]
   }
-}
-
-// Needed for test app
-// if (config.type === 'testing') {
-//   config.entry = {
-//     app: './src/app/app.js'
-//   };
-
-//   config.output = {
-//     path: path.resolve(__dirname, 'app'),
-//     filename: this.mode ? '[name].js' : '[name].min.js'
-//   };
-
-//   config.optimization = {
-//     minimizer: [
-//       new UglifyJsPlugin({
-//         parallel: true,
-//         extractComments: true,
-//         uglifyOptions: {
-//           mangle: true,
-//           output: {
-//             comments: false
-//           }
-//         }
-//       }),
-//       new OptimizeCSSAssetsPlugin()
-//     ]
-//   };
-
-//   config.plugins = [
-//     new HtmlWebpackPlugin({
-//       template: './src/app/index.html',
-//       filename: './index.html',
-//       excludeAssets: [/app.min.js/]
-//     })
-//   ];
-// }
-
-module.exports = config;
-
+};
