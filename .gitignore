@@ -1,5 +1,6 @@
 #Ignore file
 node_modules/
-public/
+dist/
 src/app/
+gulpfile.js
 npm-debug.log
