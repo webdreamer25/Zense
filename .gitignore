@@ -3,5 +3,6 @@ node_modules/
 api/
 dist/
 src/app/
+webpack.js
 gulpfile.js
 npm-debug.log

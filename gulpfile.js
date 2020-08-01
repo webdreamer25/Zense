@@ -14,7 +14,7 @@ const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const util = require('gulp-util');
 const webpack = require('webpack');
-const webpackconfig = require('./webpack.config.js');
+const webpackconfig = require('./webpack.js');
 const webpackstream = require('webpack-stream');
 
 // BrowserSync
@@ -78,13 +78,7 @@ function css() {
 };
 
 // Transpile, concatenate and minify scripts
-function scripts() {
-  if (util.env.production) {
-    webpackconfig.mode = 'production';
-  } else {
-    webpackconfig.mode = 'development';
-  }
-  
+function scripts() {  
   return gulp
       .src(['./src/app/**/**/*.js'])
       .pipe(plumber())
