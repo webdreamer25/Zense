@@ -12,9 +12,8 @@ const plumber = require('gulp-plumber');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
-const util = require('gulp-util');
 const webpack = require('webpack');
-const webpackconfig = require('./webpack.js');
+const webpackconfig = require('./gulpwebpack.js');
 const webpackstream = require('webpack-stream');
 
 // BrowserSync
@@ -104,6 +103,6 @@ gulp.task('clean', clean);
 
 // build
 gulp.task('build', gulp.series(clean, css, images, gulp.parallel('js')));
-
+ 
 // watch
 gulp.task('watch', gulp.parallel(watchFiles, appSync));

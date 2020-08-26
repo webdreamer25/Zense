@@ -9,5 +9,5 @@ dist
 .babelrc
 .gitignore
 gulpfile.js
-webpack.js
+gulpwebpack.js
 webpack.config.js

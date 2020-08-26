@@ -77,7 +77,7 @@ Renderer.destroy = function () {
   }
 
   if (this.selector instanceof Object) {
-    this.selector = this.selector.strName;
+    this.selector = this.selector.strName ? this.selector.strName : `.${this.selector.classList[0]}`;
   }
 
   this.hasRendered = false;

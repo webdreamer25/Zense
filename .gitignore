@@ -3,6 +3,7 @@ node_modules/
 api/
 dist/
 src/app/
-webpack.js
+gulpwebpack.js
 gulpfile.js
 npm-debug.log
+changelog.md

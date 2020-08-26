@@ -1,36 +1,46 @@
 const Storage = {
   uri: '',
   storeName: '',
-  storageType: 'sessionStorage',
+  storageType: 'session',
   storage: false,
   default: {},
   keysToStore: [],
 
   config(options) {
     if (options && typeof options === 'object') {
-      for (let key in options) {
+      let newObj = {};
 
+      for (let key in options) {
         try {
           if (!options.storeName && options.storage) {
             throw new Error('storeName is required.');
           }
 
-          this.add(key, options[key]);
+          if (key && options[key]) {
+            newObj[key] = options[key];
+          }
         } catch (err) {
           console.error(err);
         }
       }
+
+      if (newObj.storageType) {
+        newObj.storageType = `${newObj.storageType}Storage`;
+      }
+
+      Object.assign(this, newObj);
     }
   },
 
-  add(name, data) {
-    if (name && data) {
-      this[name] = data;
+  set(options) {
+    if (options !== undefined && typeof options === 'object') {
+      this.default = Object.assign(this.default, options);
     }
   },
 
   initStorage() {
     let data = this.storageType[this.storeName];
+    let newObj = {};
 
     this.uri = window.location.origin + window.location.pathname;
     
@@ -41,8 +51,12 @@ const Storage = {
     }
 
     for (let key in data) {
-      this.add(key, data[key]);
+      if (key && data[key]) {
+        newObj[key] = data[key];
+      }
     }
+
+    Object.assign(this, newObj);
   },
 
   setStore(data) {
