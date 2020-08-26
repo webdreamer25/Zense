@@ -1,5 +1,4 @@
 const Storage = {
-  uri: '',
   storeName: '',
   storageType: 'session',
   storage: false,
@@ -41,8 +40,6 @@ const Storage = {
   initStorage() {
     let data = this.storageType[this.storeName];
     let newObj = {};
-
-    this.uri = window.location.origin + window.location.pathname;
     
     if (data && data !== null) {
       data = JSON.parse(data);
@@ -60,9 +57,7 @@ const Storage = {
   },
 
   setStore(data) {
-    let store = {
-      uri: this.uri
-    };
+    let store = {};
 
     if (data) {
       store = Object.assign({}, store, data);
@@ -92,7 +87,7 @@ const Storage = {
       return false;
     }
 
-    return keyName && stored && stored.uri === stored.uri ? stored[keyName] : stored;
+    return keyName && stored ? stored[keyName] : stored;
   }
 };
 
