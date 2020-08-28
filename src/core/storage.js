@@ -1,9 +1,11 @@
 const Storage = {
-  storeName: '',
-  storageType: 'session',
-  storage: false,
-  default: {},
-  keysToStore: [],
+  default: {
+    storeName: '',
+    storageType: 'session',
+    storage: false,
+    keysToStore: []
+  },
+  settings: {},
 
   config(options) {
     if (options && typeof options === 'object') {
@@ -23,23 +25,25 @@ const Storage = {
         }
       }
 
-      if (newObj.storageType) {
-        newObj.storageType = `${newObj.storageType}Storage`;
-      }
-
-      Object.assign(this, newObj);
+      this.default = Object.assign(this.default, newObj);
     }
   },
 
   set(options) {
     if (options !== undefined && typeof options === 'object') {
-      this.default = Object.assign(this.default, options);
+      this.settings = Object.assign(this.settings, options);
     }
   },
 
   initStorage() {
-    let data = this.storageType[this.storeName];
+    let data = {};
     let newObj = {};
+
+    if (this.default.storageType === 'local') {
+      data = localStorage[this.default.storeName];
+    } else {
+      data = sessionStorage[this.default.storeName];     
+    }
     
     if (data && data !== null) {
       data = JSON.parse(data);
@@ -53,33 +57,41 @@ const Storage = {
       }
     }
 
-    Object.assign(this, newObj);
+    Object.assign(this.settings, newObj);
   },
 
-  setStore(data) {
+  saveToStorage(data) {
     let store = {};
 
     if (data) {
       store = Object.assign({}, store, data);
     } else {
-      let newStore = {};
 
-      if (this.keysToStore.length > 0) {
-        for (let i = 0, len = this.keysToStore.length; i < len; i++) {
-          let name = this.keysToStore[i];
+      // Ensures we only save the specified keys.
+      if (this.default.keysToStore.length > 0) {
+        for (let i = 0, len = this.default.keysToStore.length; i < len; i++) {
+          let name = this.default.keysToStore[i];
 
-          newStore[name] = this[name];
+          store[name] = this.settings[name];
         }
       }
-
-      store = Object.assign({}, store, newStore);
     }
 
-    this.storageType[this.storeName] = JSON.stringify(store);
+    if (this.default.storageType === 'local') {
+      localStorage[this.default.storeName] = JSON.stringify(store);
+    } else {
+      sessionStorage[this.default.storeName] = JSON.stringify(store);
+    }
   },
 
-  getStored(keyName) {
-    let stored = this.storageType[this.storeName];
+  getFromStorage(keyName) {
+    let stored = {};
+
+    if (this.default.storageType === 'local') {
+      stored = localStorage[this.default.storeName]
+    } else {
+      stored = sessionStorage[this.default.storeName]
+    }
 
     if (stored && stored !== null) {
       stored = JSON.parse(stored);
