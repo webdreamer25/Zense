@@ -2,8 +2,8 @@
 node_modules
 .vscode
 src
-api
 dist
+src/app
 
 # files
 .babelrc
