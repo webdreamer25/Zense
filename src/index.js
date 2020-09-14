@@ -1,3 +1,4 @@
+import Storage from './core/storage';
 import Behavior from './behavior';
 import Composite from './composite';
 import Component from './component';
@@ -9,13 +10,14 @@ const root = typeof self == 'object' && self.self === self && self ||
   {};
 
 const Zense = {
+  Storage,
   Behavior,
   Composite,
   Component,
   Module
 };
 
-Zense.VERSION = '1.4.8';
+Zense.VERSION = '1.6.1';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 
