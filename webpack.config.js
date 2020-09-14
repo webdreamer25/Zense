@@ -1,9 +1,7 @@
-
-module.exports = {
+const config = {
   devtool: false,
-  mode: 'development',
   entry: {
-    zense: ['./src/index.js'],
+    zense: ['./src/index.js']
   },
   output: {
     path: __dirname,
@@ -35,4 +33,7 @@ module.exports = {
       'node_modules'
     ]
   }
-};
+}
+
+module.exports = config;
+

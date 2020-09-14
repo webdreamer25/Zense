@@ -2,8 +2,12 @@
 node_modules
 .vscode
 src
+dist
+src/app
 
 # files
 .babelrc
 .gitignore
+gulpfile.js
+gulpwebpack.js
 webpack.config.js

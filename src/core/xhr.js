@@ -1,4 +1,6 @@
-const XHR = {};
+import Storage from "./storage";
+
+const XHR = Object.create(Storage);
 
 XHR.percentComplete = 0;
 XHR.storage = null;
