@@ -1,4 +1,9 @@
 #Ignore file
 node_modules/
+api/
 dist/
+src/app/
+gulpwebpack.js
+gulpfile.js
 npm-debug.log
+changelog.md
