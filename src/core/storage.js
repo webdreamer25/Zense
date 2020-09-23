@@ -18,6 +18,30 @@ const Storage = {
           }
 
           if (key && options[key]) {
+            switch(key) {
+              case 'storeName':
+              case 'storageType':
+                if (typeof options[key] !== 'string') {
+                  throw new Error(`The Storage.config() method ${key} needs to be a string type.`);
+                }
+
+                break;
+              case 'storage':
+                if (typeof options[key] !== 'boolean') {
+                  throw new Error(`The Storage.config() method ${key} needs to be a boolean.`);
+                }
+
+                break;
+              case 'keysToStore':
+                if (!Array.isArray(options[key])) {
+                  throw new Error(`The Storage.config() method ${key} needs to be an array.`);
+                }
+
+                break;
+              default:
+                //nothing.
+            }
+
             newObj[key] = options[key];
           }
         } catch (err) {
@@ -25,13 +49,25 @@ const Storage = {
         }
       }
 
+      if (newObj.storeName && newObj.storeName === '' || !newObj.storeName && this.default.storeName === '') {
+        let id = new Date().getMilliseconds();
+
+        newObj.storeName = `store-${id}`;
+      }
+
       this.default = Object.assign(this.default, newObj);
     }
   },
 
   set(options) {
-    if (options !== undefined && typeof options === 'object') {
-      this.settings = Object.assign(this.settings, options);
+    try {
+      if (options !== undefined && typeof options === 'object') {
+        this.settings = Object.assign(this.settings, options);
+      } else {
+        throw new Error('Options must be passed in as an object.');
+      }
+    } catch(err) {
+      console.error(err);
     }
   },
 
@@ -60,21 +96,22 @@ const Storage = {
     Object.assign(this.settings, newObj);
   },
 
-  saveToStorage(data) {
+  saveSettings(data) {
     let store = {};
 
     if (data) {
-      store = Object.assign({}, store, data);
-    } else {
+      store = Object.assign({}, this.settings, data);
+    } else if (this.default.keysToStore.length > 0) {
 
-      // Ensures we only save the specified keys.
-      if (this.default.keysToStore.length > 0) {
-        for (let i = 0, len = this.default.keysToStore.length; i < len; i++) {
-          let name = this.default.keysToStore[i];
+      // Ensures we only save the specified keys.  
+      for (let i = 0, len = this.default.keysToStore.length; i < len; i++) {
+        let name = this.default.keysToStore[i];
 
-          store[name] = this.settings[name];
-        }
+        store[name] = this.settings[name];
       }
+
+    } else {
+      store = this.settings;
     }
 
     if (this.default.storageType === 'local') {
@@ -84,7 +121,7 @@ const Storage = {
     }
   },
 
-  getFromStorage(keyName) {
+  getSettings(keyName) {
     let stored = {};
 
     if (this.default.storageType === 'local') {

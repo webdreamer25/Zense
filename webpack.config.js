@@ -1,4 +1,5 @@
 const config = {
+  mode: 'development',
   devtool: false,
   entry: {
     zense: ['./src/index.js']
