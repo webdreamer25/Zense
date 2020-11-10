@@ -1,9 +1,9 @@
 {
-  "name": "zense",
-  "title": "zense",
-  "version": "1.6.1",
+  "name": "zense js",
+  "title": "zense js",
+  "version": "1.6.4",
   "main": "zense.js",
-  "description": "Application development library",
+  "description": "Javascript application development library",
   "scripts": {
     "build": "webpack",
     "build:dev": "webpack --mode=development",
