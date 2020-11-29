@@ -1,5 +1,5 @@
 {
-  "name": "zense js",
+  "name": "zense-js",
   "title": "zense js",
   "version": "1.6.4",
   "main": "zense.js",
@@ -11,8 +11,8 @@
     "start": "webpack-dev-server --mode development --open"
   },
   "author": {
-    "name": "Edgar F. Olivares",
-    "url": "edgarolivares.com"
+    "name": "Ethan F. Olivares",
+    "url": "http://ethanolivares.com"
   },
   "keywords": [
     "zense",
