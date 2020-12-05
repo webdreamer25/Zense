@@ -42,41 +42,40 @@ HeroModule.create({
 
   update(slideIdx) {
     let track = this.ui.jsTrack;
-
-    track.style.transition = '.7s ease-out';
+    let slides = this.dom('.js-slide');
+    let currSlideId = slides[slideIdx].id;
+    
+    track.style.transition = '.3s ease-out';
     track.style.transform = `translateX(${-this.slideWidth * slideIdx}px)`;
+
+    // Ensures we carousel back to first or last slide.
+    if (slideIdx === 0) {
+      this.settings.currPageNum = this.collection.length - 2;
+    } else if (slideIdx === this.collection.length - 1) {
+      this.settings.currPageNum = 1;
+    }
+
+    // Ensures continuous animation from cloned to actual slide rep.
+    if (currSlideId === 'first-slide-clone' || currSlideId === 'last-slide-clone') {
+      setTimeout(() => {
+        track.removeAttribute('style');
+
+        track.style.transition = 'none';
+        track.style.transform = `translateX(${-this.slideWidth * this.settings.currPageNum}px)`;
+      }, 380);
+    }
   },  
 
   afterRender() {
+
+    // Needed for initial carousel transitions.
     if (this.type === 'carousel') {
       this.slideWidth = this.dom('#slide-1').offsetWidth;
 
       this.ui.jsTrack.style.transform = `translateX(${-this.slideWidth}px)`;
       this.ui.jsTrack.style.transition = 'width 0.3s ease-in-out';
-
-      this.ui.jsTrack.on('transitionend', () => {
-        let track = this.dom('.js-slide-track');
-        let slides = this.dom('.js-slide');
-        let index = this.settings.currPageNum;
-        let currSlideId = slides[index].id;
-
-        if (currSlideId === 'first-slide-clone') {
-          track.style.transition = 'none';
-
-          // index = this.settings.currPageNum = 1;
-
-          track.style.transform = `translateX(${-this.slideWidth * index}px)`;
-        }
-      
-        if (currSlideId === 'last-slide-clone') {
-          track.style.transition = 'none';
-
-          // index = this.settings.currPageNum = slides.length - 2;
-
-          track.style.transform = `translateX(${-this.slideWidth * index}px)`;
-        }
-      });
     }
+
   },
 
   serializeData() {

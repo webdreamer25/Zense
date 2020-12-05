@@ -19,13 +19,6 @@ ControlsComponent.create({
     let btn = e.currentTarget;
     let itemIdx = parseInt(btn.dataset.item);
 
-    // Ensures we carousel back to first or last slide.
-    if (itemIdx === 0) {
-      itemIdx = this.module.collection.length - 2;
-    } else if (itemIdx === this.module.collection.length - 1) {
-      itemIdx = 1;
-    }
-
     this.settings.currPageNum = itemIdx;
 
     this.module.update(itemIdx);
