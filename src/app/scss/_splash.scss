@@ -1,0 +1,16 @@
+.splash {
+  max-height: 500px;
+  
+  &-spacer {
+    padding-bottom: 26%;
+  }
+
+  &-caption {
+    color: #fff;
+    text-shadow: 0 1px 14px rgba(0,0,0,0.80);
+    position: absolute;
+    left: 2rem;
+    bottom: 2rem;
+    z-index: 1;
+  }
+}
