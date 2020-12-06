@@ -74,6 +74,13 @@ HeroModule.create({
 
       this.ui.jsTrack.style.transform = `translateX(${-this.slideWidth}px)`;
       this.ui.jsTrack.style.transition = 'width 0.3s ease-in-out';
+
+      //
+      window.addEventListener('resize', () => {
+        this.slideWidth = this.dom('#slide-1').offsetWidth;
+
+        this.update(this.settings.currPageNum);
+      });
     }
 
   },

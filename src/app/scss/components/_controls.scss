@@ -9,9 +9,9 @@
   &__prev,
   &__next {
     cursor: pointer;
-    width: 4rem;
-    height: 4rem;
-    font-size: 1.5rem;
+    width: fluid-sizing(3rem, 5rem);
+    height: fluid-sizing(3rem, 5rem);
+    font-size: 1.2rem;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 100%;
@@ -23,6 +23,10 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      
+      > i {
+        margin-top: 3px;
+      }
 
       &:hover {
         background-color: $blue;
@@ -36,7 +40,7 @@
 
   &__prev {
     &.is--carousel {
-      left: 0;
+      left: 10px;
 
       > i {
         margin-left: -5px;
@@ -46,7 +50,7 @@
 
   &__next {
     &.is--carousel {
-      right: 0;
+      right: 10px;
 
       > i {
         margin-right: -5px;

@@ -12,6 +12,7 @@
   }
 
   &__image {
+    max-width: 100%;
     height: auto;
     display: block;
   }
@@ -24,5 +25,10 @@
     left: 0;
     z-index: 3;
     padding: 1rem;
+    @include fluid-prop(font-size, 16px, 30px, 320px, 1280px);
+
+    @media screen and (min-width: 320px) {
+      padding: fluid-sizing(2rem, 4rem) fluid-sizing(4rem, 4.5rem);
+    }
   }
 }
