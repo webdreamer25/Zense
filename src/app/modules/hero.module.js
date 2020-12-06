@@ -19,25 +19,49 @@ HeroModule.create({
   type: 'carousel',
   collection: [
     {
-      path: `/images%2Fsplash%2F5 4.png?alt=media&token=20a2d373-3199-447d-9217-f3f5a073daef`,
+      image: 'about-us-desktopv1.jpg',
+      mobileImage: 'about-us-mobile-960-960-v1.jpg',
       alt: 'Some test alt text 1',
-      content: '<h2>Slide 1<\/h2><p>This is just some test text to test capabilities.<\/p>'
+      content: '<h2>Slide 1<\/h2><p>This is just some test text to test capabilities.<\/p>',
+      position: {
+        x: 'right',
+        y: 'middle'
+      }
     },
     {
-      path: `/images%2Fsplash%2F5 4.png?alt=media&token=20a2d373-3199-447d-9217-f3f5a073daef`,
+      image: 'optum-ma-carousel-desktop.jpg',
+      mobileImage: 'optum-ma-carousel-mobile-960-960-v5.jpg',
       alt: 'Some test alt text 2',
-      content: '<h2>Slide 2<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p>'
+      content: '<h2>Slide 2<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p>',
+      position: {
+        x: 'left',
+        y: 'top'
+      }
     },
     {
-      path: `/images%2Fsplash%2F5 4.png?alt=media&token=20a2d373-3199-447d-9217-f3f5a073daef`,
+      image: 'optum-perks-desktop-v7.jpg',
+      mobileImage: 'optum-perks-mobile-v7.jpg',
       alt: 'Some test alt text 3',
-      content: '<h2>Slide 3<\/h2><p>This is just some test text to test capabilities.<\/p>'
+      content: '<h2>Slide 3<\/h2><p>This is just some test text to test capabilities.<\/p>',
+      position: {
+        x: 'left',
+        y: 'middle'
+      }
+    },
+    {
+      image: 'optum-store-12-2-20.jpg',
+      mobileImage: 'optumstore-mobile-960-960-v2.jpg',
+      alt: 'Some test alt text 4',
+      content: '<h2>Slide 4<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p><p>This is just some test text to test capabilities.<\/p>',
+      position: {
+        x: 'right',
+        y: 'middle'
+      }
     }
   ],
 
   init() {
     this.settings.currPageNum = 1;
-    this.storageOrigin = 'https://firebasestorage.googleapis.com/v0/b/crees-9efc7.appspot.com/o';
   },
 
   update(slideIdx) {
@@ -108,13 +132,17 @@ HeroModule.create({
 
   template(data) {
     let content;
+    let origin = window.location.origin;
 
     switch(this.type) {
       case 'carousel':
         content = /*html*/`<div class="c-carousel">
+          <div class="c-controls" data-type="${this.type}"></div>
+
           <div class="c-carousel__track js-slide-track">
             ${data.map((slide, idx, allSlides) => {
               let id;
+              let positionClass = `is--${slide.position.x}-${slide.position.y}`;
 
               if (idx === 0) {
                 id = 'last-slide-clone';
@@ -125,13 +153,14 @@ HeroModule.create({
               }
 
               return /*html*/`<div id="${id}" class="c-carousel__slide js-slide">
-                <img class="c-carousel__image" src="${this.storageOrigin + slide.path}" alt="${slide.alt}" />
-                <div class="c-carousel__content">${slide.content}</div>
+                <img class="c-carousel__image" src="${origin}/assets/${slide.image}" alt="${slide.alt}" />
+                <img class="c-carousel__mobile-image" src="${origin}/assets/${slide.mobileImage}" alt="${slide.alt}" />
+                <div class="c-carousel__content ${positionClass}">
+                  <div class="c-carousel__caption">${slide.content}</div>
+                </div>
               </div>`;
             }).join('')}
           </div>
-
-          <div class="c-controls" data-type="${this.type}"></div>
         </div>`;
 
         break;
@@ -139,7 +168,7 @@ HeroModule.create({
         content = /*html*/`<img class="img-responsive" src="${data.image}" alt="${data.alt}" />`;
     }
 
-    return /*html*/`<div class="hero">${content}</div>`;
+    return /*html*/`<div class="m-hero">${content}</div>`;
   }
 });
 

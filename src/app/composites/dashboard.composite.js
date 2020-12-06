@@ -20,7 +20,7 @@ DashboardComposite.create({
 
   template() {
     return /*html*/`<div id="hero-region"></div>
-    <div id="results-region"></div>`;
+    <div id="results-region" class="container"></div>`;
   }
 });
 

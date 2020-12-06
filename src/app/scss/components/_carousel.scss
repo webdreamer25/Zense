@@ -12,9 +12,23 @@
   }
 
   &__image {
+    display: none;
+
+    @media screen and (min-width: 768px) {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  &__mobile-image {
     max-width: 100%;
     height: auto;
     display: block;
+
+    @media screen and (min-width: 768px) {
+      display: none;
+    }
   }
 
   &__content {
@@ -24,11 +38,17 @@
     top: 0;
     left: 0;
     z-index: 3;
+    display: flex;
     padding: 1rem;
-    @include fluid-prop(font-size, 16px, 30px, 320px, 1280px);
 
     @media screen and (min-width: 320px) {
-      padding: fluid-sizing(2rem, 4rem) fluid-sizing(4rem, 4.5rem);
+      padding: fluid-sizing(2rem, 3rem) fluid-sizing(4rem, 18rem);
     }
+  }
+
+  &__caption {
+    @include fluid-prop(font-size, 16px, 30px, 320px, 1280px);
+    width: 100%;
+    max-width: 50%;
   }
 }

@@ -5,7 +5,6 @@ html {
 
 body {
 	font-family: 'Roboto', arial,helvetica,sans-serif;
-	line-height: 22px;
 	overflow-x: hidden;
 	padding: 0;
 	margin: 0;
@@ -27,6 +26,12 @@ h2, h3, h4, h5, h6 {
 
 figure {
 	margin: 0;
+}
+
+.main {
+	width: 100%;
+	max-width: 1550px;
+	margin: 0 auto;
 }
 
 .section {

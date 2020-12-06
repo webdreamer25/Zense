@@ -35,17 +35,19 @@ ResultsModule.create({
         break;
       }
 
-      resultsTpl += /*html*/`<div class="result">
-        <div class="result__inner">
-          <figure class="result__img"></figure>
-          <h2 class="result__heading">${result.make}</h2>
-          <p class="result__description">${result.model} ${result.year}</p>
+      resultsTpl += /*html*/`<div class="m-results__item col-md-6">
+        <div class="m-results__inner">
+          <figure class="m-results__img"></figure>
+          <h2 class="m-results__heading">${result.make}</h2>
+          <p class="m-results__description">${result.model} ${result.year}</p>
         </div>
       </div>`;
     }
 
-    return /*html*/`<div class="results" role="region" aria-label="test result">${resultsTpl}</div>
-    <div class="pagination"></div>`;
+    return /*html*/`<div class="m-results row" role="region" aria-label="test result">
+      ${resultsTpl}
+    </div>
+    <div class="pagination row"></div>`;
   }
 });
 
