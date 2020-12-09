@@ -2,52 +2,67 @@
   overflow: hidden;
   
   .is--left {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: flex-start;
+      }
+    }
+
     &-top {
-      justify-content: flex-start;
       align-items: flex-start;
     }
 
     &-middle {
-      justify-content: flex-start;
       align-items: center;
     }
 
     &-bottom {
-      justify-content: flex-start;
       align-items: flex-end;
     }
   }
 
   .is--right {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: flex-end;
+      }
+    }
+
     &-top {
-      justify-content: flex-end;
       align-items: flex-start;
     }
 
     &-middle {
-      justify-content: flex-end;
       align-items: center;
     }
 
     &-bottom {
-      justify-content: flex-end;
       align-items: flex-end;
     }
   }
 
   .is--center {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: center;
+      }
+    }
+
     &-top {
-      justify-content: center;
       align-items: flex-start;
     }
 
     &-middle {
-      justify-content: center;
       align-items: center;
     }
 
     &-bottom {
-      justify-content: center;
       align-items: flex-end;
     }
   }

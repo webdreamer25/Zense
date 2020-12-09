@@ -47,8 +47,38 @@
   }
 
   &__caption {
-    @include fluid-prop(font-size, 16px, 30px, 320px, 1280px);
     width: 100%;
     max-width: 50%;
+
+    h1 {
+      font-size: 2rem;
+      @include fluid-prop(font-size, 2rem, 2.8rem, 320px, 1280px);
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      @include fluid-prop(font-size, 1.7rem, 2rem, 320px, 1280px);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      @include fluid-prop(font-size, 1.5rem, 1.8rem, 320px, 1280px);
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      @include fluid-prop(font-size, 1.2rem, 1.5rem, 320px, 1280px);
+    }
+
+    h5 {
+      font-size: 1rem;
+      @include fluid-prop(font-size, 1rem, 1.5rem, 320px, 1280px);
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.3rem;
+      @include fluid-prop(font-size, 1rem, 1.2rem, 320px, 1280px);
+    }
   }
 }

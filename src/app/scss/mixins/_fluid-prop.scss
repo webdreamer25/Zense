@@ -6,7 +6,6 @@
 
   @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
     & {
-      #{$prop}: $min-size;
       @media screen and (min-width: $min-vw) {
         #{$prop}: fluid-sizing($min-size, $max-size, $min-vw, $max-vw);
       }
