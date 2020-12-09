@@ -1,4 +1,5 @@
 import { Zense } from '../../../zense';
+import ProgressiveImgBehavior from '../behaviors/progressive-img.behavior';
 import ControlsComponent from '../components/controls.component';
 
 const HeroModule = Object.create(Zense.Module);
@@ -12,6 +13,10 @@ HeroModule.create({
     jsTrack: '.js-slide-track'
   },
 
+  behaviors: [
+    ProgressiveImgBehavior
+  ],
+
   components: [
     ControlsComponent
   ],
@@ -20,6 +25,7 @@ HeroModule.create({
   collection: [
     {
       image: 'about-us-desktopv1.jpg',
+      imageBlur: 'about-us-desktop-blur.jpg',
       mobileImage: 'about-us-mobile-960-960-v1.jpg',
       alt: 'Some test alt text 1',
       content: '<h2>Slide 1<\/h2><p>This is just some test text to test capabilities.<\/p>',
@@ -30,6 +36,7 @@ HeroModule.create({
     },
     {
       image: 'optum-ma-carousel-desktop.jpg',
+      imageBlur: 'about-us-desktop-blur.jpg',
       mobileImage: 'optum-ma-carousel-mobile-960-960-v5.jpg',
       alt: 'Some test alt text 2',
       content: '<h2>Slide 2<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p>',
@@ -40,6 +47,7 @@ HeroModule.create({
     },
     {
       image: 'optum-perks-desktop-v7.jpg',
+      imageBlur: 'about-us-desktop-blur.jpg',
       mobileImage: 'optum-perks-mobile-v7.jpg',
       alt: 'Some test alt text 3',
       content: '<h2>Slide 3<\/h2><p>This is just some test text to test capabilities.<\/p>',
@@ -50,6 +58,7 @@ HeroModule.create({
     },
     {
       image: 'optum-store-12-2-20.jpg',
+      imageBlur: 'about-us-desktop-blur.jpg',
       mobileImage: 'optumstore-mobile-960-960-v2.jpg',
       alt: 'Some test alt text 4',
       content: '<h2>Slide 4<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p><p>This is just some test text to test capabilities.<\/p>',
@@ -152,8 +161,12 @@ HeroModule.create({
                 id = `slide-${idx}`;
               }
 
-              return /*html*/`<div id="${id}" class="c-carousel__slide js-slide">
-                <img class="c-carousel__image" src="${origin}/assets/${slide.image}" alt="${slide.alt}" />
+              return /*html*/`<div id="${id}" class="c-carousel__slide js-slide" 
+                data-progressive-desktop="${origin}/assets/${slide.image}"
+                data-progressive-mobile=""
+                data-progressive-class="c-carousel__image">
+                <!--<img class="c-carousel__image" src="${origin}/assets/${slide.image}" alt="${slide.alt}" />-->
+                <img class="b-progressive-img__blur" src="${origin}/assets/${slide.imageBlur}" />
                 <img class="c-carousel__mobile-image" src="${origin}/assets/${slide.mobileImage}" alt="${slide.alt}" />
                 <div class="c-carousel__content ${positionClass}">
                   <div class="c-carousel__caption">${slide.content}</div>
