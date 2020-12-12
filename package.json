@@ -1,7 +1,7 @@
 {
   "name": "zense-js",
   "title": "zense js",
-  "version": "1.6.4",
+  "version": "1.5.0",
   "main": "zense.js",
   "description": "Javascript application development library",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "author": {
     "name": "Ethan F. Olivares",
-    "url": "http://ethanolivares.com"
+    "url": "https://github.com/webdreamer25/Zense"
   },
   "keywords": [
     "zense",
@@ -21,6 +21,9 @@
     "framework",
     "browser",
     "ES6",
+    "ES5",
+    "native",
+    "js",
     "OLOO"
   ],
   "license": "MIT",
