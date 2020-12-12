@@ -1,9 +1,9 @@
 import { Zense } from '../../zense';
 import DashboardComposite from './composites/dashboard.composite';
 
-const TestStore = Object.create(Zense.Storage);
+const AppSettings = Object.create(Zense.Storage);
 
-TestStore.config({
+AppSettings.config({
   storeName: 'test',
   storage: true,
   keysToStore: [
@@ -11,7 +11,7 @@ TestStore.config({
   ]
 });
 
-TestStore.set({
+AppSettings.set({
   store: [
     {
       make: 'mitsubishi',
@@ -78,13 +78,10 @@ TestStore.set({
       model: 'grand cherokee',
       year: '2020'
     }
-  ],
-  currPageNum: 1,
-  resultsPerPage: 4,
-  totalResults: 0
+  ]
 });
 
-TestStore.initStorage();
+AppSettings.initStorage();
 
 
 DashboardComposite.render();

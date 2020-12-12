@@ -21,7 +21,8 @@ HeroModule.create({
     ControlsComponent
   ],
 
-  type: 'carousel',
+  currPageNum: 1,
+  controlType: 'carousel',
   collection: [
     {
       image: 'about-us-desktopv1.jpg',
@@ -70,7 +71,7 @@ HeroModule.create({
   ],
 
   init() {
-    this.settings.currPageNum = 1;
+    this.currPageNum = 1;
   },
 
   update(slideIdx) {
@@ -83,9 +84,9 @@ HeroModule.create({
 
     // Ensures we carousel back to first or last slide.
     if (slideIdx === 0) {
-      this.settings.currPageNum = this.collection.length - 2;
+      this.currPageNum = this.collection.length - 2;
     } else if (slideIdx === this.collection.length - 1) {
-      this.settings.currPageNum = 1;
+      this.currPageNum = 1;
     }
 
     // Ensures continuous animation from cloned to actual slide rep.
@@ -94,7 +95,7 @@ HeroModule.create({
         track.removeAttribute('style');
 
         track.style.transition = 'none';
-        track.style.transform = `translateX(${-this.slideWidth * this.settings.currPageNum}px)`;
+        track.style.transform = `translateX(${-this.slideWidth * this.currPageNum}px)`;
       }, 380);
     }
   },  
@@ -102,7 +103,7 @@ HeroModule.create({
   afterRender() {
 
     // Needed for initial carousel transitions.
-    if (this.type === 'carousel') {
+    if (this.controlType === 'carousel') {
       this.slideWidth = this.dom('#slide-1').offsetWidth;
 
       this.ui.jsTrack.style.transform = `translateX(${-this.slideWidth}px)`;
@@ -112,7 +113,7 @@ HeroModule.create({
       window.addEventListener('resize', () => {
         this.slideWidth = this.dom('#slide-1').offsetWidth;
 
-        this.update(this.settings.currPageNum);
+        this.update(this.currPageNum);
       });
     }
 
@@ -121,7 +122,7 @@ HeroModule.create({
   serializeData() {
     let data = this.collection;
 
-    if (this.type === 'static') {
+    if (this.controlType === 'static') {
       data = {
         image: `${origin}/images%2Fsplash%2F5 4.png?alt=media&token=20a2d373-3199-447d-9217-f3f5a073daef`,
         alt: 'Some test alt text 1'
@@ -143,10 +144,10 @@ HeroModule.create({
     let content;
     let origin = window.location.origin;
 
-    switch(this.type) {
+    switch(this.controlType) {
       case 'carousel':
         content = /*html*/`<div class="c-carousel">
-          <div class="c-controls" data-type="${this.type}"></div>
+          <div class="c-controls" data-type="${this.controlType}"></div>
 
           <div class="c-carousel__track js-slide-track">
             ${data.map((slide, idx, allSlides) => {

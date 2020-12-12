@@ -43,6 +43,7 @@ Module.addComponents = function (res) {
 
       component = this.extend(customComponent, this.components[i].options);
     } else {
+      component = Object.create(component);
       component.store = this.api || res ? res : null;
     }
 

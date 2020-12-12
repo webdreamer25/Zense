@@ -84,7 +84,16 @@ Renderer.destroy = function () {
 };
 
 Renderer.setDOMSelector = function () {
-  this.selector = this.dom(this.selector);
+  if (typeof this.selector !== 'string') {
+    return false;
+  }
+
+  // Ensures that if we are rendering multiple we dont re-render on previous nodes.
+  if (this.renderMultiple && this.module !== undefined) {
+    this.selector = this.dom(`${this.module.selector.strName} ${this.selector}`);
+  } else {
+    this.selector = this.dom(this.selector);
+  }
 
   if (!this.selector.exists) {
     throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);

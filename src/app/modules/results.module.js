@@ -1,5 +1,5 @@
 import { Zense } from '../../../zense';
-import PaginationComponent from '../components/pagination.component';
+import ControlsComponent from '../components/controls.component';
 
 const ResultsModule = Object.create(Zense.Module);
 
@@ -9,23 +9,30 @@ ResultsModule.create({
   selector: '#results-region',
 
   components: [
-    PaginationComponent
+    ControlsComponent
   ],
 
+  controlType: 'static',
+  currPageNum: 1,
+  resultsPerPage: 4,
+  totalResults: 0,
+
+  init() {
+    this.collection = this.settings.store;
+  },
+
   serializeData() {
-    //this is a test girl i love you cici
-    if (this.selector)
-    return this.settings.store;
+    return this.collection;
   },
 
   template(results) {
     let resultsTpl = '';
     let start = 0;
-    let limit = this.settings.resultsPerPage;
+    let limit = this.resultsPerPage;
 
-    if (this.settings.currPageNum > 1) {
-      limit = (this.settings.resultsPerPage * this.settings.currPageNum);
-      start = limit - this.settings.resultsPerPage;
+    if (this.currPageNum > 1) {
+      limit = (this.resultsPerPage * this.currPageNum);
+      start = limit - this.resultsPerPage;
     }
 
     for (let i = start; i < limit; i++) {
@@ -47,7 +54,7 @@ ResultsModule.create({
     return /*html*/`<div class="m-results row" role="region" aria-label="test result">
       ${resultsTpl}
     </div>
-    <div class="pagination row"></div>`;
+    <div class="c-controls row"></div>`;
   }
 });
 

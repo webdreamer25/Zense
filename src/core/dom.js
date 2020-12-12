@@ -114,6 +114,9 @@ const DOMListener = function (args, context) {
         // loop parent nodes from the target to the delegation node
         if (target.matches(delegate)) {
           e.stopPropagation();
+
+          e.delegate = target;
+          
           callback.call(args[3], e, target);
           break;
         }
