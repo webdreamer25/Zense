@@ -12,9 +12,9 @@ Renderer.beforeRender = function () {
   return null;
 };
 
-Renderer.render = function (model) {
+Renderer.render = function (model = null, resetDOMSelector = false) {
   this.destroy();
-  this.setDOMSelector();
+  this.setDOMSelector(resetDOMSelector);
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
@@ -22,7 +22,7 @@ Renderer.render = function (model) {
   try {
     this.errorCheck();
 
-    let data = this.serializeData(model ? model : this.store);
+    let data = this.serializeData(model !== undefined && model !== null ? model : this.store);
 
     this.addTemplateToDOM(data);
   } catch (e) {
@@ -83,9 +83,16 @@ Renderer.destroy = function () {
   this.hasRendered = false;
 };
 
-Renderer.setDOMSelector = function () {
+Renderer.setDOMSelector = function (resetDOMSelector) {
   if (typeof this.selector !== 'string') {
-    return false;
+
+    // Ensures we have a way to re-find the selector in the DOM in cases where we are re-rendering entire composite or module.
+    if (resetDOMSelector) {
+      this.selector = this.selector.strName;
+    } else {
+      return false;
+    }
+    
   }
 
   // Ensures that if we are rendering multiple we dont re-render on previous nodes.

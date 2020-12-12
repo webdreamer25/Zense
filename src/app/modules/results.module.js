@@ -8,10 +8,15 @@ ResultsModule.create({
 
   selector: '#results-region',
 
+  ui: {
+    results: '.m-results'
+  },
+
   components: [
     ControlsComponent
   ],
 
+  renderType: 'html',
   controlType: 'static',
   currPageNum: 1,
   resultsPerPage: 4,
@@ -21,11 +26,22 @@ ResultsModule.create({
     this.collection = this.settings.store;
   },
 
+  update() {
+    this.ui.results.html(this.createResultsTemplate(this.collection))
+  },
+
   serializeData() {
     return this.collection;
   },
 
   template(results) {
+    return /*html*/`<div class="m-results row" role="region" aria-label="test result">
+      ${this.createResultsTemplate(results)}
+    </div>
+    <div class="c-controls row"></div>`;
+  },
+
+  createResultsTemplate(results) {
     let resultsTpl = '';
     let start = 0;
     let limit = this.resultsPerPage;
@@ -51,10 +67,7 @@ ResultsModule.create({
       </div>`;
     }
 
-    return /*html*/`<div class="m-results row" role="region" aria-label="test result">
-      ${resultsTpl}
-    </div>
-    <div class="c-controls row"></div>`;
+    return resultsTpl;
   }
 });
 

@@ -20,7 +20,7 @@ ControlsComponent.create({
     this.module.selector.on('click', delegate, this.handleControls.bind(this));
   },
 
-  handleControls(e) {
+  handleControls(e) {console.log('firing handleControls method.');
     let btn = e.delegate;
     let itemIdx = parseInt(btn.dataset.item);
 
@@ -28,10 +28,8 @@ ControlsComponent.create({
 
     if (this.module.update) {
       this.module.update(itemIdx);
-    } else {
-      this.module.render();
     }
-
+    
     // Ensures we update control to new state.
     this.render();
   },
