@@ -1,8 +1,12 @@
 #Ignore file
 node_modules/
 dist/
+<<<<<<< HEAD
 src/app/
 gulpwebpack.js
 gulpfile.js
 npm-debug.log
 changelog.md
+=======
+npm-debug.log
+>>>>>>> test
