@@ -1,7 +1,6 @@
 #Ignore file
 node_modules/
 dist/
-src/app/
 gulpwebpack.js
 gulpfile.js
 npm-debug.log

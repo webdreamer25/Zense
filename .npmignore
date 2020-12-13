@@ -8,6 +8,7 @@ src/app
 # files
 .babelrc
 .gitignore
+_config.yml
 gulpfile.js
 gulpwebpack.js
 webpack.config.js
