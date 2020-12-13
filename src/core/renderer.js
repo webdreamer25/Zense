@@ -12,9 +12,9 @@ Renderer.beforeRender = function () {
   return null;
 };
 
-Renderer.render = function (model) {
+Renderer.render = function (model = null, resetDOMSelector = false) {
   this.destroy();
-  this.setDOMSelector();
+  this.setDOMSelector(resetDOMSelector);
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
@@ -22,7 +22,7 @@ Renderer.render = function (model) {
   try {
     this.errorCheck();
 
-    let data = this.serializeData(model ? model : this.store);
+    let data = this.serializeData(model !== undefined && model !== null ? model : this.store);
 
     this.addTemplateToDOM(data);
   } catch (e) {
@@ -83,8 +83,24 @@ Renderer.destroy = function () {
   this.hasRendered = false;
 };
 
-Renderer.setDOMSelector = function () {
-  this.selector = this.dom(this.selector);
+Renderer.setDOMSelector = function (resetDOMSelector) {
+  if (typeof this.selector !== 'string') {
+
+    // Ensures we have a way to re-find the selector in the DOM in cases where we are re-rendering entire composite or module.
+    if (resetDOMSelector) {
+      this.selector = this.selector.strName;
+    } else {
+      return false;
+    }
+    
+  }
+
+  // Ensures that if we are rendering multiple we dont re-render on previous nodes.
+  if (this.renderMultiple && this.module !== undefined) {
+    this.selector = this.dom(`${this.module.selector.strName} ${this.selector}`);
+  } else {
+    this.selector = this.dom(this.selector);
+  }
 
   if (!this.selector.exists) {
     throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);

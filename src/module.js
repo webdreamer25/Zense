@@ -43,6 +43,7 @@ Module.addComponents = function (res) {
 
       component = this.extend(customComponent, this.components[i].options);
     } else {
+      component = Object.create(component);
       component.store = this.api || res ? res : null;
     }
 
@@ -51,6 +52,8 @@ Module.addComponents = function (res) {
 
     // We need to ensure every component has a unique name set for debugging and error handling purposes.
     this.checkUniqueName(component);
+
+    component.init();
 
     if (!this.shouldRenderChildren) {
       continue;
@@ -149,17 +152,19 @@ Module.destroyChildren = function () {
 
 // Needed to ensure that if we have more than 1 of the same component we give it a unique name.
 Module.checkUniqueName = function (component) {
-  if (!this.componentNameArray.includes(component.name)) {
-    this.componentNameArray.push(component.name);
+  let doesntExist = this.componentNameArray.includes((name) => {
+    return name.indexOf(component.name) >= 0;
+  });
+
+  if (!doesntExist) {
+    this.componentNameArray.push(component.name + '-1');
+
+    return true;
   }
 
-  for (let i = 0, len = this.componentNameArray.length; i < len; i++) {
-    if (this.componentNameArray[i] !== component.name && component.name !== '') {
-      return null;
-    } else {
-      this.componentNameArray.push(component.setName(component.selector));
-    }
-  }
+  component.setUniqueName(); 
+
+  return false;
 };
 
 Module.getChildComponent = function (componentName) {

@@ -321,9 +321,56 @@ const ResultsModalComponent.create({
     { name: ModalBehavior, options: extendBehavior }
   ],
   template(data) {
-    // SOME MODAL TEMPLATE
+    // 9OME MODAL TEMPLATE
   }
 });
+```
+
+## Storage (NEW v1.5+)
+Newly added Storage object can be used to create, manage and store settings throughout your app.
+
+### Initial storage configuration and setup.
+Use the config() and set() methods to set up what storage and settings.
+
+```js
+const AppSettings = Object.create(Zense.Storage);
+
+AppSettings.config({
+  // Optional: use to name the stored data. By default name will be "store-" followed by a generated id.
+  storeName: '', 
+
+  // User either session or local. Default storageType: "session".
+  storageType: 'session',
+
+  // Set storage property to true if you will be using session or local client storage. 
+  storage: false,
+
+  // Pass in an array of strings referencing the keys in the settings object you would like to store. Default will store the entire settings object.
+  keysToStore: [
+    'store',
+    'resultsPerPage'
+  ]
+});
+
+// Use set method to create settings that may be used throughout your app using this.settings.
+AppSettings.set({
+  store: {},
+  resultsPerPage: 10
+});
+```
+
+### Using storage
+Storage object has 3 methods to initialize, save and get what you need from session/local storage.
+
+```js
+// Initializes storage and populates settings with your saved.settings.
+this.initStorage();
+
+// Use to save your settings at their current state. Optionally you may pass in your own data object.
+this.saveSettings([[optional: data object]]);
+
+// Use to get your saved settings or a specific setting in storage by passing in string keyname of the property you are trying to get.
+this.getSettings([[optional: string keyname]]);
 ```
 
 ## DOM Traversal & Manipulation

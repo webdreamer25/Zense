@@ -9,13 +9,11 @@ Controller.shouldSetBehaviors = true;
 
 Controller.create = function (options, extender = {}) {
   Object.assign(this, options, extender);
-  
-  this.initialize();
 };
 
-Controller.initialize = function () {
+Controller.init = function () {
   return null;
-}; 
+};
 
 Controller.bindUIElements = function () {
   if (!this.ui) { return false; }

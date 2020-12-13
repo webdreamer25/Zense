@@ -33,6 +33,7 @@ Composite.bootstraper = function (arr) {
 
     strapee.composite = this;
     
+    strapee.init();
     strapee.render();
   }
 };

@@ -1,0 +1,101 @@
+//
+// Buttons
+// --------------------------------------------------
+
+
+.btn {
+	color: #fff !important;
+	text-align: center;
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+}
+.btn:hover {
+	background-color: #9e1b32 !important;
+}
+
+a.btn-link {
+	font-size: 14px;
+	color: #000;
+	
+	> i {
+		font-size: 14px;
+		color: #9e1b32;
+		margin-left: 0px;
+		transition: all 0.1s ease-in;
+		-moz-transition: all 0.1s ease-in;
+		-webkit-transition: all 0.1s ease-in;
+	}
+
+	&:hover {
+    color: #9e1b32;
+    
+    > i {
+      margin-left: 10px;
+      transition: all 0.1s ease-out;
+      -moz-transition: all 0.1s ease-out;
+      -webkit-transition: all 0.1s ease-out;
+    }
+  }
+}// .btn-link
+
+// Button Colors
+.btn-primary {
+  background-color: #999;
+}
+.btn-secondary {
+  background-color: #ff8900;
+}
+
+// Button Sizes
+.btn-small {
+  font-size: 14px;
+  padding: 4px 10px;
+}
+.btn-medium {
+  font-size: 18px;
+  padding: 8px 20px;
+}
+.btn-large {
+  font-size: 20px;
+  padding: 15px 40px;
+}
+
+.close-btn {
+	width: 48px;
+  height: 28px;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  border: none;
+	background-color: #fff;
+
+  > span {
+    width: 18px;
+    height: 1px;
+    display: block;
+    top: 50%;
+    left: 50%;
+    background-color: #000;
+    position:absolute;
+    margin-top: -1px;
+    margin-left: -8px;}
+
+  > span:nth-child(1) {
+    transform: rotate(-130deg);
+  }
+  > span:nth-child(2) {
+    transform: rotate(130deg);
+  }
+}//.modal-close-btn
+
+.animated-btn {
+	@include transition(all 0.2s ease-in);
+}
+
+.animated-btn:hover {
+	background: #e60a24;
+  span {
+    background-color: #fff;
+  }
+}
