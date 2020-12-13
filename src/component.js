@@ -82,15 +82,21 @@ Component.shouldPreventBehaviorFromStarting = function (behavior) {
   return result;
 };
 
-Component.setName = function (selector) {
-  selector = selector.toLowerCase();
+Component.setUniqueName = function () {
+  let newName = this.name;
 
-  this.name = `${selector.slice(1)}-${this.type}-${this.id}`;
+  if (newName.indexOf(`-${this.type}`) === -1) {
+    newName = `${newName}-${this.type}-${this.id}`;
+  } else {
+    newName = `${newName}-${this.id}`;
+  }
+
+  this.name = newName;
 
   // Increment id after name is set so no duplication occurs
   this.id++
 
-  return this.name;
+  return newName;
 };
 
 export default Component;

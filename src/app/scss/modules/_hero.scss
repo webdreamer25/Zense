@@ -1,0 +1,69 @@
+.m-hero {
+  overflow: hidden;
+  
+  .is--left {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: flex-start;
+      }
+    }
+
+    &-top {
+      align-items: flex-start;
+    }
+
+    &-middle {
+      align-items: center;
+    }
+
+    &-bottom {
+      align-items: flex-end;
+    }
+  }
+
+  .is--right {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: flex-end;
+      }
+    }
+
+    &-top {
+      align-items: flex-start;
+    }
+
+    &-middle {
+      align-items: center;
+    }
+
+    &-bottom {
+      align-items: flex-end;
+    }
+  }
+
+  .is--center {
+    &-top,
+    &-middle,
+    &-bottom {
+      @media screen and (min-width: 768px) {
+        justify-content: center;
+      }
+    }
+
+    &-top {
+      align-items: flex-start;
+    }
+
+    &-middle {
+      align-items: center;
+    }
+
+    &-bottom {
+      align-items: flex-end;
+    }
+  }
+}

@@ -326,7 +326,7 @@ const ResultsModalComponent.create({
 });
 ```
 
-## Storage
+## Storage (NEW v1.5+)
 Newly added Storage object can be used to create, manage and store settings throughout your app.
 
 ### Initial storage configuration and setup.
