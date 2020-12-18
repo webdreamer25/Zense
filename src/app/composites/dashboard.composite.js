@@ -1,5 +1,6 @@
 import { Zense } from '../../../zense';
 import HeroModule from '../modules/hero.module';
+import LayoutModule from '../modules/layout.module';
 import ResultsModule from '../modules/results.module';
 
 const DashboardComposite = Object.create(Zense.Composite);
@@ -11,7 +12,8 @@ DashboardComposite.create({
 
   modules: [
     HeroModule,
-    ResultsModule
+    ResultsModule,
+    LayoutModule
   ],
 
   beforeRender() {
@@ -20,7 +22,8 @@ DashboardComposite.create({
 
   template() {
     return /*html*/`<div id="hero-region"></div>
-    <div id="results-region" class="container"></div>`;
+    <div id="results-region" class="container"></div>
+    <div id="layout-region"></div>`;
   }
 });
 

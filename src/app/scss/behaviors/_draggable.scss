@@ -1,0 +1,50 @@
+.b-draggable {
+  &__item {
+    position: relative;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+
+    &.is--grabbing {
+      opacity: .4;
+      cursor: grabbing;
+    }
+
+    &.is--to-insert-afterend,
+    &.is--to-insert-beforebegin {
+      position: relative;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        transform: translate(-50%, -100%);
+      }
+    }
+
+    &.is--to-insert-beforebegin {
+      border-top: 1px solid $success;
+      
+      &:before {
+        top: -1px;
+        border-bottom: 8px solid $success;
+      }
+    }
+
+    &.is--to-insert-afterend {
+      border-bottom: 1px solid $success;
+
+      &:before {
+
+        bottom: -17px;
+        border-top: 8px solid $success;
+      }
+    }
+  }
+}

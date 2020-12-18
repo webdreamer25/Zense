@@ -1,54 +1,46 @@
-import { Behavior } from "../../../zense";
+import { Zense } from "../../../zense";
 
-const DragBehavior = Object.create(Behavior);
+const DragBehavior = Object.create(Zense.Behavior);
 
 DragBehavior.config({
   behaviorName: 'drag-behavior',
 
   ui: {
-    container: '.g-draggable',
-    item: '.js-draggable-item',
-    grip: '.js-item-grip'
+    container: '.b-draggable',
+    item: '.js-draggable-item'
   },
 
   modifiers: {
     grabbing: 'is--grabbing',
-    overArea: 'is--over-area'
+    insertPos: 'is--to-insert'
   },
 
+  position: 'beforebegin',
+  positionClass: null,
   currDraggedItem: null,
-  insertTxt: 'Drop element here.',
 
   handlers() {
     let container = this.dom(this.ui.container);
 
     if (container.exists) {
       container.on('dragstart', this.ui.item, this.onDragStart.bind(this));
-      // container.on('dragenter', this.ui.item, this.onDragEnter.bind(this));
       container.on('dragover', this.ui.item, this.onDragOver.bind(this));
       container.on('dragleave', this.ui.item, this.onDragLeave.bind(this));
-      container.on('dragend', this.ui.item, this.onDragEnd.bind(this));
       container.on('drop', this.ui.item, this.onDrop.bind(this));
     }
   },
 
-  onDragStart(e, draggableItem) {
-    let disabledBtn;
+  onDragStart(e) {
+    let draggableItem = e.delegate;
     
     if (this.hasClass(draggableItem, this.modifiers.grabbing)) {
       return false;
     }
 
-    disabledBtn = this.dom('.js-edit-save-btn[disabled]');
-
-    if (disabledBtn.exists) {
-      let attr = disabledBtn.getAttributeNode('disabled');
-      
-      disabledBtn.removeAttributeNode(attr);
-    }
-
     // Target (this) element is the source node.
-    this.currDraggedItem = draggableItem;
+    if (this.currDraggedItem === null) {
+      this.currDraggedItem = draggableItem;
+    }
 
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', draggableItem.outerHTML);
@@ -56,57 +48,69 @@ DragBehavior.config({
     draggableItem.classList.add(this.modifiers.grabbing);
   },
 
-  onDragEnter(e, draggableItem) {
-    
-  },
+  onDragOver(e) {
+    let position = 'beforebegin';
+    let referenceItem = e.delegate;
+    let cursorYPos = e.clientY;
+    let refItemPos = referenceItem.getBoundingClientRect();
+    let refItemHeight = refItemPos.height / 2;
 
-  onDragOver(e, draggableItem) {
     if (e.preventDefault) {
       e.preventDefault();
     }
 
-    if (!this.hasClass(draggableItem, this.modifiers.overArea)) {
-      draggableItem.classList.add(this.modifiers.overArea);
-  
+    // Ensures we drop item below the current item we are over.
+    if (cursorYPos > refItemPos.bottom || cursorYPos > (refItemPos.bottom - refItemHeight)) {
+      position = 'afterend';
+    } else if (cursorYPos < refItemPos.top || cursorYPos < (refItemPos.top + refItemHeight)) {
+      position = 'beforebegin';
+    }
+
+    if (!this.currDraggedItem.isSameNode(referenceItem) && this.position !== position) {
+      let positionClass = `${this.modifiers.insertPos}-${position}`;
+
+      if (this.positionClass !== null) {
+        referenceItem.classList.remove(this.positionClass);
+      }
+      
+      referenceItem.classList.add(positionClass);
+
+      this.position = position;
+      this.positionClass = positionClass;
+
       e.dataTransfer.dropEffect = 'move';
     }
-
-    return false;
   },
 
-  onDragLeave(e, draggableItem) {
-    // this / e.target is previous target element.
-    if (this.hasClass(draggableItem, this.modifiers.overArea)) {
-      draggableItem.classList.remove(this.modifiers.overArea);
+  onDragLeave(e) {
+    let referenceItem = e.delegate;
+
+    // Ensures we remove the over effect so long as we are still dragging still.
+    if (this.hasClass(referenceItem, this.positionClass)) {
+      referenceItem.classList.remove(this.positionClass);
     }
   },
 
-  onDragEnd(e, draggableItem) {
-    // this/e.target is the source node.
-    if (this.hasClass(draggableItem, this.modifiers.overArea)) {
-      draggableItem.classList.remove(this.modifiers.overArea);
-    }
-  },
-
-  onDrop(e, draggableItem) {
+  onDrop(e) {
     let dropHtml;
+    let referenceItem = e.delegate;
 
     // Don't do anything if dropping the same column we're dragging.
-    if (this.currDraggedItem !== draggableItem) {
-      draggableItem.parentNode.removeChild(this.currDraggedItem);
+    if (!this.currDraggedItem.isSameNode(referenceItem)) {
+      referenceItem.parentNode.removeChild(this.currDraggedItem);
 
       dropHtml = e.dataTransfer.getData('text/html');
 
-      draggableItem.insertAdjacentHTML('beforebegin', dropHtml);
+      referenceItem.insertAdjacentHTML(this.position, dropHtml);
 
       this.currDraggedItem = null;
     }
 
-    if (this.hasClass(draggableItem, this.modifiers.overArea)) {
-      draggableItem.classList.remove(this.modifiers.overArea);
+    if (this.hasClass(referenceItem, this.positionClass)) {
+      referenceItem.classList.remove(this.positionClass);
     }
 
-    draggableItem.classList.remove(this.modifiers.grabbing);
+    referenceItem.classList.remove(this.modifiers.grabbing);
 
     return false;
   },
