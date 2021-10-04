@@ -5,41 +5,55 @@ const Composite = Object.create(Controller);
 Composite.type = 'composite';
 Composite.modules = [];
 Composite.components = [];
-Composite.children = [];
 
-Composite.internalPostHook = function () {
+Composite.strap = function (res) {
   if (this.modules.length > 0) {
-    this.children.push('modules');
-
-    this.bootstraper(this.modules);
+    this.bootstraper(this.modules, res);
   }
 
   if (this.components.length > 0) {
-    this.children.push('components');
-    
-    this.bootstraper(this.components);
+    this.bootstraper(this.components, res);
   }
-
-  return false;
 };
 
 Composite.bootstraper = function (arr) {
   for (let i = 0, len = arr.length; i < len; i++) {
     let strapee = arr[i];
 
-    if (this.store) {
-      strapee.store = this.store;
+    // Ensures we don't modify our base Object instance.
+    if (strapee.name && strapee.options) {
+      let newStrapeeInstance = Object.create(strapee.name)
+
+      newStrapeeInstance = this.extend(newStrapeeInstance, strapee.options);
+
+      strapee = newStrapeeInstance;
+    } else {
+      strapee = Object.create(strapee);
+
+      if (this.store) {
+        strapee.store = this.store;
+      }
     }
 
-    strapee.composite = this;
+    if (this.theme !== undefined) {
+      strapee.theme = this.theme;
+    }
     
-    strapee.init();
-    strapee.render();
+    strapee.composite = Object.create(this);
+    
+    if (strapee.init && typeof strapee.init === 'function') {
+      strapee.init();
+    }
+
+    if (strapee.shouldRender) {
+      strapee.render();
+    }
   }
 };
 
 Composite.destroyChildren = function () {
-  let childrenLen = this.children.length;
+  let children = this.modules.concat(this.components);
+  let childrenLen = children.length;
 
   if (childrenLen === 0) { 
     return false; 
@@ -57,6 +71,25 @@ Composite.destroyChildren = function () {
       }
     }
   }
+};
+
+Composite.getChild = function (name, childType = 'modules') {
+  for (let i = 0, len = this[childType].length; i < len; i++) {
+    let child = this[childType][i];
+    let childName = child.name;
+
+    // For customized children.
+    if (child && typeof childName !== 'string') {
+      childName = childName.name;
+    }
+
+    if (childName.indexOf(name) > -1) {
+      return child;
+    }
+  }
+
+  // TODO: delete or figure out how to use it.
+  // throw new Error(`Could not find child ${name} in ${this.name}.`);
 };
 
 export default Composite;
