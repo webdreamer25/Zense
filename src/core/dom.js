@@ -1,5 +1,7 @@
 const DOM = function (selector, context) {
   const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
+  const lastClassRegex = /[^\s]+$/g;
+  const spaceRegex = /\s/g;
 
   if (!context) { 
     context = document;
@@ -10,6 +12,12 @@ const DOM = function (selector, context) {
 
   // We do not want to get the dom if the selector is already and html node.
   if (typeof selector === 'string') {
+
+    // Needed to ensure no duplication of parent selector occurs when rendering multiples of the same component.
+    if (spaceRegex.test(selector)) {
+      selector = selector.match(lastClassRegex)[0];
+    }
+
     strSelector = selector;
     match = selectorRegex.exec(selector);
 

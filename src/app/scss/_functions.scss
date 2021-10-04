@@ -2,6 +2,8 @@
 //
 // Utility mixins and functions for evaluating source code across our variables, maps, and mixins.
 
+@use "sass:math";
+
 // Ascending
 // Used to evaluate Sass maps like our grid breakpoints.
 @mixin _assert-ascending($map, $map-name) {
@@ -53,8 +55,9 @@
   $r: red($color);
   $g: green($color);
   $b: blue($color);
+  $sum: (($r * 299) + ($g * 587) + ($b * 114));
 
-  $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+  $yiq: math.div($sum, 1000);
 
   @if ($yiq >= $yiq-contrasted-threshold) {
     @return $dark;
@@ -86,7 +89,7 @@
 }
 
 @function strip-unit($value) {
-  @return $value / ($value * 0 + 1);
+  @return math.div($value, ($value * 0 + 1));
 }
 
 @function fluid-sizing($min-size, $max-size, $min-vw: 320px, $max-vw: 680px) {

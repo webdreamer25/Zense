@@ -88,15 +88,17 @@ Behavior.bindUIElements = function () {
 
       let selector;
 
-      if (this.component || this.module) {
-        if (this.component) {
+      if (this.component || this.module || this.composite) {
+        if (this.component !== undefined && this.component.selector) {
           selector = this.component.selector;
-        } else if (this.module) {
+        } else if (this.module !== undefined && this.module.selector) {
           selector = this.module.selector;
-        } 
+        } else if (this.composite !== undefined && this.composite.selector) {
+          selector = this.composite.selector;
+        }
 
         // Ensure we only do a find to single node returns from this.dom();
-        if (!this.module.selector.length) {
+        if (selector !== undefined) {
           this.ui[key] = selector.find(uiElement);
         } else {
           this.ui[key] = selector;
@@ -141,11 +143,16 @@ Behavior.bindEventListeners = function (delegate, selectorObj, context) {
       }
 
       // Ensure that we are not rebinding the same event on re-rendering of a component.
-      selector.off();
+      if (!selector.exists) {
+        console.warn(`The defined parent selector ${selector.strName} in ${this.behaviorName} does not exist in the DOM.`);
 
-      // We pass in event, delegate, handler, context which is our behavior.
-      selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
+        return selector;
+      } else {
+        selector.off();
 
+        // We pass in event, delegate, handler, context which is our behavior.
+        selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
+      }
     }
 
     return selector.find(delegate);

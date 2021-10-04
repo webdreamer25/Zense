@@ -16,17 +16,16 @@ Component.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
-        let customBehavior = behavior.name;
-
         try {
 
-          // Necessary if we want to have specific behavior changes on any given component/module
+          // Ensures we don't overwrite base behavior instance.
           if (behavior.options) {
-            customBehavior.setUniqueIdAndName(this.name);
+            let newBehaviorInstance = Object.create(behavior.name);
 
-            customBehavior = this.extend({}, customBehavior, behavior.options);
+            newBehaviorInstance.setUniqueIdAndName(this.name);
+            newBehaviorInstance = this.extend({}, newBehaviorInstance, behavior.options);
 
-            behavior = customBehavior;
+            behavior = newBehaviorInstance;
           } else {
             throw {
               type: `Customization ${behavior.name.behavior}`,
@@ -35,12 +34,11 @@ Component.setBehaviors = function () {
           }
 
         } catch(err) {
-          console.log(err);
+          console.error(err);
         }
       } else {
+        behavior = Object.create(behavior);
         behavior.setUniqueIdAndName(this.name);
-
-        behavior = this.extend({}, behavior);
       }
 
       behavior.component = Object.create(this);

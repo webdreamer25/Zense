@@ -10,6 +10,9 @@
 //
 // Example usage: change the default blue border and shadow to white for better
 // contrast against a dark gray background.
+
+@use "sass:math";
+
 @mixin form-control-focus() {
   &:focus {
     color: $input-focus-color;
@@ -58,8 +61,8 @@
       @if $enable-validation-icons {
         padding-right: $input-height-inner;
         background-repeat: no-repeat;
-        background-position: center right calc(#{$input-height-inner} / 4);
-        background-size: calc(#{$input-height-inner} / 2) calc(#{$input-height-inner} / 2);
+        background-position: center right math.div($input-height-inner, 4);
+        background-size: math.div($input-height-inner, 2) math.div($input-height-inner, 2);
 
         @if $state == "valid" {
           background-image: $form-feedback-icon-valid;
@@ -86,7 +89,7 @@
     &.is-#{$state} {
       @if $enable-validation-icons {
         padding-right: $input-height-inner;
-        background-position: top calc(#{$input-height-inner} / 4) right calc(#{$input-height-inner} / 4);
+        background-position: top math.div($input-height-inner, 4) right math.div($input-height-inner, 4);
       }
     }
   }

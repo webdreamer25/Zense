@@ -330,12 +330,12 @@ const ResultsModalComponent.create({
 Newly added Storage object can be used to create, manage and store settings throughout your app.
 
 ### Initial storage configuration and setup.
-Use the config() and set() methods to set up what storage and settings.
+Use the config() and set() methods to store any props. Store props are accessible in any zense Object via this.store. Methods can be directly refered to using this keyword. ex. this.saveStore()
 
 ```js
-const AppSettings = Object.create(Zense.Storage);
+const AppStore = Object.create(Zense.Storage);
 
-AppSettings.config({
+AppStore.config({
   // Optional: use to name the stored data. By default name will be "store-" followed by a generated id.
   storeName: '', 
 
@@ -353,7 +353,7 @@ AppSettings.config({
 });
 
 // Use set method to create settings that may be used throughout your app using this.settings.
-AppSettings.set({
+AppStore.set({
   store: {},
   resultsPerPage: 10
 });
@@ -367,10 +367,23 @@ Storage object has 3 methods to initialize, save and get what you need from sess
 this.initStorage();
 
 // Use to save your settings at their current state. Optionally you may pass in your own data object.
-this.saveSettings([[optional: data object]]);
+this.saveSettings([[optional: data object]]); // Zense < v1.5 & no longer available in v1.6 or higher.
+
+// Zense v1.6+
+this.saveStore([[optional: data object]]); 
 
 // Use to get your saved settings or a specific setting in storage by passing in string keyname of the property you are trying to get.
-this.getSettings([[optional: string keyname]]);
+this.getSettings([[optional: string keyname]]); // Zense < v1.5 & no longer available in v1.6 or higher.
+
+// Zense v1.6+
+this.getStore([[optional: string keyname]]);
+
+// NEW Zense v1.6+
+// Use to remove a specific key item from storage.
+this.removeFromStore(name, storageType); // default storageType: 'session'
+
+// User to delete entire store of the name given during configuration from storage.
+this.clearStore(); 
 ```
 
 ## DOM Traversal & Manipulation

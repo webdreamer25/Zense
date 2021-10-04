@@ -5,7 +5,7 @@ const Storage = {
     storage: false,
     keysToStore: []
   },
-  settings: {},
+  store: {},
 
   config(options) {
     if (options && typeof options === 'object') {
@@ -62,7 +62,7 @@ const Storage = {
   set(options) {
     try {
       if (options !== undefined && typeof options === 'object') {
-        this.settings = Object.assign(this.settings, options);
+        this.store = Object.assign(this.store, options);
       } else {
         throw new Error('Options must be passed in as an object.');
       }
@@ -93,41 +93,58 @@ const Storage = {
       }
     }
 
-    Object.assign(this.settings, newObj);
+    Object.assign(this.store, newObj);
   },
 
-  saveSettings(data) {
+  saveStore({ 
+    data = false, 
+    storeName = this.default.storeName, 
+    storageType = this.default.storageType,
+    extendSettings = true
+  } = {}) {
     let store = {};
 
-    if (data) {
-      store = Object.assign({}, this.settings, data);
-    } else if (this.default.keysToStore.length > 0) {
+    try {
+      if (data) {
+        if ((typeof data !== 'object' || Array.isArray(data)) && extendSettings) {
+          throw new Error('Storage error: Cannot extend data of type object.');
+        }
 
-      // Ensures we only save the specified keys.  
-      for (let i = 0, len = this.default.keysToStore.length; i < len; i++) {
-        let name = this.default.keysToStore[i];
+        store = extendSettings ? Object.assign({}, this.store, data) : data;
+      } else if (this.default.keysToStore.length > 0) {
 
-        store[name] = this.settings[name];
+        // Ensures we only save the specified keys.  
+        for (let i = 0, len = this.default.keysToStore.length; i < len; i++) {
+          let name = this.default.keysToStore[i];
+
+          store[name] = this.store[name];
+        }
+
+      } else {
+        store = this.store;
       }
-
-    } else {
-      store = this.settings;
+    } catch(err) {
+      console.error(err);
     }
 
-    if (this.default.storageType === 'local') {
-      localStorage[this.default.storeName] = JSON.stringify(store);
+    if (storageType === 'local') {
+      localStorage[storeName] = JSON.stringify(store);
     } else {
-      sessionStorage[this.default.storeName] = JSON.stringify(store);
+      sessionStorage[storeName] = JSON.stringify(store);
     }
   },
 
-  getSettings(keyName) {
+  getStore({ 
+    keyName = false, 
+    storeName = this.default.storeName, 
+    storageType = this.default.storageType
+  } = {}) {
     let stored = {};
 
-    if (this.default.storageType === 'local') {
-      stored = localStorage[this.default.storeName]
+    if (storageType === 'local') {
+      stored = localStorage[storeName]
     } else {
-      stored = sessionStorage[this.default.storeName]
+      stored = sessionStorage[storeName]
     }
 
     if (stored && stored !== null) {
@@ -136,7 +153,25 @@ const Storage = {
       return false;
     }
 
-    return keyName && stored ? stored[keyName] : stored;
+    return keyName ? stored[keyName] : stored;
+  },
+
+  removeFromStore(name, storageType = this.default.storageType) {
+    if (typeof name === 'string') {
+      if (storageType === 'local') {
+        localStorage.removeItem(name);
+      } else {
+        sessionStorage.removeItem(name);
+      }
+    }
+  },
+
+  clearStore() {
+    if (this.default.storageType === 'local') {
+      localStorage.clear();
+    } else {
+      sessionStorage.clear();
+    }
   }
 };
 
