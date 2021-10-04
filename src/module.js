@@ -9,16 +9,20 @@ Module.componentNameArray = [];
 Module.shouldRenderChildren = true;
 Module.shouldSetBehaviors = true;
 
-Module.handleAPIUse = function () {
-  if (this.api) {
-    this.ajax({ url: this.api }).then(this.addComponents.bind(this));
-  } else {
-    this.addComponents();
+Module.strap = function () {
+  let componentsLen = this.components.length;
+
+  // Do nothing if no child components exist
+  if (!Array.isArray(this.components) && componentsLen === 0) {
+    return null;
   }
+
+  this.beforeAddComponents();
+  this.addComponents(componentsLen);
+  this.afterAddComponents();
 };
 
-Module.addComponents = function (res) {
-  let componentsLen = this.components.length;
+Module.addComponents = function (componentsLen) {
 
   // Do nothing if no child components exist
   if (!Array.isArray(this.components) && componentsLen === 0) {
@@ -35,16 +39,15 @@ Module.addComponents = function (res) {
   for (let i = 0; i < componentsLen; i++) {
     let component = this.components[i];
 
-    // This check is to ensure we are also handling extending the component.
+    // Ensures we don't overwrite the original instance when customizing.
     if (component.name && component.options) {
-      let customComponent = this.components[i].name;
+      let newComponentInstance = Object.create(component.name);
 
-      customComponent.store = this.api || res ? res : null;
+      newComponentInstance = this.extend(newComponentInstance, component.options);
 
-      component = this.extend(customComponent, this.components[i].options);
+      component = newComponentInstance;
     } else {
       component = Object.create(component);
-      component.store = this.api || res ? res : null;
     }
 
     // Let the component know whos their daddy.
@@ -71,8 +74,6 @@ Module.addComponents = function (res) {
       // });
     }
   }
-
-  this.afterAddComponents();
 };
 
 Module.beforeAddComponents = function () {
@@ -92,29 +93,29 @@ Module.setBehaviors = function () {
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior.name) {
-        let customBehavior = behavior.name;
-
         try {
-          // Necessary if we want to have specific behavior changes on any given component/module
+
+          // Ensures we don't overwrite base behavior instance.
           if (behavior.options) {
-            customBehavior.setUniqueIdAndName(this.name);
+            let newBehaviorInstance = Object.create(behavior.name);
 
-            customBehavior = this.extend({}, customBehavior, behavior.options);
+            newBehaviorInstance.setUniqueIdAndName(this.name);
+            newBehaviorInstance = this.extend({}, newBehaviorInstance, behavior.options);
 
-            behavior = customBehavior;
+            behavior = newBehaviorInstance;
           } else {
             throw {
               type: `Customization ${behavior.name.behavior}`,
               message: 'Customization options is either missing or mis-spelled.'
             }
           }
+          
         } catch(err) {
           console.log(err);
         }
       } else {
+        behavior = Object.create(behavior);
         behavior.setUniqueIdAndName(this.name);
-
-        behavior = this.extend({}, behavior);
       }
 
       // We need to let the behavior who the parent caller are.

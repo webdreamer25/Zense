@@ -34,8 +34,8 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
 };
 
 Renderer.internalPostHook = function () {
-  if (this.handleAPIUse !== undefined) {
-    this.handleAPIUse();
+  if (this.strap !== undefined) {
+    this.strap();
   }
 
   if (this.setBehaviors !== undefined) {
