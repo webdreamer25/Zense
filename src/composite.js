@@ -34,10 +34,6 @@ Composite.bootstraper = function (arr) {
         strapee.store = this.store;
       }
     }
-
-    if (this.theme !== undefined) {
-      strapee.theme = this.theme;
-    }
     
     strapee.composite = Object.create(this);
     
