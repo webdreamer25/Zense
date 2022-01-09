@@ -20,7 +20,7 @@ ControlsComponent.create({
     this.super.selector.on('click', delegate, this.handleControls.bind(this));
   },
 
-  handleControls(e) {console.log('firing handleControls method.');
+  handleControls(e) {
     let btn = e.delegate;
     let itemIdx = parseInt(btn.dataset.item);
 
