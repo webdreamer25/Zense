@@ -23,7 +23,7 @@ ResultsModule.create({
   totalResults: 0,
 
   init() {
-    this.collection = this.settings.store;
+    this.collection = this.store.cars;
   },
 
   update() {

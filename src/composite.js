@@ -6,54 +6,22 @@ Composite.type = 'composite';
 Composite.modules = [];
 Composite.components = [];
 
-Composite.strap = function (res) {
-  if (this.modules.length > 0) {
-    this.bootstraper(this.modules, res);
+Composite.strap = function () {
+  const modulesLen = this.modules.length;
+  const componentsLen = this.components.length;
+
+  if (modulesLen > 0) {
+    this.bootstrapChildren(this.modules, modulesLen);
   }
 
-  if (this.components.length > 0) {
-    this.bootstraper(this.components, res);
+  if (componentsLen > 0) {
+    this.bootstrapChildren(this.components, componentsLen);
   }
-};
-
-Composite.bootstraper = function (arr) {
-  for (let i = 0, len = arr.length; i < len; i++) {
-    let strapee = arr[i];
-
-    // Ensures we don't modify our base Object instance.
-    if (strapee.name && strapee.options) {
-      let newStrapeeInstance = Object.create(strapee.name)
-
-      newStrapeeInstance = this.extend(newStrapeeInstance, strapee.options);
-
-      strapee = newStrapeeInstance;
-    } else {
-      strapee = Object.create(strapee);
-
-      if (this.store) {
-        strapee.store = this.store;
-      }
-    }
-
-    if (this.theme !== undefined) {
-      strapee.theme = this.theme;
-    }
-    
-    strapee.composite = Object.create(this);
-    
-    if (strapee.init && typeof strapee.init === 'function') {
-      strapee.init();
-    }
-
-    if (strapee.shouldRender) {
-      strapee.render();
-    }
-  }
-};
+}
 
 Composite.destroyChildren = function () {
-  let children = this.modules.concat(this.components);
-  let childrenLen = children.length;
+  const children = this.modules.concat(this.components);
+  const childrenLen = children.length;
 
   if (childrenLen === 0) { 
     return false; 
@@ -71,7 +39,7 @@ Composite.destroyChildren = function () {
       }
     }
   }
-};
+}
 
 Composite.getChild = function (name, childType = 'modules') {
   for (let i = 0, len = this[childType].length; i < len; i++) {
@@ -87,9 +55,6 @@ Composite.getChild = function (name, childType = 'modules') {
       return child;
     }
   }
-
-  // TODO: delete or figure out how to use it.
-  // throw new Error(`Could not find child ${name} in ${this.name}.`);
-};
+}
 
 export default Composite;

@@ -1,18 +1,18 @@
 import { Zense } from '../../zense';
 import DashboardComposite from './composites/dashboard.composite';
 
-const AppSettings = Object.create(Zense.Storage);
+const AppStorage = Object.create(Zense.Storage);
 
-AppSettings.config({
+AppStorage.config({
   storeName: 'test',
   storage: true,
   keysToStore: [
     'currPageNum'
   ]
-});
+})
 
-AppSettings.set({
-  store: [
+AppStorage.set({
+  cars: [
     {
       make: 'mitsubishi',
       model: 'eclipse',
@@ -79,10 +79,14 @@ AppSettings.set({
       year: '2020'
     }
   ]
-});
+})
 
-AppSettings.initStorage();
+const App = Object.create(Zense.App);
 
+App.create({
+  afterStart() {
+    DashboardComposite.render();
+  }
+})
 
-DashboardComposite.render();
-
+App.start()

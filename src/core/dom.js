@@ -53,7 +53,7 @@ const DOM = function (selector, context) {
   }
 
   if (selector) {
-    let len = selector.length;
+    const len = selector.length;
 
     if (len) {
       let i = 0;
@@ -74,8 +74,10 @@ const DOM = function (selector, context) {
         i++;
       } while (i < len);
 
+      // Ensures that if we have an array object selector with 1 node we only return that node.
       if (len === 1) {
         selector[0].exists = true;
+        selector[0].strName = strSelector;
         
         return selector[0];
       }
@@ -97,24 +99,23 @@ const DOM = function (selector, context) {
   }
 
   return selector;
-};
+}
 
 const DOMListener = function (args, context) {
-  let event = args[0];
+  const event = args[0];
   let callback = args[1];
   let bubble = args[2] ? args[2] : true;
 
   if (typeof args[1] === 'function') {
-    context.info = { event, callback };
-
+    context.info = addSelectorInfo(context.info, { event, callback});
     context.addEventListener(event, callback, bubble);
   } else {
-    let delegate = args[1];
+    const delegate = args[1];
 
     callback = args[2];
     bubble = true;
 
-    context.info = { event, delegate, callback };
+    context.info = addSelectorInfo(context.info, { event, delegate, callback });
 
     context.addEventListener(event, function (e) {
       for (let target = e.target; target && target != this; target = target.parentNode) {
@@ -134,12 +135,12 @@ const DOMListener = function (args, context) {
   }
 
   return context;
-};
+}
 
 const DOMSelectorMethods = {
   on() {
+    const len = this.length;
     let selector;
-    let len = this.length;
 
     if (!len) {
       selector = new DOMListener(arguments, this);
@@ -153,15 +154,13 @@ const DOMSelectorMethods = {
   },
 
   off() {
-    let len = this.length;
+    const len = this.length;
 
-    if (!len && this.info) {
-      this.removeEventListener(this.info.event, this.info.callback, true);
+    if (!len) {
+      removeSelectorInfoAndListener(this, this.info);
     } else {
       for (let i = 0; i < len; i++) {
-        if (this[i].info) {
-          this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
-        }
+        removeSelectorInfoAndListener(this[i], this[i].info);
       }
     }
 
@@ -169,7 +168,7 @@ const DOMSelectorMethods = {
   },
 
   html(html) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this.innerHTML = html;
@@ -187,7 +186,7 @@ const DOMSelectorMethods = {
   },
 
   insertHTML(position, html) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this.insertAdjacentHTML(position, html);
@@ -201,7 +200,7 @@ const DOMSelectorMethods = {
   },
 
   attr(attribute, property) {
-    let len = this.length;
+    const len = this.length;
 
     if (len) {
       for (let i = 0; i < len; i++) {
@@ -219,7 +218,7 @@ const DOMSelectorMethods = {
   },
 
   val(value) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       if (typeof value !== 'undefined') {
@@ -241,7 +240,7 @@ const DOMSelectorMethods = {
   },
 
   prop(property, value) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this[property] = value;
@@ -276,6 +275,61 @@ const DOMSelectorMethods = {
   find(selector) {
     return new DOM(selector, this);
   }
-};
+}
 
-export default DOM;
+function addSelectorInfo(selectorInfo, infoObj) {
+  let updatedSelectorInfo;
+
+  infoObj.uid = createUniqueId();
+
+  // Ensures we support cases where the same selector has multiple events attached to it.
+  if (selectorInfo !== undefined) {
+
+    // Ensures we create the array only if that is not already the value type.
+    if (!Array.isArray(selectorInfo)) {
+      updatedSelectorInfo = [selectorInfo];
+    } else {
+      updatedSelectorInfo = selectorInfo;
+    }
+    
+    // Ensures we are not repeating the same info 
+    if (!updatedSelectorInfo.some(obj => obj.uid === infoObj.uid)) {
+      updatedSelectorInfo.push(infoObj);
+    }
+  } else {
+    updatedSelectorInfo = infoObj;
+  }
+
+  return updatedSelectorInfo;
+}
+
+function removeSelectorInfoAndListener(context, selectorInfo) {
+  if (selectorInfo === undefined) {
+    return context;
+  } else {
+    if (Array.isArray(selectorInfo)) {
+      for (let i = 0, len = selectorInfo.length; i < len; i++) {
+        let info = context.info[i];
+
+        context.removeEventListener(info.event, info.callback, true);
+      }
+    } else {
+      context.removeEventListener(selectorInfo.event, selectorInfo.callback, true);
+    }
+  }
+
+  context.info = undefined;
+}
+
+function createUniqueId(num = 1) {
+  const array = new Uint32Array(num);
+
+  window.crypto.getRandomValues(array);
+
+  return array.length === 1 ? array[0] : array;
+}
+
+export {
+  DOM,
+  createUniqueId
+}

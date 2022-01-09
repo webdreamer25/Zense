@@ -15,7 +15,7 @@ DashboardComposite.create({
   ],
 
   beforeRender() {
-    this.settings.totalResults = this.settings.store.length;
+    this.store.totalResults = this.store.cars.length;
   },
 
   template() {

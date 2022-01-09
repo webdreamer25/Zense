@@ -1,15 +1,12 @@
-import Xhr from './xhr';
-import Eventor from './eventor';
-import DOM from './dom';
+import Storage from './storage';
+import { DOM } from './dom';
 import cloneDeep from 'lodash.clonedeep';
 
-const Traverse = Object.create(Xhr);
-
-Traverse.events = Object.create(Eventor);
+const Traverse = Object.create(Storage);
 
 Traverse.dom = function (selector) {
   return new DOM(selector);
-};
+}
 
 Traverse.each = function (arr, callback) {
   if (Array.isArray(arr)) {
@@ -25,12 +22,12 @@ Traverse.each = function (arr, callback) {
       }
     }
   }
-};
+}
 
 Traverse.isObject = function (val) {
   if (val === null) { return false; }
   return ((typeof val === 'function') || (typeof val === 'object'));
-};
+}
 
 Traverse.extend = function () {
   for (let i = 1; i < arguments.length; i++) {
@@ -48,10 +45,10 @@ Traverse.extend = function () {
   }
 
   return arguments[0];
-};
+}
 
 Traverse.uniqueArray = function (arr) {
   return Array.from(new Set(arr));
-};
+}
 
 export default Traverse;

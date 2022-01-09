@@ -1,6 +1,4 @@
-import Storage from "./storage";
-
-const XHR = Object.create(Storage);
+const XHR = {};
 
 XHR.percentComplete = 0;
 XHR.storage = null;
@@ -55,15 +53,15 @@ XHR.ajax = function ({...options}) {
 
     xhr.send(data);
   });
-};
+}
 
 XHR.error = function () {
   console.log('There was an error with your XHR request');
-};
+}
 
 XHR.abort = function () {
   console.log('Aborted your XHR request.');
-};
+}
 
 XHR.updateProgress = function (eventObj) {
   if (eventObj.lengthComputable) {
@@ -74,6 +72,6 @@ XHR.updateProgress = function (eventObj) {
       description: 'Unable to update "' + this.methodType + '" xhr request progress.'
     });
   }
-};
+}
 
 export default XHR;
