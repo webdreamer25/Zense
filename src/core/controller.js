@@ -4,7 +4,7 @@ const Controller = Object.create(Renderer);
 
 /****************************************************************
  * @PROP name: Exists to more easily find composites, modules & component related coded for debugging.
- * @PROP strUI: Use to access string value of a given node returned by this.dom() method.
+ * @PROP strUI: Use to access string value of your node selector returned by this.dom() method.
  * @PROP bindUI: Use so that we do not run our bindUIElements in cases we just want to control bindings.
  * @PROP shoudlRender: Prevent composite, module or component from rendering.
  * @PROP shouldSetBehaviors: Use in cases when you want to control when behvaiors start.
@@ -30,7 +30,7 @@ Controller.bootstrapChildren = async function (strapees, childrenLen) {
   for (let i = 0; i < childrenLen; i++) {
     let strapee = strapees[i];
     let strapeeOptions = strapee.options;
-    let type = strapee.type;
+    let type = strapeeOptions ? strapee.component.type : strapee.type;
 
     // Ensures we don't overwrite the original instance when customizing.
     if (strapee[type] && strapeeOptions) {
@@ -43,7 +43,7 @@ Controller.bootstrapChildren = async function (strapees, childrenLen) {
 
       // Ensures that we only update default object if we have it instead of the entire object.
       if (strapee.defaultOnly) {
-        newStrapeeInstance.default = Object.assign({}, newStrapeeInstance.default, coptions);
+        newStrapeeInstance.default = Object.assign({}, newStrapeeInstance.default, strapeeOptions);
       } else {
         newStrapeeInstance = this.extend({}, newStrapeeInstance, strapeeOptions);
       }
@@ -53,7 +53,9 @@ Controller.bootstrapChildren = async function (strapees, childrenLen) {
 
       strapee = newStrapeeInstance;
     } else {
-      strapee = Object.create(strapee);
+      const newStrapeeInstance = Object.create(strapee);
+
+      strapee = newStrapeeInstance;
     }
 
     // Let the component know whos their daddy.

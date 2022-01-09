@@ -14,10 +14,6 @@ ControlsComponent.create({
   renderType: 'html',
   renderMultiple: true,
 
-  default: {
-    controlType: 'static'
-  },
-
   init() {
     let delegate = typeof this.ui.jsBtn === 'string' ? this.ui.jsBtn : this.ui.jsBtn.strName;
 

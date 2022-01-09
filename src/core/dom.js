@@ -14,11 +14,13 @@ const DOM = function (selector, context) {
   if (typeof selector === 'string') {
 
     // Needed to ensure no duplication of parent selector occurs when rendering multiples of the same component.
+    // Selector will have "#parent .child" as selector string and we only want the child class as the strSelector of the given element.
     if (spaceRegex.test(selector)) {
-      selector = selector.match(lastClassRegex)[0];
+      strSelector = selector.match(lastClassRegex)[0];
+    } else {
+      strSelector = selector;
     }
 
-    strSelector = selector;
     match = selectorRegex.exec(selector);
 
     if (match !== null) {
