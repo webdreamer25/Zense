@@ -2284,7 +2284,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
       }
 
       // Ensures we don't go through the same logic again since we have already customized our strapee.
-      strapees.splice(i, 1, newStrapeeInstance);
+      strapeeArr.splice(i, 1, newStrapeeInstance);
 
       strapee = newStrapeeInstance;
     } else {
@@ -2590,10 +2590,10 @@ const DOMSelectorMethods = {
     const len = this.length;
 
     if (!len) {
-      removeSelectorInfoAndListener(this, this.info);
+      Object(_functions__WEBPACK_IMPORTED_MODULE_0__["removeSelectorInfoAndListener"])(this, this.info);
     } else {
       for (let i = 0; i < len; i++) {
-        removeSelectorInfoAndListener(this[i], this[i].info);
+        Object(_functions__WEBPACK_IMPORTED_MODULE_0__["removeSelectorInfoAndListener"])(this[i], this[i].info);
       }
     }
 

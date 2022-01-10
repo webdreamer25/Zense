@@ -49,7 +49,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
       }
 
       // Ensures we don't go through the same logic again since we have already customized our strapee.
-      strapees.splice(i, 1, newStrapeeInstance);
+      strapeeArr.splice(i, 1, newStrapeeInstance);
 
       strapee = newStrapeeInstance;
     } else {

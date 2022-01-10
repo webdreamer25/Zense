@@ -1,4 +1,5 @@
 import { Zense } from '../../../zense';
+import TopComponent from '../components/top.component';
 import HeroModule from '../modules/hero.module';
 import ResultsModule from '../modules/results.module';
 
@@ -11,6 +12,13 @@ DashboardComposite.create({
 
   modules: [
     HeroModule,
+    { 
+      component: TopComponent, 
+      options: {
+        heading: 'Car results'
+      }, 
+      defaultOnly: true 
+    },
     ResultsModule
   ],
 
@@ -20,6 +28,7 @@ DashboardComposite.create({
 
   template() {
     return /*html*/`<div id="hero-region"></div>
+    <div id="top-region"></div>
     <div id="results-region" class="container"></div>`;
   }
 });
