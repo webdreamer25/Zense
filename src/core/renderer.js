@@ -13,6 +13,7 @@ Renderer.beforeRender = function () {
 }
 
 Renderer.render = function (model = null, resetDOMSelector = false) {
+  this.destroy();
   this.setDOMSelector(resetDOMSelector);
   this.beforeRender();
   

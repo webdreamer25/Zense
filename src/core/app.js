@@ -17,7 +17,19 @@ App.create = function (options) {
 };
 
 App.setUtilityMethods = function (methodsObj) {
-  this.util = Object.assign(this.util, methodsObj);
+  try {
+    if (typeof methodsObj !== 'object') {
+      throw {
+        type: 'type error',
+        name: 'App.customUtilities',
+        message: 'Property shhould be type OBJECT.'
+      }
+    }
+
+    this.util = Object.assign(this.util, methodsObj);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 App.afterStart = function () {

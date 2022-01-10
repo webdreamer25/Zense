@@ -26,9 +26,9 @@ Controller.init = function () {
 }
 
 // Async to ensure if some options are fetched we can resolve the promise.
-Controller.bootstrapChildren = async function (strapees, childrenLen) {
+Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
   for (let i = 0; i < childrenLen; i++) {
-    let strapee = strapees[i];
+    let strapee = strapeeArr[i];
     let strapeeOptions = strapee.options;
     let type = strapeeOptions ? strapee.component.type : strapee.type;
 
@@ -61,10 +61,6 @@ Controller.bootstrapChildren = async function (strapees, childrenLen) {
     // Let the component know whos their daddy.
     strapee.super = Object.create(this);
 
-    if (strapee.hasRendered) {
-      strapee.destroy();
-    }
-
     // We need to ensure every component has a unique name set for debugging and error handling purposes.
     if (this.checkUniqueName) {
       this.checkUniqueName(strapee);
@@ -89,7 +85,8 @@ Controller.startBehaviors = function () {
   if (this.shouldSetBehaviors && behaviorsLen > 0) {
     for (let i = 0; i < behaviorsLen; i++) {
       let behavior = this.behaviors[i];
-      let type = behavior.type;
+      let behaviorOptions = behavior.options;
+      let type = behaviorOptions ? behavior.behavior.type : behavior.type;
       
       // This check is to ensure we are also handling extending the behavior.
       if (behavior[type]) {
@@ -99,11 +96,11 @@ Controller.startBehaviors = function () {
         try {
 
           // Necessary if we want to have specific behavior changes on any given component/module.
-          if (behavior.options || behavior.ui) {
-            if (behavior.ui) {
-              newBehaviorInstance.ui = Object.assign({}, newBehaviorInstance.ui, behavior.ui);
+          if (behaviorOptions) {
+            if (behavior.uiOnly) {
+              newBehaviorInstance.ui = Object.assign({}, newBehaviorInstance.ui, behaviorOptions);
             } else {
-              newBehaviorInstance = this.extend({}, newBehaviorInstance, behavior.options);
+              newBehaviorInstance = this.extend({}, newBehaviorInstance, behaviorOptions);
             }
 
             newBehaviorInstance.setUniqueIdAndName(this.name);
