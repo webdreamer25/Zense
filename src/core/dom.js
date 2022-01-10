@@ -1,4 +1,4 @@
-import { addSelectorInfo } from './functions';
+import { addSelectorInfo, removeSelectorInfoAndListener } from './functions';
 
 const DOM = function (selector, context) {
   const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
