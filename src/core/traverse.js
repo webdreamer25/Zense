@@ -1,5 +1,5 @@
 import Storage from './storage';
-import { DOM } from './dom';
+import DOM from './dom';
 import cloneDeep from 'lodash.clonedeep';
 
 const Traverse = Object.create(Storage);

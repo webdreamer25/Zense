@@ -42,7 +42,7 @@ ProgressiveImgBehavior.config({
   },
 
   start() {
-    this.bindUIElements();
+    this.util.bindUIElements(this);
 
     if (this.ui.container.exists && this.ui.container.length) {
       this.ui.container.each((region) => {

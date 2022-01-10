@@ -1,3 +1,5 @@
+import { addSelectorInfo } from './functions';
+
 const DOM = function (selector, context) {
   const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
   const lastClassRegex = /[^\s]+$/g;
@@ -279,59 +281,6 @@ const DOMSelectorMethods = {
   }
 }
 
-function addSelectorInfo(selectorInfo, infoObj) {
-  let updatedSelectorInfo;
 
-  infoObj.uid = createUniqueId();
 
-  // Ensures we support cases where the same selector has multiple events attached to it.
-  if (selectorInfo !== undefined) {
-
-    // Ensures we create the array only if that is not already the value type.
-    if (!Array.isArray(selectorInfo)) {
-      updatedSelectorInfo = [selectorInfo];
-    } else {
-      updatedSelectorInfo = selectorInfo;
-    }
-    
-    // Ensures we are not repeating the same info 
-    if (!updatedSelectorInfo.some(obj => obj.uid === infoObj.uid)) {
-      updatedSelectorInfo.push(infoObj);
-    }
-  } else {
-    updatedSelectorInfo = infoObj;
-  }
-
-  return updatedSelectorInfo;
-}
-
-function removeSelectorInfoAndListener(context, selectorInfo) {
-  if (selectorInfo === undefined) {
-    return context;
-  } else {
-    if (Array.isArray(selectorInfo)) {
-      for (let i = 0, len = selectorInfo.length; i < len; i++) {
-        let info = context.info[i];
-
-        context.removeEventListener(info.event, info.callback, true);
-      }
-    } else {
-      context.removeEventListener(selectorInfo.event, selectorInfo.callback, true);
-    }
-  }
-
-  context.info = undefined;
-}
-
-function createUniqueId(num = 1) {
-  const array = new Uint32Array(num);
-
-  window.crypto.getRandomValues(array);
-
-  return array.length === 1 ? array[0] : array;
-}
-
-export {
-  DOM,
-  createUniqueId
-}
+export default DOM

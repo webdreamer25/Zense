@@ -1,7 +1,7 @@
 import Traverse from './traverse';
 import XHR from './xhr';
 import Eventor from './eventor';
-import { createUniqueId } from './dom';
+import { createUniqueId, bindUIElements } from './functions';
 
 const App = Object.create(Traverse);
 
@@ -9,7 +9,8 @@ App.xhr = Object.create(XHR);
 App.events = Object.create(Eventor);
 App.customUtilities = null;
 App.util = {
-  createUniqueId
+  createUniqueId,
+  bindUIElements
 };
 
 App.create = function (options) {

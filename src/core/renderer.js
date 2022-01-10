@@ -34,8 +34,6 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
 }
 
 Renderer.internalPostHook = function () {
-  const ui = this.ui !== undefined ? Object.keys(this.ui) : [];
-
   if (this.strap !== undefined) {
     this.strap();
   }
@@ -44,9 +42,7 @@ Renderer.internalPostHook = function () {
     this.startBehaviors();
   }
 
-  if (this.bindUI && ui.length > 0) {
-    this.bindUIElements();
-  }
+  this.util.bindUIElements(this);
   
   this.hasRendered = true;
 }

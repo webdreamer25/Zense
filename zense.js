@@ -1964,6 +1964,7 @@ Behavior.ui = {};
 Behavior.name = '';
 Behavior.strUI = {};
 Behavior.type = 'behavior';
+Behavior.bindUI = true;
 Behavior.customized = false;
 Behavior.shouldStart = true;
 Behavior.setStringUIValues = true;
@@ -2026,94 +2027,6 @@ Behavior.setUniqueIdAndName = function (parentName) {
   this.name = this.name + name;
 }
 
-Behavior.bindUIElements = function () {
-  if (!this.ui) { return false; }
-
-  for (let key in this.ui) {
-    let uiElement = this.ui[key];
-    let isUIElementString = typeof uiElement === 'string';
-    let isUIElementObject = typeof uiElement === 'object';
-
-    // Ensures that even if we pass the class as key we re-get the dom node.
-    if (isUIElementString || isUIElementObject && key.indexOf('.') === -1) {
-
-      // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-      if (isUIElementString && uiElement !== this.strUI[key]) {
-        this.strUI[key] = uiElement;
-      }
-
-      // Needed to ensure ui dom elements are rebound
-      if ((this.customized || isUIElementString)) {
-        uiElement = this.strUI[key];
-      }
-
-      if (this.super !== undefined) {
-        const selector = this.super.selector;
-
-        // Ensure we only do a find to single node returns from this.dom();
-        if (selector !== undefined && uiElement !== undefined) {
-          this.ui[key] = selector.find(uiElement);
-        } else {
-          this.ui[key] = selector;
-        }
-        
-      } else {
-        this.ui[key] = this.dom(uiElement);
-      }
-    } else {
-      this.ui[key]['selector'] = this.bindEventListeners({ 
-        delegate: key, uiSelectorObj: this.ui[key], context: this 
-      });
-    }
-  }
-}
-
-Behavior.bindEventListeners = function (options) {
-  const { delegate, uiSelectorObj, context } = options;
-  
-  try {
-    let selector;
-
-    if (this.super === undefined) {
-      throw {
-        type: this.name,
-        message: 'Behavior has no parent declared since it was started on its own.'
-      }
-    } else {
-
-      // Ensure we have a parent selector if none is specified
-      if (!uiSelectorObj.parent) {
-        selector = this.super.selector;
-      } else {
-
-        // Allows for functional returns of parent objects under the right context.
-        if (typeof uiSelectorObj.parent === 'function') {
-          selector = this.dom(uiSelectorObj.parent(this));
-        } else {
-          selector = this.dom(uiSelectorObj.parent);
-        }
-
-      }
-
-      // Ensure that we are not rebinding the same event on re-rendering of a component.
-      if (!selector.exists) {
-        console.warn(`The defined parent selector ${selector.strName} in ${this.name} does not exist in the DOM.`);
-
-        return selector;
-      } else {
-        selector.off();
-
-        // We pass in event, delegate, handler, context which is our behavior.
-        selector.on(uiSelectorObj.event, delegate, this[uiSelectorObj.method], context);
-      }
-    }
-
-    return selector.find(delegate);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 Behavior.unbindUIElements = function () {
   for (let key in this.ui) {
 
@@ -2127,7 +2040,7 @@ Behavior.unbindUIElements = function () {
 }
 
 Behavior.start = function () {
-  this.bindUIElements();
+  this.util.bindUIElements(this)
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Behavior);
@@ -2258,7 +2171,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _traverse__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./traverse */ "./src/core/traverse.js");
 /* harmony import */ var _xhr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./xhr */ "./src/core/xhr.js");
 /* harmony import */ var _eventor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./eventor */ "./src/core/eventor.js");
-/* harmony import */ var _dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom */ "./src/core/dom.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./functions */ "./src/core/functions.js");
 
 
 
@@ -2270,7 +2183,8 @@ App.xhr = Object.create(_xhr__WEBPACK_IMPORTED_MODULE_1__["default"]);
 App.events = Object.create(_eventor__WEBPACK_IMPORTED_MODULE_2__["default"]);
 App.customUtilities = null;
 App.util = {
-  createUniqueId: _dom__WEBPACK_IMPORTED_MODULE_3__["createUniqueId"]
+  createUniqueId: _functions__WEBPACK_IMPORTED_MODULE_3__["createUniqueId"],
+  bindUIElements: _functions__WEBPACK_IMPORTED_MODULE_3__["bindUIElements"]
 };
 
 App.create = function (options) {
@@ -2461,76 +2375,6 @@ Controller.startBehaviors = function () {
   }
 }
 
-Controller.bindUIElements = function () {
-  if (!this.ui) { return false; }
-
-  for (let key in this.ui) {
-    let uiElement = this.ui[key];
-
-    // Ensures that even if we pass the class as key we re-get the dom node.
-    if (typeof this.ui[key] === 'string' || typeof this.ui[key] === 'object' && key.indexOf('.') === -1) {
-
-      // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-      if (typeof this.ui[key] === 'string' && this.ui[key] !== this.strUI[key]) {
-        this.strUI[key] = this.ui[key];
-      }
-
-      // Needed to ensure ui dom elements are rebound
-      if ((this.customized || typeof uiElement !== 'string')) {
-        uiElement = this.strUI[key];
-      }
-
-      let selector;
-
-      if (this.super) {
-        selector = this.super.selector;
-
-        // Ensure we only do a find to single node returns from this.dom();
-        if (!selector.length && uiElement !== undefined) {
-          this.ui[key] = selector.find(uiElement);
-        } else {
-          this.ui[key] = selector;
-        }
-        
-      } else {
-        this.ui[key] = this.dom(uiElement);
-      }
-    } else {
-      this.ui[key]['selector'] = this.bindEventListeners(key, this.ui[key], this);
-    }
-  }
-}
-
-Controller.bindEventListeners = function (delegate, selectorObj, context) {
-  let selector;
-  
-  // Ensure we have a parent selector if none is specified
-  if (!selectorObj.parent) {
-    if (this.selector) {
-      selector = this.selector;
-    } else if (this.super) {
-      selector = this.super.selector;
-    }
-  } else {
-
-    // Allows for functional returns of parent objects under the right context.
-    if (typeof selectorObj.parent === 'function') {
-      selector = this.dom(selectorObj.parent.bind(this));
-    } else {
-      selector = this.dom(selectorObj.parent);
-    }
-
-  }
-
-  // Ensure that we are not rebinding the same event on re-rendering of a component.
-  selector.off();
-
-  // We pass in event, delegate, handler, context which is our behavior.
-  selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
-
-  return selector.find(delegate);
-}
-
 Controller.unbindBehaviorEvents = function () {
   if (this.behaviors.length === 0) {
     return false;
@@ -2577,13 +2421,14 @@ Controller.getBehavior = function (behaviorName) {
 /*!*************************!*\
   !*** ./src/core/dom.js ***!
   \*************************/
-/*! exports provided: DOM, createUniqueId */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DOM", function() { return DOM; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUniqueId", function() { return createUniqueId; });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/core/functions.js");
+
+
 const DOM = function (selector, context) {
   const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
   const lastClassRegex = /[^\s]+$/g;
@@ -2695,7 +2540,7 @@ const DOMListener = function (args, context) {
   let bubble = args[2] ? args[2] : true;
 
   if (typeof args[1] === 'function') {
-    context.info = addSelectorInfo(context.info, { event, callback});
+    context.info = Object(_functions__WEBPACK_IMPORTED_MODULE_0__["addSelectorInfo"])(context.info, { event, callback});
     context.addEventListener(event, callback, bubble);
   } else {
     const delegate = args[1];
@@ -2703,7 +2548,7 @@ const DOMListener = function (args, context) {
     callback = args[2];
     bubble = true;
 
-    context.info = addSelectorInfo(context.info, { event, delegate, callback });
+    context.info = Object(_functions__WEBPACK_IMPORTED_MODULE_0__["addSelectorInfo"])(context.info, { event, delegate, callback });
 
     context.addEventListener(event, function (e) {
       for (let target = e.target; target && target != this; target = target.parentNode) {
@@ -2865,59 +2710,9 @@ const DOMSelectorMethods = {
   }
 }
 
-function addSelectorInfo(selectorInfo, infoObj) {
-  let updatedSelectorInfo;
-
-  infoObj.uid = createUniqueId();
-
-  // Ensures we support cases where the same selector has multiple events attached to it.
-  if (selectorInfo !== undefined) {
-
-    // Ensures we create the array only if that is not already the value type.
-    if (!Array.isArray(selectorInfo)) {
-      updatedSelectorInfo = [selectorInfo];
-    } else {
-      updatedSelectorInfo = selectorInfo;
-    }
-    
-    // Ensures we are not repeating the same info 
-    if (!updatedSelectorInfo.some(obj => obj.uid === infoObj.uid)) {
-      updatedSelectorInfo.push(infoObj);
-    }
-  } else {
-    updatedSelectorInfo = infoObj;
-  }
-
-  return updatedSelectorInfo;
-}
-
-function removeSelectorInfoAndListener(context, selectorInfo) {
-  if (selectorInfo === undefined) {
-    return context;
-  } else {
-    if (Array.isArray(selectorInfo)) {
-      for (let i = 0, len = selectorInfo.length; i < len; i++) {
-        let info = context.info[i];
-
-        context.removeEventListener(info.event, info.callback, true);
-      }
-    } else {
-      context.removeEventListener(selectorInfo.event, selectorInfo.callback, true);
-    }
-  }
-
-  context.info = undefined;
-}
-
-function createUniqueId(num = 1) {
-  const array = new Uint32Array(num);
-
-  window.crypto.getRandomValues(array);
-
-  return array.length === 1 ? array[0] : array;
-}
 
 
+/* harmony default export */ __webpack_exports__["default"] = (DOM);
 
 /***/ }),
 
@@ -2993,6 +2788,169 @@ const Eventor = {
 
 /***/ }),
 
+/***/ "./src/core/functions.js":
+/*!*******************************!*\
+  !*** ./src/core/functions.js ***!
+  \*******************************/
+/*! exports provided: bindUIElements, bindEventListeners, addSelectorInfo, removeSelectorInfoAndListener, createUniqueId */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindUIElements", function() { return bindUIElements; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindEventListeners", function() { return bindEventListeners; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addSelectorInfo", function() { return addSelectorInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeSelectorInfoAndListener", function() { return removeSelectorInfoAndListener; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUniqueId", function() { return createUniqueId; });
+function bindUIElements(context) {
+  const ui = context.ui;
+  const hasUIElements = ui && Object.keys(ui).length > 0;
+
+  if (!hasUIElements || context.bindUI !== undefined && !context.bindUI) { 
+    return false; 
+  }
+
+  for (let key in ui) {
+    let uiElement = ui[key];
+    let isUIElementString = typeof uiElement === 'string';
+    let isUIElementObject = typeof uiElement === 'object';
+
+    // Ensures that even if we pass the class as key we re-get the dom node.
+    if (isUIElementString || isUIElementObject && key.indexOf('.') === -1) {
+
+      // Neccessary for re-binding of events on later rendered elements referenced by ui object.
+      if (isUIElementString && uiElement !== context.strUI[key]) {
+        context.strUI[key] = uiElement;
+      }
+
+      // Needed to ensure ui dom elements are rebound
+      if ((context.customized || isUIElementString)) {
+        uiElement = context.strUI[key];
+      }
+
+      if (context.super !== undefined) {
+        const selector = context.super.selector;
+
+        // Ensure we only do a find to single node returns from context.dom();
+        if (selector !== undefined && uiElement !== undefined) {
+          ui[key] = selector.find(uiElement);
+        } else {
+          ui[key] = selector;
+        }
+        
+      } else {
+        ui[key] = context.dom(uiElement);
+      }
+    } else {
+      ui[key]['selector'] = bindEventListeners({ 
+        delegate: key, uiSelectorObj: ui[key], context
+      });
+    }
+  }
+
+  return ui;
+}
+
+function bindEventListeners(options) {
+  const { delegate, uiSelectorObj, context } = options;
+  
+  try {
+    let selector;
+
+    if (context.super === undefined) {
+      throw {
+        type: context.name,
+        message: 'Behavior has no parent declared since it was started on its own.'
+      }
+    } else {
+
+      // Ensure we have a parent selector if none is specified
+      if (!uiSelectorObj.parent) {
+        selector = context.super.selector;
+      } else {
+
+        // Allows for functional returns of parent objects under the right context.
+        if (typeof uiSelectorObj.parent === 'function') {
+          selector = context.dom(uiSelectorObj.parent.call(context));
+        } else {
+          selector = context.dom(uiSelectorObj.parent);
+        }
+
+      }
+
+      // Ensure that we are not rebinding the same event on re-rendering of a component.
+      if (!selector.exists) {
+        console.warn(`The defined parent selector ${selector.strName} in ${context.name} does not exist in the DOM.`);
+
+        return selector;
+      } else {
+        selector.off();
+
+        // We pass in event, delegate, handler, context which is our behavior.
+        selector.on(uiSelectorObj.event, delegate, context[uiSelectorObj.method], context);
+      }
+    }
+
+    return selector.find(delegate);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function addSelectorInfo(selectorInfo, infoObj) {
+  let updatedSelectorInfo;
+
+  infoObj.uid = createUniqueId();
+
+  // Ensures we support cases where the same selector has multiple events attached to it.
+  if (selectorInfo !== undefined) {
+
+    // Ensures we create the array only if that is not already the value type.
+    if (!Array.isArray(selectorInfo)) {
+      updatedSelectorInfo = [selectorInfo];
+    } else {
+      updatedSelectorInfo = selectorInfo;
+    }
+    
+    // Ensures we are not repeating the same info 
+    if (!updatedSelectorInfo.some(obj => obj.uid === infoObj.uid)) {
+      updatedSelectorInfo.push(infoObj);
+    }
+  } else {
+    updatedSelectorInfo = infoObj;
+  }
+
+  return updatedSelectorInfo;
+}
+
+function removeSelectorInfoAndListener(context, selectorInfo) {
+  if (selectorInfo === undefined) {
+    return context;
+  } else {
+    if (Array.isArray(selectorInfo)) {
+      for (let i = 0, len = selectorInfo.length; i < len; i++) {
+        let info = context.info[i];
+
+        context.removeEventListener(info.event, info.callback, true);
+      }
+    } else {
+      context.removeEventListener(selectorInfo.event, selectorInfo.callback, true);
+    }
+  }
+
+  context.info = undefined;
+}
+
+function createUniqueId(num = 1) {
+  const array = new Uint32Array(num);
+
+  window.crypto.getRandomValues(array);
+
+  return array.length === 1 ? array[0] : array;
+}
+
+/***/ }),
+
 /***/ "./src/core/renderer.js":
 /*!******************************!*\
   !*** ./src/core/renderer.js ***!
@@ -3039,8 +2997,6 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
 }
 
 Renderer.internalPostHook = function () {
-  const ui = this.ui !== undefined ? Object.keys(this.ui) : [];
-
   if (this.strap !== undefined) {
     this.strap();
   }
@@ -3049,9 +3005,7 @@ Renderer.internalPostHook = function () {
     this.startBehaviors();
   }
 
-  if (this.bindUI && ui.length > 0) {
-    this.bindUIElements();
-  }
+  this.util.bindUIElements(this);
   
   this.hasRendered = true;
 }
@@ -3380,7 +3334,7 @@ __webpack_require__.r(__webpack_exports__);
 const Traverse = Object.create(_storage__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 Traverse.dom = function (selector) {
-  return new _dom__WEBPACK_IMPORTED_MODULE_1__["DOM"](selector);
+  return new _dom__WEBPACK_IMPORTED_MODULE_1__["default"](selector);
 }
 
 Traverse.each = function (arr, callback) {
@@ -3555,7 +3509,7 @@ const Zense = {
   App: _core_app__WEBPACK_IMPORTED_MODULE_0__["default"]
 }
 
-Zense.VERSION = '1.7.5';
+Zense.VERSION = '1.7.7';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 
