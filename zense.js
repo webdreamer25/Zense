@@ -2131,9 +2131,9 @@ Composite.destroyChildren = function () {
     // Ensure if module or component was customized we always have the appropriate referencing context.
     child = child.name ? child.name : child;
 
-    for (let i = 0, len = [child].length; i < len; i++) {
-      if ([child][i].hasRendered) {
-        [child][i].destroy();
+    for (let i = 0, len = child.length; i < len; i++) {
+      if (child[i].hasRendered) {
+        child[i].destroy();
       }
     }
   }
@@ -2818,13 +2818,13 @@ function bindUIElements(context) {
     // Ensures that even if we pass the class as key we re-get the dom node.
     if (isUIElementString || isUIElementObject && key.indexOf('.') === -1) {
 
-      // Neccessary for re-binding of events on later rendered elements referenced by ui object.
+      // Save a copy of string uiElement to re-assign later when re-rendering.
       if (isUIElementString && uiElement !== context.strUI[key]) {
         context.strUI[key] = uiElement;
       }
 
-      // Needed to ensure ui dom elements are rebound
-      if ((context.customized || isUIElementString)) {
+      // Use our string type ui element to reset ui element state.
+      if ((context.customized || !isUIElementString)) {
         uiElement = context.strUI[key];
       }
 
