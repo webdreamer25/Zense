@@ -1,5 +1,6 @@
 import { Zense } from '../../zense';
 import DashboardComposite from './composites/dashboard.composite';
+import ResultsComposite from './composites/results.composite';
 
 const AppStorage = Object.create(Zense.Storage);
 
@@ -85,7 +86,31 @@ const App = Object.create(Zense.App);
 
 App.create({
   afterStart() {
-    DashboardComposite.render();
+    let hash = window.location.hash;
+
+    if (hash === '' || hash === '#/dashboard') {
+      DashboardComposite.render();
+    }
+
+    window.addEventListener('hashchange', this.route.bind(this));
+  },
+
+  route() {
+    let hash = window.location.hash;
+    let module;
+
+    hash = hash.replace(/#\//, '');
+
+    switch(hash) {
+      case 'results':
+        module = ResultsComposite;
+
+        break;
+      default:
+        module = DashboardComposite;
+    }
+
+    module.render();
   }
 })
 

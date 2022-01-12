@@ -2126,14 +2126,14 @@ Composite.destroyChildren = function () {
   }
 
   for (let c = 0; c < childrenLen; c++) {
-    let child = this.children[c];
+    let child = children[c];
 
     // Ensure if module or component was customized we always have the appropriate referencing context.
     child = child.name ? child.name : child;
 
-    for (let i = 0, len = this[child].length; i < len; i++) {
-      if (this[child][i].hasRendered) {
-        this[child][i].destroy();
+    for (let i = 0, len = [child].length; i < len; i++) {
+      if ([child][i].hasRendered) {
+        [child][i].destroy();
       }
     }
   }
