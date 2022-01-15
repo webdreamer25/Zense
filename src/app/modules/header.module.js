@@ -12,11 +12,9 @@ HeaderModule.create({
   ],
 
   template() {
-    return /*html*/`<div class="container">
-      <div class="row">
-        <div class="col">Company Logo</div>
-        <div id="nav-region" class="col"></div>
-      </div>
+    return /*html*/`<div class="m-zense-header row">
+      <div class="col">Zense JS</div>
+      <div id="nav-region" class="col-auto"></div>
     </div>`;
   }
 })

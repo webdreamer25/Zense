@@ -7,7 +7,7 @@ const ResultsComposite = Object.create(Zense.Composite);
 
 ResultsComposite.create({
   name: 'results-composite',
-  selector: '.main',
+  selector: '#app',
   renderType: 'html',
 
   modules: [
@@ -24,8 +24,8 @@ ResultsComposite.create({
   },
 
   template() {
-    return /*html*/`<div id="header-region"></div>
-    <div id="top-region"></div>
+    return /*html*/`<div id="header-region" class="container"></div>
+    <div id="top-region" class="container"></div>
     <div id="results-region" class="container"></div>`;
   }
 })

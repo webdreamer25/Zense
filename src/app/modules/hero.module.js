@@ -6,7 +6,6 @@ const HeroModule = Object.create(Zense.Module);
 
 HeroModule.create({
   name: 'hero-module',
-
   selector: '#hero-region',
 
   ui: {

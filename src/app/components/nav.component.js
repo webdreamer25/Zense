@@ -9,11 +9,15 @@ NavComponent.create({
   serializeData() {
     return [
       {
-        label: 'Dashboard',
-        route: '/dashboard'
+        label: 'home',
+        route: '/home'
       },
       {
-        label: 'Results',
+        label: 'develop',
+        route: '/develop'
+      },
+      {
+        label: 'results',
         route: '/results'
       }
     ]

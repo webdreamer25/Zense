@@ -1,5 +1,6 @@
 import { Zense } from '../../zense';
-import DashboardComposite from './composites/dashboard.composite';
+import DevelopComposite from './composites/develop.composite';
+import HomeComposite from './composites/home.composite';
 import ResultsComposite from './composites/results.composite';
 
 const AppStorage = Object.create(Zense.Storage);
@@ -13,6 +14,7 @@ AppStorage.config({
 })
 
 AppStorage.set({
+  baseJSONPath: '/json/',
   cars: [
     {
       make: 'mitsubishi',
@@ -86,11 +88,7 @@ const App = Object.create(Zense.App);
 
 App.create({
   afterStart() {
-    let hash = window.location.hash;
-
-    if (hash === '' || hash === '#/dashboard') {
-      DashboardComposite.render();
-    }
+    this.route();
 
     window.addEventListener('hashchange', this.route.bind(this));
   },
@@ -102,12 +100,16 @@ App.create({
     hash = hash.replace(/#\//, '');
 
     switch(hash) {
+      case 'develop':
+        module = DevelopComposite;
+
+        break;
       case 'results':
         module = ResultsComposite;
 
         break;
       default:
-        module = DashboardComposite;
+        module = HomeComposite;
     }
 
     module.render();
