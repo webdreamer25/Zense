@@ -1,4 +1,5 @@
 import { Zense } from '../../../zense';
+import ArchitectualModule from '../modules/architectual.module';
 import HeaderModule from '../modules/header.module';
 import SidepanelModule from '../modules/sidepanel.module';
 
@@ -11,7 +12,8 @@ DevelopComposite.create({
 
   modules: [
     HeaderModule,
-    SidepanelModule
+    SidepanelModule,
+    ArchitectualModule
   ],
 
   template() {
@@ -19,7 +21,9 @@ DevelopComposite.create({
     <div class="container">
       <div class="row">
         <div id="sidepanel-region" class="col-auto"></div>
-        <main id="main-region" class="col"></main>
+        <main class="col">
+          <div id="architectual-region"></div>
+        </main>
       </div>
     </div>`;
   }

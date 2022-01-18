@@ -2,6 +2,7 @@ import { Zense } from '../../zense';
 import DevelopComposite from './composites/develop.composite';
 import HomeComposite from './composites/home.composite';
 import ResultsComposite from './composites/results.composite';
+import Util from './util';
 
 const AppStorage = Object.create(Zense.Storage);
 
@@ -87,6 +88,8 @@ AppStorage.set({
 const App = Object.create(Zense.App);
 
 App.create({
+  customUtilities: Util,
+  
   afterStart() {
     this.route();
 

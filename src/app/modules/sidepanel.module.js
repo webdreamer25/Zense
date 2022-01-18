@@ -10,22 +10,12 @@ SidepanelModule.create({
   init() {
     this.navigationData = null;
 
-    this.fetchJSONData();
-  },
-
-  async fetchJSONData() {
-    try {
-      const basePath = this.store.baseJSONPath;
-      const response = await fetch(basePath + 'developer.json');
-      const json = await response.json();
-
+    this.util.fetchJSONData('developer', (json) => {
       this.navigationData = json;
       this.shouldRender = true;
 
       this.render();
-    } catch (err) {
-      console.error(err);
-    }
+    }, this);
   },
 
   afterRender() {

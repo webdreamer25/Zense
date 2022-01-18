@@ -1,3 +1,101 @@
+@use "sass:math";
+
+$object-spacing: 40px !default;
+$element-spacing: 60px !default;
+
 .m-zense-architectual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__object {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+    text-transform: capitalize;
+    position: relative;
+
+    &.is--left,
+    &.is--right,
+    &.is--center {
+      &:before {
+        width: 2px;
+        height: $element-spacing;
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: -#{$element-spacing};
+        background-color: #000;
+      }
+    }
+
+    &.is--left,
+    &.is--right {
+      &:before {
+        height: math.div($element-spacing, 2);
+        top: -#{math.div($element-spacing, 2)};
+      }
+    }
+
+    &.is--center {
+      margin: 0 $element-spacing;
+    }
+  }
+
+  &__object + &__object {
+    &.is--core {
+      margin-top: $object-spacing;
+
+      &:before {
+        width: 2px;
+        height: $object-spacing;
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: -#{$object-spacing};
+        background-color: #000;
+      }
+    }
+  }
   
+
+  &__elements {
+    display: flex;
+    position: absolute;
+    bottom: -160px;
+
+    &:before {
+      width: 320px;
+      height: 2px;
+      content: '';
+      position: absolute;
+      left: 50%;
+      background-color: #000;
+    }
+
+    &.is--overlayed {
+      width: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      bottom: 50%;
+      transform: translateY(50%);
+      margin-top: 0;
+
+      &:before {
+        top: 50%;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    &:not(.is--overlayed) {
+      &:before {
+        top: -#{math.div($element-spacing, 2)};
+        transform: translate(-50%, 0);
+      }
+    }
+  }
 }

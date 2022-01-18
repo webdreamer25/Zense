@@ -1,0 +1,60 @@
+[
+  {
+    "name": "storage",
+    "type": "core"
+  },
+  {
+    "name": "traverse",
+    "type": "core",
+    "constructors": [
+      {
+        "name": "DOM"
+      }
+    ]
+  },
+  {
+    "name": "app",
+    "type": "core",
+    "linkedObjects": [
+      {
+        "name": "behavior",
+        "type": "element"
+      }
+    ],
+    "serviceObjects": [
+      {
+        "name": "xhr",
+        "type": "core"
+      },
+      {
+        "name": "eventor",
+        "type": "core"
+      }
+    ]
+  },
+  {
+    "name": "renderer",
+    "type": "core"
+  },
+  {
+    "name": "controller",
+    "type": "core",
+    "linkedObjects": [
+      {
+        "name": "composite",
+        "type": "element",
+        "align": "left"
+      },
+      {
+        "name": "module",
+        "type": "element",
+        "align": "center"
+      },
+      {
+        "name": "component",
+        "type": "element",
+        "align": "right"
+      }
+    ]
+  }
+]
