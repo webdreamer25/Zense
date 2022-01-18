@@ -1,12 +1,15 @@
-import Traverse from './core/traverse';
+import App from './core/app';
 
-const Behavior = Object.create(Traverse);
+const Behavior = Object.create(App);
 
 Behavior.id = '';
 Behavior.ui = {};
+Behavior.name = '';
 Behavior.strUI = {};
-Behavior.behaviorName = '';
+Behavior.type = 'behavior';
+Behavior.bindUI = true;
 Behavior.customized = false;
+Behavior.shouldStart = true;
 Behavior.setStringUIValues = true;
 
 Behavior.config = function (options) {
@@ -33,21 +36,21 @@ Behavior.config = function (options) {
   }
 
   try {
-    if (this.behaviorName === '') {
+    if (this.name === '') {
       throw {
         type: 'Behavior',
         message: 'Behavior name has not been declared'
       }
     } else {
-      // Gives our behaviorName property a suffix.
-      if (this.behaviorName.indexOf('-behavior') === -1) {
-        this.behaviorName += '-behavior';
+      // Gives our name property a suffix.
+      if (this.name.indexOf('-behavior') === -1) {
+        this.name += '-behavior';
       }
     }
   } catch (e) {
     console.error(e);
   }
-};
+}
 
 Behavior.setUniqueIdAndName = function (parentName) {
   let name = '';
@@ -57,109 +60,15 @@ Behavior.setUniqueIdAndName = function (parentName) {
   if (parentName) {
 
     // Ensures we dont attribute 2 different parents to the same behavior.
-    if (this.behaviorName.indexOf('__') > -1) {
-      this.behaviorName = this.behaviorName.split('__')[0];
+    if (this.name.indexOf('__') > -1) {
+      this.name = this.name.split('__')[0];
     }
 
     name = '__' + parentName;
   }
 
-  this.behaviorName = this.behaviorName + name;
-};
-
-Behavior.bindUIElements = function () {
-  if (!this.ui) { return false; }
-
-  for (let key in this.ui) {
-    let uiElement = this.ui[key];
-
-    // Ensures that even if we pass the class as key we re-get the dom node.
-    if (typeof this.ui[key] === 'string' || typeof this.ui[key] === 'object' && key.indexOf('.') === -1) {
-
-      // Neccessary for re-binding of events on later rendered elements referenced by this.ui object.
-      if (typeof this.ui[key] === 'string' && this.ui[key] !== this.strUI[key]) {
-        this.strUI[key] = this.ui[key];
-      }
-
-      // Needed to ensure ui dom elements are rebound
-      if ((this.customized || typeof uiElement !== 'string')) {
-        uiElement = this.strUI[key];
-      }
-
-      let selector;
-
-      if (this.component || this.module || this.composite) {
-        if (this.component !== undefined && this.component.selector) {
-          selector = this.component.selector;
-        } else if (this.module !== undefined && this.module.selector) {
-          selector = this.module.selector;
-        } else if (this.composite !== undefined && this.composite.selector) {
-          selector = this.composite.selector;
-        }
-
-        // Ensure we only do a find to single node returns from this.dom();
-        if (selector !== undefined) {
-          this.ui[key] = selector.find(uiElement);
-        } else {
-          this.ui[key] = selector;
-        }
-        
-      } else {
-        this.ui[key] = this.dom(uiElement);
-      }
-    } else {
-      this.ui[key]['selector'] = this.bindEventListeners(key, this.ui[key], this);
-    }
-  }
-};
-
-Behavior.bindEventListeners = function (delegate, selectorObj, context) {
-  let selector;
-  
-  try {
-    if (this.component === undefined && this.module === undefined) {
-      throw {
-        type: this.behaviorName,
-        message: 'Behavior has no parent declared since it was started on its own.'
-      }
-    } else {
-
-      // Ensure we have a parent selector if none is specified
-      if (!selectorObj.parent) {
-        if (this.component) {
-          selector = this.component.selector;
-        } else if (this.module) {
-          selector = this.module.selector;
-        }
-      } else {
-
-        // Allows for functional returns of parent objects under the right context.
-        if (typeof selectorObj.parent === 'function') {
-          selector = this.dom(selectorObj.parent(this));
-        } else {
-          selector = this.dom(selectorObj.parent);
-        }
-
-      }
-
-      // Ensure that we are not rebinding the same event on re-rendering of a component.
-      if (!selector.exists) {
-        console.warn(`The defined parent selector ${selector.strName} in ${this.behaviorName} does not exist in the DOM.`);
-
-        return selector;
-      } else {
-        selector.off();
-
-        // We pass in event, delegate, handler, context which is our behavior.
-        selector.on(selectorObj.event, delegate, this[selectorObj.method], context);
-      }
-    }
-
-    return selector.find(delegate);
-  } catch (err) {
-    console.error(err);
-  }
-};
+  this.name = this.name + name;
+}
 
 Behavior.unbindUIElements = function () {
   for (let key in this.ui) {
@@ -171,10 +80,10 @@ Behavior.unbindUIElements = function () {
     }
     
   }
-};
+}
 
 Behavior.start = function () {
-  this.bindUIElements();
-};
+  this.util.bindUIElements(this)
+}
 
 export default Behavior;

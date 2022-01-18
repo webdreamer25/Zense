@@ -1,6 +1,6 @@
-import Traverse from './traverse';
+import App from './app';
 
-const Renderer = Object.create(Traverse);
+const Renderer = Object.create(App);
 
 Renderer.selector = null;
 Renderer.template = null;
@@ -10,7 +10,7 @@ Renderer.renderMultiple = false;
 
 Renderer.beforeRender = function () {
   return null;
-};
+}
 
 Renderer.render = function (model = null, resetDOMSelector = false) {
   this.destroy();
@@ -31,27 +31,25 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
 
   this.internalPostHook();
   this.afterRender();
-};
+}
 
 Renderer.internalPostHook = function () {
   if (this.strap !== undefined) {
     this.strap();
   }
 
-  if (this.setBehaviors !== undefined) {
-    this.setBehaviors();
+  if (this.startBehaviors !== undefined) {
+    this.startBehaviors();
   }
 
-  if (this.ui !== undefined && Object.keys(this.ui).length > 0) {
-    this.bindUIElements();
-  }
+  this.util.bindUIElements(this);
   
   this.hasRendered = true;
-};
+}
 
 Renderer.afterRender = function () {
   return null;
-};
+}
 
 Renderer.destroy = function () {
   // We want to destroy only if it has rendered.
@@ -81,7 +79,7 @@ Renderer.destroy = function () {
   }
 
   this.hasRendered = false;
-};
+}
 
 Renderer.setDOMSelector = function (resetDOMSelector) {
   if (typeof this.selector !== 'string') {
@@ -96,8 +94,10 @@ Renderer.setDOMSelector = function (resetDOMSelector) {
   }
 
   // Ensures that if we are rendering multiple we dont re-render on previous nodes.
-  if (this.renderMultiple && this.module !== undefined) {
-    this.selector = this.dom(`${this.module.selector.strName} ${this.selector}`);
+  if (this.renderMultiple && this.super !== undefined) {
+    const parentSelector = this.super.selector.strName;
+
+    this.selector = this.dom(`${parentSelector} ${this.selector}`);
   } else {
     this.selector = this.dom(this.selector);
   }
@@ -105,7 +105,7 @@ Renderer.setDOMSelector = function (resetDOMSelector) {
   if (!this.selector.exists) {
     throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);
   }
-};
+}
 
 Renderer.addTemplateToDOM = function (data) {
   if (this.shouldRender) {
@@ -122,13 +122,13 @@ Renderer.addTemplateToDOM = function (data) {
     this.selector.remove();
     
   }
-};
+}
 
 Renderer.serializeData = function (data) {
   if (data) { 
     return data;
   } 
-};
+}
 
 Renderer.errorCheck = function () {
   let errorObj = {
@@ -147,6 +147,6 @@ Renderer.errorCheck = function () {
   if (errorObj.message) {
     throw errorObj;
   }
-};
+}
 
 export default Renderer;

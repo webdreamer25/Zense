@@ -8,7 +8,7 @@ const config = {
     path: __dirname,
     filename: '[name].js'
   },
-  module: {
+  /*module: {
     rules: [
       {
         test: /\.(js|jsx)?$/,
@@ -27,7 +27,7 @@ const config = {
         }
       }
     ]
-  },
+  },*/
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
     modules: [

@@ -1,18 +1,21 @@
 import { Zense } from '../../zense';
-import DashboardComposite from './composites/dashboard.composite';
+import DevelopComposite from './composites/develop.composite';
+import HomeComposite from './composites/home.composite';
+import ResultsComposite from './composites/results.composite';
 
-const AppSettings = Object.create(Zense.Storage);
+const AppStorage = Object.create(Zense.Storage);
 
-AppSettings.config({
+AppStorage.config({
   storeName: 'test',
   storage: true,
   keysToStore: [
     'currPageNum'
   ]
-});
+})
 
-AppSettings.set({
-  store: [
+AppStorage.set({
+  baseJSONPath: '/json/',
+  cars: [
     {
       make: 'mitsubishi',
       model: 'eclipse',
@@ -79,10 +82,38 @@ AppSettings.set({
       year: '2020'
     }
   ]
-});
+})
 
-AppSettings.initStorage();
+const App = Object.create(Zense.App);
 
+App.create({
+  afterStart() {
+    this.route();
 
-DashboardComposite.render();
+    window.addEventListener('hashchange', this.route.bind(this));
+  },
 
+  route() {
+    let hash = window.location.hash;
+    let module;
+
+    hash = hash.replace(/#\//, '');
+
+    switch(hash) {
+      case 'develop':
+        module = DevelopComposite;
+
+        break;
+      case 'results':
+        module = ResultsComposite;
+
+        break;
+      default:
+        module = HomeComposite;
+    }
+
+    module.render();
+  }
+})
+
+App.start()

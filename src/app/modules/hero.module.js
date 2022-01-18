@@ -6,7 +6,6 @@ const HeroModule = Object.create(Zense.Module);
 
 HeroModule.create({
   name: 'hero-module',
-
   selector: '#hero-region',
 
   ui: {
@@ -21,71 +20,70 @@ HeroModule.create({
     ControlsComponent
   ],
 
-  currPageNum: 1,
-  controlType: 'carousel',
-  collection: [
-    {
-      image: 'about-us-desktopv1.jpg',
-      imageBlur: 'about-us-desktop-blur.jpg',
-      mobileImage: 'about-us-mobile-960-960-v1.jpg',
-      alt: 'Some test alt text 1',
-      content: '<h2>Slide 1<\/h2><p>This is just some test text to test capabilities.<\/p>',
-      position: {
-        x: 'right',
-        y: 'middle'
-      }
-    },
-    {
-      image: 'optum-ma-carousel-desktop.jpg',
-      imageBlur: 'about-us-desktop-blur.jpg',
-      mobileImage: 'optum-ma-carousel-mobile-960-960-v5.jpg',
-      alt: 'Some test alt text 2',
-      content: '<h2>Slide 2<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p>',
-      position: {
-        x: 'left',
-        y: 'top'
-      }
-    },
-    {
-      image: 'optum-perks-desktop-v7.jpg',
-      imageBlur: 'about-us-desktop-blur.jpg',
-      mobileImage: 'optum-perks-mobile-v7.jpg',
-      alt: 'Some test alt text 3',
-      content: '<h2>Slide 3<\/h2><p>This is just some test text to test capabilities.<\/p>',
-      position: {
-        x: 'left',
-        y: 'middle'
-      }
-    },
-    {
-      image: 'optum-store-12-2-20.jpg',
-      imageBlur: 'about-us-desktop-blur.jpg',
-      mobileImage: 'optumstore-mobile-960-960-v2.jpg',
-      alt: 'Some test alt text 4',
-      content: '<h2>Slide 4<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p><p>This is just some test text to test capabilities.<\/p>',
-      position: {
-        x: 'right',
-        y: 'middle'
-      }
-    }
-  ],
-
   init() {
+    this.controlType = 'carousel';
     this.currPageNum = 1;
+    this.collection = [
+      {
+        image: 'about-us-desktopv1.jpg',
+        imageBlur: 'about-us-desktop-blur.jpg',
+        mobileImage: 'about-us-mobile-960-960-v1.jpg',
+        alt: 'Some test alt text 1',
+        content: '<h2>Slide 1<\/h2><p>This is just some test text to test capabilities.<\/p>',
+        position: {
+          x: 'right',
+          y: 'middle'
+        }
+      },
+      {
+        image: 'optum-ma-carousel-desktop.jpg',
+        imageBlur: 'about-us-desktop-blur.jpg',
+        mobileImage: 'optum-ma-carousel-mobile-960-960-v5.jpg',
+        alt: 'Some test alt text 2',
+        content: '<h2>Slide 2<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p>',
+        position: {
+          x: 'left',
+          y: 'top'
+        }
+      },
+      {
+        image: 'optum-perks-desktop-v7.jpg',
+        imageBlur: 'about-us-desktop-blur.jpg',
+        mobileImage: 'optum-perks-mobile-v7.jpg',
+        alt: 'Some test alt text 3',
+        content: '<h2>Slide 3<\/h2><p>This is just some test text to test capabilities.<\/p>',
+        position: {
+          x: 'left',
+          y: 'middle'
+        }
+      },
+      {
+        image: 'optum-store-12-2-20.jpg',
+        imageBlur: 'about-us-desktop-blur.jpg',
+        mobileImage: 'optumstore-mobile-960-960-v2.jpg',
+        alt: 'Some test alt text 4',
+        content: '<h2>Slide 4<\/h2><p>We need to test exactly how much text one can use in these things. This is specially when you plan to make the text responsive.<\/p><p>This is just some test text to test capabilities.<\/p>',
+        position: {
+          x: 'right',
+          y: 'middle'
+        }
+      }
+    ]
   },
 
   update(slideIdx) {
-    let track = this.ui.jsTrack;
-    let slides = this.dom('.js-slide');
-    let currSlideId = slides[slideIdx].id;
+    const track = this.ui.jsTrack;
+    const slides = this.dom('.js-slide');
+    const currSlideId = slides[slideIdx].id;
+    const collectionLen = this.collection.length;
     
     track.style.transition = '.3s ease-out';
     track.style.transform = `translateX(${-this.slideWidth * slideIdx}px)`;
 
     // Ensures we carousel back to first or last slide.
     if (slideIdx === 0) {
-      this.currPageNum = this.collection.length - 2;
-    } else if (slideIdx === this.collection.length - 1) {
+      this.currPageNum = collectionLen - 2;
+    } else if (slideIdx === collectionLen - 1) {
       this.currPageNum = 1;
     }
 

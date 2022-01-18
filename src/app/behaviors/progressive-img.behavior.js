@@ -3,7 +3,7 @@ import { Zense } from "../../../zense";
 const ProgressiveImgBehavior = Object.create(Zense.Behavior);
 
 ProgressiveImgBehavior.config({
-  behaviorName: 'progressive-image-behavior',
+  name: 'progressive-image-behavior',
 
   ui: {
     container: '[data-progressive-desktop]'
@@ -42,7 +42,7 @@ ProgressiveImgBehavior.config({
   },
 
   start() {
-    this.bindUIElements();
+    this.util.bindUIElements(this);
 
     if (this.ui.container.exists && this.ui.container.length) {
       this.ui.container.each((region) => {

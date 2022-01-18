@@ -1,0 +1,10 @@
+[
+  {
+    "label": "architecture",
+    "route": "/architecture"
+  },
+  {
+    "label": "storage object",
+    "route": "/storage"
+  }
+]

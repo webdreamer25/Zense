@@ -17,17 +17,17 @@ ControlsComponent.create({
   init() {
     let delegate = typeof this.ui.jsBtn === 'string' ? this.ui.jsBtn : this.ui.jsBtn.strName;
 
-    this.module.selector.on('click', delegate, this.handleControls.bind(this));
+    this.super.selector.on('click', delegate, this.handleControls.bind(this));
   },
 
-  handleControls(e) {console.log('firing handleControls method.');
+  handleControls(e) {
     let btn = e.delegate;
     let itemIdx = parseInt(btn.dataset.item);
 
-    this.module.currPageNum = itemIdx;
+    this.super.currPageNum = itemIdx;
 
-    if (this.module.update) {
-      this.module.update(itemIdx);
+    if (this.super.update) {
+      this.super.update(itemIdx);
     }
     
     // Ensures we update control to new state.
@@ -61,9 +61,9 @@ ControlsComponent.create({
       showNums: false,
       prevLabel: 'Previous',
       nextLabel: 'Next',
-      isCarousel: this.module.controlType === 'carousel',
-      typeClass:` is--${this.module.controlType}`,
-      items: this.module.collection
+      isCarousel: this.super.controlType === 'carousel',
+      typeClass:` is--${this.super.controlType}`,
+      items: this.super.collection
     };
   },
 
@@ -71,9 +71,9 @@ ControlsComponent.create({
     let prevBtnTpl = '';
     let nextBtnTpl = '';
     let paginatorTpl = '';
-    let page = this.module.currPageNum;
+    let page = this.super.currPageNum;
     let totalItems = model.items.length;
-    let limit = Math.ceil(totalItems / this.module.resultsPerPage);
+    let limit = Math.ceil(totalItems / this.super.resultsPerPage);
 
     if (page > 1 && page <= limit || model.isCarousel) {
       let prevIdx = this.updateSlideIdx('prev', page, totalItems);
