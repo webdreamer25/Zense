@@ -1,3 +1,4 @@
+import App from './core/app';
 import Storage from './core/storage';
 import Behavior from './behavior';
 import Composite from './composite';
@@ -14,10 +15,11 @@ const Zense = {
   Behavior,
   Composite,
   Component,
-  Module
-};
+  Module, 
+  App
+}
 
-Zense.VERSION = '1.6.2';
+Zense.VERSION = '1.7.7';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 

@@ -28,16 +28,16 @@ ErrorHandler.initialize = function (options) {
     this.render();
 
   };
-};
+}
 
 ErrorHandler.serializeData = function () {
   return Internal.errors[this.index];
-};
+}
 
 ErrorHandler.start = function () {
   if ((Internal.errors === 0 || Config.env !== 'dev')) { return null; }
 
   this.initialize();
-};
+}
 
 export default ErrorHandler;

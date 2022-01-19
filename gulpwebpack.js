@@ -22,8 +22,8 @@ const config = {
             options: { minimize: true }
           }
         ]
-      },
-      {
+      }
+      /*{
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
         use: {
@@ -38,7 +38,7 @@ const config = {
             ]
           }
         }
-      }
+      }*/
     ]
   },
   optimization: {

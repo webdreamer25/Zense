@@ -1,3 +1,5 @@
+import { addSelectorInfo, removeSelectorInfoAndListener } from './functions';
+
 const DOM = function (selector, context) {
   const selectorRegex = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/;
   const lastClassRegex = /[^\s]+$/g;
@@ -14,11 +16,13 @@ const DOM = function (selector, context) {
   if (typeof selector === 'string') {
 
     // Needed to ensure no duplication of parent selector occurs when rendering multiples of the same component.
+    // Selector will have "#parent .child" as selector string and we only want the child class as the strSelector of the given element.
     if (spaceRegex.test(selector)) {
-      selector = selector.match(lastClassRegex)[0];
+      strSelector = selector.match(lastClassRegex)[0];
+    } else {
+      strSelector = selector;
     }
 
-    strSelector = selector;
     match = selectorRegex.exec(selector);
 
     if (match !== null) {
@@ -53,7 +57,7 @@ const DOM = function (selector, context) {
   }
 
   if (selector) {
-    let len = selector.length;
+    const len = selector.length;
 
     if (len) {
       let i = 0;
@@ -74,8 +78,10 @@ const DOM = function (selector, context) {
         i++;
       } while (i < len);
 
+      // Ensures that if we have an array object selector with 1 node we only return that node.
       if (len === 1) {
         selector[0].exists = true;
+        selector[0].strName = strSelector;
         
         return selector[0];
       }
@@ -97,24 +103,23 @@ const DOM = function (selector, context) {
   }
 
   return selector;
-};
+}
 
 const DOMListener = function (args, context) {
-  let event = args[0];
+  const event = args[0];
   let callback = args[1];
   let bubble = args[2] ? args[2] : true;
 
   if (typeof args[1] === 'function') {
-    context.info = { event, callback };
-
+    context.info = addSelectorInfo(context.info, { event, callback});
     context.addEventListener(event, callback, bubble);
   } else {
-    let delegate = args[1];
+    const delegate = args[1];
 
     callback = args[2];
     bubble = true;
 
-    context.info = { event, delegate, callback };
+    context.info = addSelectorInfo(context.info, { event, delegate, callback });
 
     context.addEventListener(event, function (e) {
       for (let target = e.target; target && target != this; target = target.parentNode) {
@@ -134,12 +139,12 @@ const DOMListener = function (args, context) {
   }
 
   return context;
-};
+}
 
 const DOMSelectorMethods = {
   on() {
+    const len = this.length;
     let selector;
-    let len = this.length;
 
     if (!len) {
       selector = new DOMListener(arguments, this);
@@ -153,15 +158,13 @@ const DOMSelectorMethods = {
   },
 
   off() {
-    let len = this.length;
+    const len = this.length;
 
-    if (!len && this.info) {
-      this.removeEventListener(this.info.event, this.info.callback, true);
+    if (!len) {
+      removeSelectorInfoAndListener(this, this.info);
     } else {
       for (let i = 0; i < len; i++) {
-        if (this[i].info) {
-          this[i].removeEventListener(this[i].info.event, this[i].info.callback, true);
-        }
+        removeSelectorInfoAndListener(this[i], this[i].info);
       }
     }
 
@@ -169,7 +172,7 @@ const DOMSelectorMethods = {
   },
 
   html(html) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this.innerHTML = html;
@@ -187,7 +190,7 @@ const DOMSelectorMethods = {
   },
 
   insertHTML(position, html) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this.insertAdjacentHTML(position, html);
@@ -201,7 +204,7 @@ const DOMSelectorMethods = {
   },
 
   attr(attribute, property) {
-    let len = this.length;
+    const len = this.length;
 
     if (len) {
       for (let i = 0; i < len; i++) {
@@ -219,7 +222,7 @@ const DOMSelectorMethods = {
   },
 
   val(value) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       if (typeof value !== 'undefined') {
@@ -241,7 +244,7 @@ const DOMSelectorMethods = {
   },
 
   prop(property, value) {
-    let len = this.length;
+    const len = this.length;
 
     if (!len) {
       this[property] = value;
@@ -276,6 +279,8 @@ const DOMSelectorMethods = {
   find(selector) {
     return new DOM(selector, this);
   }
-};
+}
 
-export default DOM;
+
+
+export default DOM

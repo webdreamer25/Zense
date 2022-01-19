@@ -11,7 +11,7 @@ const Eventor = {
   ],
 
   publish(eventName, eventDetails = null, trigger = false) {
-    let event = this.createEvent(eventName, eventDetails);
+    const event = this.createEvent(eventName, eventDetails);
 
     this.isPublishedEvent = true;
 
