@@ -29,7 +29,7 @@ Module.afterAddComponents = function () {
 }
 
 Module.destroyChildren = function () {
-  let componentsLen = this.components.length;
+  const componentsLen = this.components.length;
 
   if (componentsLen === 0) { 
     return false; 

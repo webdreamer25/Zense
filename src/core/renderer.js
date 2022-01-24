@@ -52,6 +52,8 @@ Renderer.afterRender = function () {
 }
 
 Renderer.destroy = function () {
+  let firstChildNode;
+
   // We want to destroy only if it has rendered.
   if (!this.hasRendered || this.renderMultiple || !this.hasRendered && this.shouldRender) { 
     return null; 
@@ -62,17 +64,23 @@ Renderer.destroy = function () {
     this.destroyChildren();
   }
 
-  let firstChildNode = this.selector.firstChild;
+  // Ensure we don't get a reference error.
+  if (this.unbindBehaviorEvents !== undefined && typeof this.unbindBehaviorEvents === 'function') {
+    this.unbindBehaviorEvents();
+  }
+
+  firstChildNode = this.selector.firstChild;
 
   while (firstChildNode) {
     this.selector.removeChild(firstChildNode);
     firstChildNode = this.selector.firstChild;
   }
 
-  // Ensure we don't get a reference error.
-  if (this.unbindBehaviorEvents !== undefined && typeof this.unbindBehaviorEvents === 'function') {
-    this.unbindBehaviorEvents();
-  }
+  // Ensures we remove bindings that exists on container nodes.
+  // Should not be a performance hit since container nodes do not hold much html.
+  // This was added to fix an issue causing multiple bindings on re-render of parent container.
+  // Using .removeEventListener method on said element was not working.
+  this.selector.replaceWith(this.selector.cloneNode(true));
 
   if (this.selector instanceof Object) {
     this.selector = this.selector.strName ? this.selector.strName : `.${this.selector.classList[0]}`;

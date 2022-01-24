@@ -7,17 +7,21 @@ const App = Object.create(Traverse);
 
 App.xhr = Object.create(XHR);
 App.events = Object.create(Eventor);
-App.customUtilities = null;
+App.customUtilities = false;
 App.util = {
   createUniqueId,
   bindUIElements
-};
+}
 
 App.create = function (options) {
   Object.assign(this, options);
-};
+}
 
 App.setUtilityMethods = function (methodsObj) {
+  if (!methodsObj) {
+    return false;
+  }
+
   try {
     if (typeof methodsObj !== 'object') {
       throw {
@@ -31,11 +35,11 @@ App.setUtilityMethods = function (methodsObj) {
   } catch (err) {
     console.error(err);
   }
-};
+}
 
 App.afterStart = function () {
   return null;
-};
+}
 
 App.start = function () {
   // Ensures we overwrite util object with our own utility methods.
@@ -43,6 +47,6 @@ App.start = function () {
   
   this.initStorage();
   this.afterStart();
-};
+}
 
 export default App;

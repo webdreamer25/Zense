@@ -53,9 +53,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
 
       strapee = newStrapeeInstance;
     } else {
-      const newStrapeeInstance = Object.create(strapee);
-
-      strapee = newStrapeeInstance;
+      strapee = Object.create(strapee);
     }
 
     // Let the component know whos their daddy.
@@ -66,7 +64,9 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
       this.checkUniqueName(strapee);
     }
 
-    strapee.init();
+    if (strapee.init) {
+      strapee.init();
+    }
 
     if (!this.shouldRenderChildren) {
       continue;

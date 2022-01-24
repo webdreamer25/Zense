@@ -55,6 +55,6 @@ const Eventor = {
 
     return event;
   }
-};
+}
 
 export default Eventor;

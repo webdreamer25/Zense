@@ -6,7 +6,6 @@ const Storage = {
     keysToStore: []
   },
   store: {},
-  isLocalStorage: null,
 
   config(options) {
     if (options && typeof options === 'object') {
@@ -73,11 +72,12 @@ const Storage = {
   },
 
   initStorage() {
-    const isLocalStorage = this.default.storageType === 'local';
     let data = {};
     let newObj = {};
 
-    if (isLocalStorage) {
+    if (!this.default.storage) { return; }
+
+    if (this.default.storageType === 'local') {
       data = localStorage[this.default.storeName];
     } else {
       data = sessionStorage[this.default.storeName];     
@@ -159,12 +159,8 @@ const Storage = {
   },
 
   removeFromStore(name, storageType = this.default.storageType) {
-    const nameIsString = typeof name === 'string';
-    
-    if (nameIsString) {
-      const isLocalStorage = storageType === 'local';
-
-      if (isLocalStorage) {
+    if (typeof name === 'string') {
+      if (storageType === 'local') {
         localStorage.removeItem(name);
       } else {
         sessionStorage.removeItem(name);
@@ -173,14 +169,12 @@ const Storage = {
   },
 
   clearStore(storageType = this.default.storageType) {
-    const isLocalStorage = storageType === 'local';
-
-    if (isLocalStorage) {
+    if (storageType === 'local') {
       localStorage.clear();
     } else {
       sessionStorage.clear();
     }
   }
-};
+}
 
 export default Storage;
