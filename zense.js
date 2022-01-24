@@ -2181,17 +2181,21 @@ const App = Object.create(_traverse__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 App.xhr = Object.create(_xhr__WEBPACK_IMPORTED_MODULE_1__["default"]);
 App.events = Object.create(_eventor__WEBPACK_IMPORTED_MODULE_2__["default"]);
-App.customUtilities = null;
+App.customUtilities = false;
 App.util = {
   createUniqueId: _functions__WEBPACK_IMPORTED_MODULE_3__["createUniqueId"],
   bindUIElements: _functions__WEBPACK_IMPORTED_MODULE_3__["bindUIElements"]
-};
+}
 
 App.create = function (options) {
   Object.assign(this, options);
-};
+}
 
 App.setUtilityMethods = function (methodsObj) {
+  if (!methodsObj) {
+    return false;
+  }
+
   try {
     if (typeof methodsObj !== 'object') {
       throw {
@@ -2205,11 +2209,11 @@ App.setUtilityMethods = function (methodsObj) {
   } catch (err) {
     console.error(err);
   }
-};
+}
 
 App.afterStart = function () {
   return null;
-};
+}
 
 App.start = function () {
   // Ensures we overwrite util object with our own utility methods.
@@ -2217,7 +2221,7 @@ App.start = function () {
   
   this.initStorage();
   this.afterStart();
-};
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
 
@@ -2288,9 +2292,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
 
       strapee = newStrapeeInstance;
     } else {
-      const newStrapeeInstance = Object.create(strapee);
-
-      strapee = newStrapeeInstance;
+      strapee = Object.create(strapee);
     }
 
     // Let the component know whos their daddy.
@@ -2301,7 +2303,9 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
       this.checkUniqueName(strapee);
     }
 
-    strapee.init();
+    if (strapee.init) {
+      strapee.init();
+    }
 
     if (!this.shouldRenderChildren) {
       continue;
@@ -2782,7 +2786,7 @@ const Eventor = {
 
     return event;
   }
-};
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (Eventor);
 
@@ -3015,6 +3019,8 @@ Renderer.afterRender = function () {
 }
 
 Renderer.destroy = function () {
+  let firstChildNode;
+
   // We want to destroy only if it has rendered.
   if (!this.hasRendered || this.renderMultiple || !this.hasRendered && this.shouldRender) { 
     return null; 
@@ -3025,17 +3031,23 @@ Renderer.destroy = function () {
     this.destroyChildren();
   }
 
-  let firstChildNode = this.selector.firstChild;
+  // Ensure we don't get a reference error.
+  if (this.unbindBehaviorEvents !== undefined && typeof this.unbindBehaviorEvents === 'function') {
+    this.unbindBehaviorEvents();
+  }
+
+  firstChildNode = this.selector.firstChild;
 
   while (firstChildNode) {
     this.selector.removeChild(firstChildNode);
     firstChildNode = this.selector.firstChild;
   }
 
-  // Ensure we don't get a reference error.
-  if (this.unbindBehaviorEvents !== undefined && typeof this.unbindBehaviorEvents === 'function') {
-    this.unbindBehaviorEvents();
-  }
+  // Ensures we remove bindings that exists on container nodes.
+  // Should not be a performance hit since container nodes do not hold much html.
+  // This was added to fix an issue causing multiple bindings on re-render of parent container.
+  // Using .removeEventListener method on said element was not working.
+  this.selector.replaceWith(this.selector.cloneNode(true));
 
   if (this.selector instanceof Object) {
     this.selector = this.selector.strName ? this.selector.strName : `.${this.selector.classList[0]}`;
@@ -3133,7 +3145,6 @@ const Storage = {
     keysToStore: []
   },
   store: {},
-  isLocalStorage: null,
 
   config(options) {
     if (options && typeof options === 'object') {
@@ -3200,11 +3211,12 @@ const Storage = {
   },
 
   initStorage() {
-    const isLocalStorage = this.default.storageType === 'local';
     let data = {};
     let newObj = {};
 
-    if (isLocalStorage) {
+    if (!this.default.storage) { return; }
+
+    if (this.default.storageType === 'local') {
       data = localStorage[this.default.storeName];
     } else {
       data = sessionStorage[this.default.storeName];     
@@ -3286,12 +3298,8 @@ const Storage = {
   },
 
   removeFromStore(name, storageType = this.default.storageType) {
-    const nameIsString = typeof name === 'string';
-    
-    if (nameIsString) {
-      const isLocalStorage = storageType === 'local';
-
-      if (isLocalStorage) {
+    if (typeof name === 'string') {
+      if (storageType === 'local') {
         localStorage.removeItem(name);
       } else {
         sessionStorage.removeItem(name);
@@ -3300,15 +3308,13 @@ const Storage = {
   },
 
   clearStore(storageType = this.default.storageType) {
-    const isLocalStorage = storageType === 'local';
-
-    if (isLocalStorage) {
+    if (storageType === 'local') {
       localStorage.clear();
     } else {
       sessionStorage.clear();
     }
   }
-};
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (Storage);
 
@@ -3509,7 +3515,7 @@ const Zense = {
   App: _core_app__WEBPACK_IMPORTED_MODULE_0__["default"]
 }
 
-Zense.VERSION = '1.7.7';
+Zense.VERSION = '1.7.9';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 
@@ -3568,7 +3574,7 @@ Module.afterAddComponents = function () {
 }
 
 Module.destroyChildren = function () {
-  let componentsLen = this.components.length;
+  const componentsLen = this.components.length;
 
   if (componentsLen === 0) { 
     return false; 
