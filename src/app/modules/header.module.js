@@ -1,11 +1,13 @@
 import { Zense } from '../../../zense';
 import NavComponent from "../components/nav.component";
 
+import css from './header.css';
+
 const HeaderModule = Object.create(Zense.Module);
 
 HeaderModule.create({
   name: 'header-module',
-  selector: '#header-region',
+  css,
 
   components: [
     NavComponent
@@ -14,7 +16,7 @@ HeaderModule.create({
   template() {
     return /*html*/`<div class="m-zense-header row">
       <div class="col">Zense JS</div>
-      <div id="nav-region" class="col-auto"></div>
+      <nav-component class="col-auto"></nav-component>
     </div>`;
   }
 })

@@ -1,21 +1,20 @@
 import { Zense } from '../../../zense';
 import HeaderModule from '../modules/header.module';
-import HeroModule from '../modules/hero.module';
+// import HeroModule from '../modules/hero.module';
 
 const HomeComposite = Object.create(Zense.Composite);
 
 HomeComposite.create({
   name: 'home-page',
   selector: '#app',
-  renderType: 'html',
 
   modules: [
-    HeaderModule,
-    HeroModule
+    HeaderModule
+    // HeroModule
   ],
 
   template() {
-    return /*html*/`<header id="header-region" class="container"></header>
+    return /*html*/`<header-module class="container"></header-module>
     <div id="hero-region" class="container"></div>
     <div id="top-region" class="container"></div>`;
   }

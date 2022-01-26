@@ -2,29 +2,36 @@ import App from './app';
 
 const Renderer = Object.create(App);
 
-Renderer.selector = null;
 Renderer.template = null;
 Renderer.hasRendered = false;
-Renderer.renderType = 'append';
-Renderer.renderMultiple = false;
+Renderer.css = false;
 
 Renderer.beforeRender = function () {
   return null;
 }
 
-Renderer.render = function (model = null, resetDOMSelector = false) {
+Renderer.render = async function (model = false) {
   this.destroy();
-  this.setDOMSelector(resetDOMSelector);
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
   
   try {
+    const store = model ? model : this.store;
+    let tagName = this.name;
+    let customElement;
+    let data;
+
     this.errorCheck();
 
-    let data = this.serializeData(model !== undefined && model !== null ? model : this.store);
+    if (!/-/g.test(tagName)) {
+      tagName = `${tagName}-${this.type}`
+    }
 
-    this.addTemplateToDOM(data);
+    data = this.serializeData(store);
+    customElement = await this.createCustomElement(tagName, data);
+
+    customElements.define(tagName, customElement);
   } catch (e) {
     console.error(e);
   }
@@ -32,6 +39,46 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
   this.internalPostHook();
   this.afterRender();
 }
+
+Renderer.createCustomElement = function (tagName, data) {
+  const self = this;
+  const CustomDOMElement = function () {
+    return Reflect.construct(HTMLElement, [], CustomDOMElement);
+  }
+
+  CustomDOMElement.prototype = Object.create(HTMLElement.prototype);
+
+  CustomDOMElement.prototype.connectedCallback = function () {
+    const shadow = this.attachShadow({ mode: 'open' });
+    const slot = document.createElement('slot');
+
+    // Exposes shadow elements to be styled by outside css.
+    shadow.appendChild(slot);
+
+    data.tagName = tagName;
+
+    this.classList.add(tagName);
+    this.innerHTML = self.template(data);
+
+    if (self.css) {
+      const style = document.createElement('style');
+
+      style.textContent = self.css;
+
+      this.appendChild(style);
+    }
+  }
+
+  return CustomDOMElement;
+}
+
+// Renderer.getStyleSheet = async function () {
+//   const cssModule = await import(`./${this.css}`, {
+//     assert: { type: 'css' }
+//   });
+
+//   return cssModule;
+// }
 
 Renderer.internalPostHook = function () {
   if (this.strap !== undefined) {
@@ -87,49 +134,6 @@ Renderer.destroy = function () {
   }
 
   this.hasRendered = false;
-}
-
-Renderer.setDOMSelector = function (resetDOMSelector) {
-  if (typeof this.selector !== 'string') {
-
-    // Ensures we have a way to re-find the selector in the DOM in cases where we are re-rendering entire composite or module.
-    if (resetDOMSelector) {
-      this.selector = this.selector.strName;
-    } else {
-      return false;
-    }
-    
-  }
-
-  // Ensures that if we are rendering multiple we dont re-render on previous nodes.
-  if (this.renderMultiple && this.super !== undefined) {
-    const parentSelector = this.super.selector.strName;
-
-    this.selector = this.dom(`${parentSelector} ${this.selector}`);
-  } else {
-    this.selector = this.dom(this.selector);
-  }
-
-  if (!this.selector.exists) {
-    throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);
-  }
-}
-
-Renderer.addTemplateToDOM = function (data) {
-  if (this.shouldRender) {
-    let tpl = this.template(data);
-
-    if (this.renderType !== 'append') {
-      this.selector.html(tpl);
-    } else {
-      this.selector.insertHTML('beforeend', tpl);
-    }
-  } else {
-
-    // Assumes that if shouldRender is being set to false manually we also dont want the container in the DOM.
-    this.selector.remove();
-    
-  }
 }
 
 Renderer.serializeData = function (data) {

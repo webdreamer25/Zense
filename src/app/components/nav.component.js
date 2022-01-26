@@ -4,7 +4,6 @@ const NavComponent = Object.create(Zense.Component);
 
 NavComponent.create({
   name: 'nav-component',
-  selector: '#nav-region',
 
   serializeData() {
     return [

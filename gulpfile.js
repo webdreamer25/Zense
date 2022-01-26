@@ -1,6 +1,5 @@
 'use strict';
 
-// Load plugins
 const autoprefixer = require('autoprefixer');
 const browsersync = require('browser-sync').create();
 const cssnano = require('cssnano');
@@ -40,7 +39,6 @@ function clean() {
   return del(['./dist/']);
 }
 
-// Optimize Images
 function images() {
   return gulp
     .src('./src/app/assets/**/*')
@@ -69,7 +67,7 @@ function json() {
     .pipe(gulp.dest('./dist/json'));
 }
 
-function css() {
+function scss() {
   return gulp
     .src('./src/app/scss/**/*.scss')
     .pipe(plumber())
@@ -84,31 +82,27 @@ function css() {
 // Transpile, concatenate and minify scripts
 function scripts() {  
   return gulp
-      .src(['./src/app/**/**/*.js'])
-      .pipe(plumber())
-      .pipe(webpackstream(webpackconfig, webpack))
-      // folder only, filename is specified in webpack config
-      .pipe(gulp.dest('./dist'))
-      .pipe(browsersync.stream());
+    .src(['./src/app/**/**/*.js'])
+    .pipe(plumber())
+    .pipe(webpackstream(webpackconfig, webpack))
+    // folder only, filename is specified in webpack config
+    .pipe(gulp.dest('./dist'))
+    .pipe(browsersync.stream());
 }
 
-// Watch files
 function watchFiles() {
   gulp.watch('./src/app/json/*.json', json);
-  gulp.watch('./src/app/scss/**/**/*.scss', css);
+  gulp.watch('./src/app/scss/**/**/*.scss', scss);
   gulp.watch('./src/app/**/*.js', gulp.series(scripts));
   gulp.watch('./src/app/*.html', gulp.series(browserSyncReload));
   gulp.watch('./src/assets/**/*', images);
 }
 
-// Tasks
 // gulp.task("images", images);
-gulp.task('css', css);
+gulp.task('css', scss);
 gulp.task('js', gulp.series(scripts));
 gulp.task('clean', clean);
 
 // build
-gulp.task('build', gulp.series(clean, json, css, images, gulp.parallel('js')));
- 
-// watch
+gulp.task('build', gulp.series(clean, json, scss, images, gulp.parallel('js')));
 gulp.task('watch', gulp.parallel(watchFiles, appSync));

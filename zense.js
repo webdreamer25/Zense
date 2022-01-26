@@ -1,99 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ({
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/lodash.clonedeep/index.js":
 /*!************************************************!*\
   !*** ./node_modules/lodash.clonedeep/index.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, exports, __webpack_require__) => {
 
-/* WEBPACK VAR INJECTION */(function(global, module) {/**
+/* module decorator */ module = __webpack_require__.nmd(module);
+/**
  * lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="npm" -o ./`
  * Copyright jQuery Foundation and other contributors <https://jquery.org/>
@@ -173,7 +88,7 @@ cloneableTags[errorTag] = cloneableTags[funcTag] =
 cloneableTags[weakMapTag] = false;
 
 /** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeGlobal = typeof __webpack_require__.g == 'object' && __webpack_require__.g && __webpack_require__.g.Object === Object && __webpack_require__.g;
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -185,7 +100,7 @@ var root = freeGlobal || freeSelf || Function('return this')();
 var freeExports =  true && exports && !exports.nodeType && exports;
 
 /** Detect free variable `module`. */
-var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+var freeModule = freeExports && "object" == 'object' && module && !module.nodeType && module;
 
 /** Detect the popular CommonJS extension `module.exports`. */
 var moduleExports = freeModule && freeModule.exports === freeExports;
@@ -1842,106 +1757,6 @@ function stubFalse() {
 
 module.exports = cloneDeep;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/global.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/harmony-module.js":
-/*!*******************************************!*\
-  !*** (webpack)/buildin/harmony-module.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function(originalModule) {
-	if (!originalModule.webpackPolyfill) {
-		var module = Object.create(originalModule);
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		Object.defineProperty(module, "exports", {
-			enumerable: true
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/module.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/module.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
 
 /***/ }),
 
@@ -1949,11 +1764,13 @@ module.exports = function(module) {
 /*!*************************!*\
   !*** ./src/behavior.js ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _core_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/app */ "./src/core/app.js");
 
 
@@ -2043,7 +1860,7 @@ Behavior.start = function () {
   this.util.bindUIElements(this)
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Behavior);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Behavior);
 
 /***/ }),
 
@@ -2051,11 +1868,13 @@ Behavior.start = function () {
 /*!**************************!*\
   !*** ./src/component.js ***!
   \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _core_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/controller */ "./src/core/controller.js");
 
 
@@ -2081,7 +1900,7 @@ Component.setUniqueName = function () {
   return newName;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Component);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Component);
 
 
 /***/ }),
@@ -2090,19 +1909,77 @@ Component.setUniqueName = function () {
 /*!**************************!*\
   !*** ./src/composite.js ***!
   \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _core_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/controller */ "./src/core/controller.js");
 
 
 const Composite = Object.create(_core_controller__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 Composite.type = 'composite';
+Composite.selector = null;
+Composite.renderType = 'html';
 Composite.modules = [];
 Composite.components = [];
+
+Composite.render = async function (model = false) {
+  this.destroy();
+  this.setDOMSelector();
+  this.beforeRender();
+  
+  if (!this.shouldRender) { return false; }
+  
+  try {
+    const store = model ? model : this.store;
+    let data;
+
+    this.errorCheck();
+
+    data = this.serializeData(store);
+
+    this.addTemplateToDOM(data);
+  } catch (e) {
+    console.error(e);
+  }
+
+  this.internalPostHook();
+  this.afterRender();
+}
+
+Composite.setDOMSelector = function () {
+  // Ensures we have a way to re-find the selector in the DOM in cases where we are re-rendering entire composite or module.
+  if (typeof this.selector !== 'string') {
+    this.selector = this.selector.strName;
+  }
+
+  this.selector = this.dom(this.selector);
+
+  if (!this.selector.exists) {
+    throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);
+  }
+}
+
+Composite.addTemplateToDOM = function (data) {
+  if (this.shouldRender) {
+    const tpl = this.template(data);
+
+    if (this.renderType === 'append') {
+      this.selector.insertHTML('beforeend', tpl);
+    } else {
+      this.selector.html(tpl);
+    }
+  } else {
+
+    // Assumes that if shouldRender is being set to false manually we also dont want the container in the DOM.
+    this.selector.remove();
+    
+  }
+}
 
 Composite.strap = function () {
   const modulesLen = this.modules.length;
@@ -2155,7 +2032,7 @@ Composite.getChild = function (name, childType = 'modules') {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Composite);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Composite);
 
 /***/ }),
 
@@ -2163,11 +2040,13 @@ Composite.getChild = function (name, childType = 'modules') {
 /*!*************************!*\
   !*** ./src/core/app.js ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _traverse__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./traverse */ "./src/core/traverse.js");
 /* harmony import */ var _xhr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./xhr */ "./src/core/xhr.js");
 /* harmony import */ var _eventor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./eventor */ "./src/core/eventor.js");
@@ -2183,8 +2062,8 @@ App.xhr = Object.create(_xhr__WEBPACK_IMPORTED_MODULE_1__["default"]);
 App.events = Object.create(_eventor__WEBPACK_IMPORTED_MODULE_2__["default"]);
 App.customUtilities = false;
 App.util = {
-  createUniqueId: _functions__WEBPACK_IMPORTED_MODULE_3__["createUniqueId"],
-  bindUIElements: _functions__WEBPACK_IMPORTED_MODULE_3__["bindUIElements"]
+  createUniqueId: _functions__WEBPACK_IMPORTED_MODULE_3__.createUniqueId,
+  bindUIElements: _functions__WEBPACK_IMPORTED_MODULE_3__.bindUIElements
 }
 
 App.create = function (options) {
@@ -2223,7 +2102,7 @@ App.start = function () {
   this.afterStart();
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (App);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
 /***/ }),
 
@@ -2231,11 +2110,13 @@ App.start = function () {
 /*!********************************!*\
   !*** ./src/core/controller.js ***!
   \********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./renderer */ "./src/core/renderer.js");
 
 
@@ -2417,7 +2298,7 @@ Controller.getBehavior = function (behaviorName) {
   return result[0];
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Controller);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Controller);
 
 /***/ }),
 
@@ -2425,11 +2306,13 @@ Controller.getBehavior = function (behaviorName) {
 /*!*************************!*\
   !*** ./src/core/dom.js ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/core/functions.js");
 
 
@@ -2544,7 +2427,7 @@ const DOMListener = function (args, context) {
   let bubble = args[2] ? args[2] : true;
 
   if (typeof args[1] === 'function') {
-    context.info = Object(_functions__WEBPACK_IMPORTED_MODULE_0__["addSelectorInfo"])(context.info, { event, callback});
+    context.info = (0,_functions__WEBPACK_IMPORTED_MODULE_0__.addSelectorInfo)(context.info, { event, callback});
     context.addEventListener(event, callback, bubble);
   } else {
     const delegate = args[1];
@@ -2552,7 +2435,7 @@ const DOMListener = function (args, context) {
     callback = args[2];
     bubble = true;
 
-    context.info = Object(_functions__WEBPACK_IMPORTED_MODULE_0__["addSelectorInfo"])(context.info, { event, delegate, callback });
+    context.info = (0,_functions__WEBPACK_IMPORTED_MODULE_0__.addSelectorInfo)(context.info, { event, delegate, callback });
 
     context.addEventListener(event, function (e) {
       for (let target = e.target; target && target != this; target = target.parentNode) {
@@ -2594,10 +2477,10 @@ const DOMSelectorMethods = {
     const len = this.length;
 
     if (!len) {
-      Object(_functions__WEBPACK_IMPORTED_MODULE_0__["removeSelectorInfoAndListener"])(this, this.info);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_0__.removeSelectorInfoAndListener)(this, this.info);
     } else {
       for (let i = 0; i < len; i++) {
-        Object(_functions__WEBPACK_IMPORTED_MODULE_0__["removeSelectorInfoAndListener"])(this[i], this[i].info);
+        (0,_functions__WEBPACK_IMPORTED_MODULE_0__.removeSelectorInfoAndListener)(this[i], this[i].info);
       }
     }
 
@@ -2716,7 +2599,7 @@ const DOMSelectorMethods = {
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (DOM);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DOM);
 
 /***/ }),
 
@@ -2724,11 +2607,13 @@ const DOMSelectorMethods = {
 /*!*****************************!*\
   !*** ./src/core/eventor.js ***!
   \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 const Eventor = {
   subscriptions: [],
 
@@ -2788,7 +2673,7 @@ const Eventor = {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Eventor);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Eventor);
 
 /***/ }),
 
@@ -2796,16 +2681,17 @@ const Eventor = {
 /*!*******************************!*\
   !*** ./src/core/functions.js ***!
   \*******************************/
-/*! exports provided: bindUIElements, bindEventListeners, addSelectorInfo, removeSelectorInfoAndListener, createUniqueId */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindUIElements", function() { return bindUIElements; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindEventListeners", function() { return bindEventListeners; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addSelectorInfo", function() { return addSelectorInfo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeSelectorInfoAndListener", function() { return removeSelectorInfoAndListener; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createUniqueId", function() { return createUniqueId; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "bindUIElements": () => (/* binding */ bindUIElements),
+/* harmony export */   "bindEventListeners": () => (/* binding */ bindEventListeners),
+/* harmony export */   "addSelectorInfo": () => (/* binding */ addSelectorInfo),
+/* harmony export */   "removeSelectorInfoAndListener": () => (/* binding */ removeSelectorInfoAndListener),
+/* harmony export */   "createUniqueId": () => (/* binding */ createUniqueId)
+/* harmony export */ });
 function bindUIElements(context) {
   const ui = context.ui;
   const hasUIElements = ui && Object.keys(ui).length > 0;
@@ -2959,39 +2845,48 @@ function createUniqueId(num = 1) {
 /*!******************************!*\
   !*** ./src/core/renderer.js ***!
   \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app */ "./src/core/app.js");
 
 
 const Renderer = Object.create(_app__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
-Renderer.selector = null;
 Renderer.template = null;
 Renderer.hasRendered = false;
-Renderer.renderType = 'append';
-Renderer.renderMultiple = false;
+Renderer.css = false;
 
 Renderer.beforeRender = function () {
   return null;
 }
 
-Renderer.render = function (model = null, resetDOMSelector = false) {
+Renderer.render = async function (model = false) {
   this.destroy();
-  this.setDOMSelector(resetDOMSelector);
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
   
   try {
+    const store = model ? model : this.store;
+    let tagName = this.name;
+    let customElement;
+    let data;
+
     this.errorCheck();
 
-    let data = this.serializeData(model !== undefined && model !== null ? model : this.store);
+    if (!/-/g.test(tagName)) {
+      tagName = `${tagName}-${this.type}`
+    }
 
-    this.addTemplateToDOM(data);
+    data = this.serializeData(store);
+    customElement = await this.createCustomElement(tagName, data);
+
+    customElements.define(tagName, customElement);
   } catch (e) {
     console.error(e);
   }
@@ -2999,6 +2894,46 @@ Renderer.render = function (model = null, resetDOMSelector = false) {
   this.internalPostHook();
   this.afterRender();
 }
+
+Renderer.createCustomElement = function (tagName, data) {
+  const self = this;
+  const CustomDOMElement = function () {
+    return Reflect.construct(HTMLElement, [], CustomDOMElement);
+  }
+
+  CustomDOMElement.prototype = Object.create(HTMLElement.prototype);
+
+  CustomDOMElement.prototype.connectedCallback = function () {
+    const shadow = this.attachShadow({ mode: 'open' });
+    const slot = document.createElement('slot');
+
+    // Exposes shadow elements to be styled by outside css.
+    shadow.appendChild(slot);
+
+    data.tagName = tagName;
+
+    this.classList.add(tagName);
+    this.innerHTML = self.template(data);
+
+    if (self.css) {
+      const style = document.createElement('style');
+
+      style.textContent = self.css;
+
+      this.appendChild(style);
+    }
+  }
+
+  return CustomDOMElement;
+}
+
+// Renderer.getStyleSheet = async function () {
+//   const cssModule = await import(`./${this.css}`, {
+//     assert: { type: 'css' }
+//   });
+
+//   return cssModule;
+// }
 
 Renderer.internalPostHook = function () {
   if (this.strap !== undefined) {
@@ -3056,49 +2991,6 @@ Renderer.destroy = function () {
   this.hasRendered = false;
 }
 
-Renderer.setDOMSelector = function (resetDOMSelector) {
-  if (typeof this.selector !== 'string') {
-
-    // Ensures we have a way to re-find the selector in the DOM in cases where we are re-rendering entire composite or module.
-    if (resetDOMSelector) {
-      this.selector = this.selector.strName;
-    } else {
-      return false;
-    }
-    
-  }
-
-  // Ensures that if we are rendering multiple we dont re-render on previous nodes.
-  if (this.renderMultiple && this.super !== undefined) {
-    const parentSelector = this.super.selector.strName;
-
-    this.selector = this.dom(`${parentSelector} ${this.selector}`);
-  } else {
-    this.selector = this.dom(this.selector);
-  }
-
-  if (!this.selector.exists) {
-    throw new Error(`Selector ${this.selector.strName} defined in ${this.type} ${this.name} does not exist in the DOM.`);
-  }
-}
-
-Renderer.addTemplateToDOM = function (data) {
-  if (this.shouldRender) {
-    let tpl = this.template(data);
-
-    if (this.renderType !== 'append') {
-      this.selector.html(tpl);
-    } else {
-      this.selector.insertHTML('beforeend', tpl);
-    }
-  } else {
-
-    // Assumes that if shouldRender is being set to false manually we also dont want the container in the DOM.
-    this.selector.remove();
-    
-  }
-}
-
 Renderer.serializeData = function (data) {
   if (data) { 
     return data;
@@ -3124,7 +3016,7 @@ Renderer.errorCheck = function () {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Renderer);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Renderer);
 
 /***/ }),
 
@@ -3132,11 +3024,13 @@ Renderer.errorCheck = function () {
 /*!*****************************!*\
   !*** ./src/core/storage.js ***!
   \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 const Storage = {
   default: {
     storeName: '',
@@ -3316,7 +3210,7 @@ const Storage = {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Storage);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Storage);
 
 /***/ }),
 
@@ -3324,11 +3218,13 @@ const Storage = {
 /*!******************************!*\
   !*** ./src/core/traverse.js ***!
   \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./storage */ "./src/core/storage.js");
 /* harmony import */ var _dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom */ "./src/core/dom.js");
 /* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash.clonedeep */ "./node_modules/lodash.clonedeep/index.js");
@@ -3386,7 +3282,7 @@ Traverse.uniqueArray = function (arr) {
   return Array.from(new Set(arr));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Traverse);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Traverse);
 
 /***/ }),
 
@@ -3394,11 +3290,13 @@ Traverse.uniqueArray = function (arr) {
 /*!*************************!*\
   !*** ./src/core/xhr.js ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 const XHR = {};
 
 XHR.percentComplete = 0;
@@ -3475,7 +3373,7 @@ XHR.updateProgress = function (eventObj) {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (XHR);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (XHR);
 
 /***/ }),
 
@@ -3483,17 +3381,17 @@ XHR.updateProgress = function (eventObj) {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var _core_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/app */ "./src/core/app.js");
+/* harmony import */ var _core_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/app */ "./src/core/app.js");
 /* harmony import */ var _core_storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./core/storage */ "./src/core/storage.js");
 /* harmony import */ var _behavior__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./behavior */ "./src/behavior.js");
 /* harmony import */ var _composite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./composite */ "./src/composite.js");
 /* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./component */ "./src/component.js");
 /* harmony import */ var _module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./module */ "./src/module.js");
+/* module decorator */ module = __webpack_require__.hmd(module);
 
 
 
@@ -3502,7 +3400,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const root = typeof self == 'object' && self.self === self && self ||
-  typeof global == 'object' && global.global === global && global ||
+  typeof __webpack_require__.g == 'object' && __webpack_require__.g.global === __webpack_require__.g && __webpack_require__.g ||
   undefined ||
   {};
 
@@ -3529,7 +3427,6 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   root.Zense = Zense;
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../node_modules/webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
 
 /***/ }),
 
@@ -3537,11 +3434,13 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 /*!***********************!*\
   !*** ./src/module.js ***!
   \***********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _core_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core/controller */ "./src/core/controller.js");
 
 
@@ -3620,20 +3519,122 @@ Module.getChildComponent = function (componentName) {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Module);
-
-/***/ }),
-
-/***/ 0:
-/*!****************************!*\
-  !*** multi ./src/index.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! ./src/index.js */"./src/index.js");
-
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Module);
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/harmony module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.hmd = (module) => {
+/******/ 			module = Object.create(module);
+/******/ 			if (!module.children) module.children = [];
+/******/ 			Object.defineProperty(module, 'exports', {
+/******/ 				enumerable: true,
+/******/ 				set: () => {
+/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
+/******/ 				}
+/******/ 			});
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	
+/******/ })()
+;

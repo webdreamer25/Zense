@@ -1,6 +1,7 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
   devtool: false,
@@ -22,38 +23,32 @@ const config = {
             options: { minimize: true }
           }
         ]
-      }
-      /*{
-        test: /\.(js|jsx)?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
-            ],
-            plugins: [
-              "@babel/plugin-transform-object-assign"
-            ]
-          }
-        }
-      }*/
+      },
+      {
+        test: /\.css$/i,
+        loader: 'css-loader',
+        options: {
+          esModule: true
+        },
+
+      },
     ]
   },
   optimization: {
+    minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
-        parallel: true,
-        extractComments: true,
-        uglifyOptions: {
-          mangle: true,
-          output: {
-            comments: false
+      new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+        extractComments: 'all',
+        terserOptions: {
+          compress: true,
+          mangle: false,
+          format: {
+            comments: false,
           }
         }
       }),
-      new OptimizeCSSAssetsPlugin()
+      new CssMinimizerPlugin(),
     ]
   },
   plugins: [
@@ -61,7 +56,8 @@ const config = {
       template: './src/app/index.html',
       filename: './index.html',
       excludeAssets: [/app.min.js/]
-    })
+    }),
+    new MiniCssExtractPlugin()
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
