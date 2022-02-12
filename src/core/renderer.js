@@ -4,6 +4,7 @@ const Renderer = Object.create(App);
 
 Renderer.template = null;
 Renderer.hasRendered = false;
+Renderer.elementsRegistered = [];
 Renderer.css = false;
 
 Renderer.beforeRender = function () {
@@ -11,7 +12,7 @@ Renderer.beforeRender = function () {
 }
 
 Renderer.render = async function (model = false) {
-  this.destroy();
+  //this.destroy();
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
@@ -60,6 +61,11 @@ Renderer.createCustomElement = function (tagName, data) {
     this.classList.add(tagName);
     this.innerHTML = self.template(data);
 
+    // Used later so we don't have to register a component we already registered before.
+    if (!self.elementsRegistered.includes(tagName)) {
+      self.elementsRegistered.push(tagName);
+    }
+
     if (self.css) {
       const style = document.createElement('style');
 
@@ -67,29 +73,23 @@ Renderer.createCustomElement = function (tagName, data) {
 
       this.appendChild(style);
     }
+
+    self.startBehaviors(this);
   }
 
   return CustomDOMElement;
 }
 
-// Renderer.getStyleSheet = async function () {
-//   const cssModule = await import(`./${this.css}`, {
-//     assert: { type: 'css' }
-//   });
-
-//   return cssModule;
-// }
-
 Renderer.internalPostHook = function () {
+  this.util.bindUIElements(this);
+
   if (this.strap !== undefined) {
     this.strap();
   }
 
-  if (this.startBehaviors !== undefined) {
-    this.startBehaviors();
-  }
-
-  this.util.bindUIElements(this);
+  // if (this.startBehaviors !== undefined) {
+  //   this.startBehaviors();
+  // }
   
   this.hasRendered = true;
 }
@@ -102,7 +102,7 @@ Renderer.destroy = function () {
   let firstChildNode;
 
   // We want to destroy only if it has rendered.
-  if (!this.hasRendered || this.renderMultiple || !this.hasRendered && this.shouldRender) { 
+  if (!this.hasRendered || !this.hasRendered && this.shouldRender) { 
     return null; 
   }
 

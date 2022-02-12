@@ -6,7 +6,6 @@ const HeroModule = Object.create(Zense.Module);
 
 HeroModule.create({
   name: 'hero-module',
-  selector: '#hero-region',
 
   ui: {
     jsTrack: '.js-slide-track'
@@ -145,7 +144,7 @@ HeroModule.create({
     switch(this.controlType) {
       case 'carousel':
         content = /*html*/`<div class="c-carousel">
-          <div class="c-controls" data-type="${this.controlType}"></div>
+          <controls-component data-type="${this.controlType}"></controls-component>
 
           <div class="c-carousel__track js-slide-track">
             ${data.map((slide, idx, allSlides) => {

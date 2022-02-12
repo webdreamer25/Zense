@@ -79,7 +79,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
   }
 }
 
-Controller.startBehaviors = function () {
+Controller.startBehaviors = function (shadowDOMContext) {
   const behaviorsLen = this.behaviors.length;
 
   if (this.shouldSetBehaviors && behaviorsLen > 0) {
@@ -132,7 +132,7 @@ Controller.startBehaviors = function () {
         continue;
       }
 
-      behavior.start();
+      behavior.start(shadowDOMContext);
     }
 
     // Ensures that behaviors are only set one time.

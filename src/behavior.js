@@ -82,8 +82,8 @@ Behavior.unbindUIElements = function () {
   }
 }
 
-Behavior.start = function () {
-  this.util.bindUIElements(this)
+Behavior.start = function (shadowDOMContext) {
+  this.util.bindUIElements(this, shadowDOMContext);
 }
 
 export default Behavior;

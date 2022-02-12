@@ -41,8 +41,8 @@ ProgressiveImgBehavior.config({
     region.insertBefore(imgLarge, region.firstChild);
   },
 
-  start() {
-    this.util.bindUIElements(this);
+  start(shadowDOMContext) {
+    this.util.bindUIElements(this, shadowDOMContext);
 
     if (this.ui.container.exists && this.ui.container.length) {
       this.ui.container.each((region) => {

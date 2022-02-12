@@ -1,7 +1,6 @@
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
   devtool: false,
@@ -35,13 +34,13 @@ const config = {
     ]
   },
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [
       new TerserPlugin({
         test: /\.js(\?.*)?$/i,
         extractComments: 'all',
         terserOptions: {
-          compress: true,
+          compress: false,
           mangle: false,
           format: {
             comments: false,
@@ -56,8 +55,7 @@ const config = {
       template: './src/app/index.html',
       filename: './index.html',
       excludeAssets: [/app.min.js/]
-    }),
-    new MiniCssExtractPlugin()
+    })
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.css'],

@@ -1856,8 +1856,8 @@ Behavior.unbindUIElements = function () {
   }
 }
 
-Behavior.start = function () {
-  this.util.bindUIElements(this)
+Behavior.start = function (shadowDOMContext) {
+  this.util.bindUIElements(shadowDOMContext);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Behavior);
@@ -2199,7 +2199,7 @@ Controller.bootstrapChildren = async function (strapeeArr, childrenLen) {
   }
 }
 
-Controller.startBehaviors = function () {
+Controller.startBehaviors = function (shadowDOMContext) {
   const behaviorsLen = this.behaviors.length;
 
   if (this.shouldSetBehaviors && behaviorsLen > 0) {
@@ -2252,7 +2252,7 @@ Controller.startBehaviors = function () {
         continue;
       }
 
-      behavior.start();
+      behavior.start(shadowDOMContext);
     }
 
     // Ensures that behaviors are only set one time.
@@ -2859,6 +2859,7 @@ const Renderer = Object.create(_app__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 Renderer.template = null;
 Renderer.hasRendered = false;
+Renderer.elementsRegistered = [];
 Renderer.css = false;
 
 Renderer.beforeRender = function () {
@@ -2866,7 +2867,7 @@ Renderer.beforeRender = function () {
 }
 
 Renderer.render = async function (model = false) {
-  this.destroy();
+  //this.destroy();
   this.beforeRender();
   
   if (!this.shouldRender) { return false; }
@@ -2915,6 +2916,11 @@ Renderer.createCustomElement = function (tagName, data) {
     this.classList.add(tagName);
     this.innerHTML = self.template(data);
 
+    // Used later so we don't have to register a component we already registered before.
+    if (!self.elementsRegistered.includes(tagName)) {
+      self.elementsRegistered.push(tagName);
+    }
+
     if (self.css) {
       const style = document.createElement('style');
 
@@ -2922,29 +2928,23 @@ Renderer.createCustomElement = function (tagName, data) {
 
       this.appendChild(style);
     }
+
+    self.startBehaviors(this);
   }
 
   return CustomDOMElement;
 }
 
-// Renderer.getStyleSheet = async function () {
-//   const cssModule = await import(`./${this.css}`, {
-//     assert: { type: 'css' }
-//   });
-
-//   return cssModule;
-// }
-
 Renderer.internalPostHook = function () {
+  this.util.bindUIElements(this);
+
   if (this.strap !== undefined) {
     this.strap();
   }
 
-  if (this.startBehaviors !== undefined) {
-    this.startBehaviors();
-  }
-
-  this.util.bindUIElements(this);
+  // if (this.startBehaviors !== undefined) {
+  //   this.startBehaviors();
+  // }
   
   this.hasRendered = true;
 }
@@ -2957,7 +2957,7 @@ Renderer.destroy = function () {
   let firstChildNode;
 
   // We want to destroy only if it has rendered.
-  if (!this.hasRendered || this.renderMultiple || !this.hasRendered && this.shouldRender) { 
+  if (!this.hasRendered || !this.hasRendered && this.shouldRender) { 
     return null; 
   }
 
@@ -3413,7 +3413,7 @@ const Zense = {
   App: _core_app__WEBPACK_IMPORTED_MODULE_0__["default"]
 }
 
-Zense.VERSION = '1.7.9';
+Zense.VERSION = '2.0.0';
 
 // Export Zense object for **Node.js**, with
 // backwards-compatibility for their old module API. 

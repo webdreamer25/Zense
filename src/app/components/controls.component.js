@@ -5,19 +5,14 @@ const ControlsComponent = Object.create(Zense.Component);
 ControlsComponent.create({
   name: 'controls-component',
 
-  selector: '.c-controls',
-
   ui: {
     jsBtn: '.js-control-btn'
   },
 
-  renderType: 'html',
-  renderMultiple: true,
-
   init() {
     let delegate = typeof this.ui.jsBtn === 'string' ? this.ui.jsBtn : this.ui.jsBtn.strName;
 
-    this.super.selector.on('click', delegate, this.handleControls.bind(this));
+    this.super.ui.jsTrack.on('click', delegate, this.handleControls.bind(this));
   },
 
   handleControls(e) {
