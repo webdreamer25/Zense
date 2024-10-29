@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 
 const ArchitectualModule = Object.create(Zense.Module);
 

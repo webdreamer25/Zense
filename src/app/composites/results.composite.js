@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 import TopComponent from '../components/top.component';
 import HeaderModule from '../modules/header.module';
 import ResultsModule from '../modules/results.module';

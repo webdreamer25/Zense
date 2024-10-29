@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 import HeaderModule from '../modules/header.module';
 import SidepanelModule from '../modules/sidepanel.module';
 

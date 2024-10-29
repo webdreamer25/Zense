@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 import ControlsComponent from '../components/controls.component';
 
 const ResultsModule = Object.create(Zense.Module);

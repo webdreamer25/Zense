@@ -1,4 +1,4 @@
-import { Zense } from '../../zense';
+import { Zense } from '@zense';
 import DevelopComposite from './composites/develop.composite';
 import HomeComposite from './composites/home.composite';
 import ResultsComposite from './composites/results.composite';

@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 import NavComponent from "../components/nav.component";
 
 const HeaderModule = Object.create(Zense.Module);

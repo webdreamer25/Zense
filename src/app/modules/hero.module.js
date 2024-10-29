@@ -1,4 +1,4 @@
-import { Zense } from '../../../zense';
+import { Zense } from '@zense';
 import ProgressiveImgBehavior from '../behaviors/progressive-img.behavior';
 import ControlsComponent from '../components/controls.component';
 

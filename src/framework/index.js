@@ -10,14 +10,14 @@ const root = typeof self == 'object' && self.self === self && self ||
   this ||
   {};
 
-const Zense = {
+export const Zense = {
   Storage,
   Behavior,
   Composite,
   Component,
   Module, 
   App
-}
+};
 
 Zense.VERSION = '1.7.9';
 
